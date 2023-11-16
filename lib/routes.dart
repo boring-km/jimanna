@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:jimanna/home_page.dart';
-import 'package:jimanna/register_page.dart';
+import 'package:jimanna/pages/admin_black_list_page.dart';
+import 'package:jimanna/pages/admin_draw_page.dart';
+import 'package:jimanna/pages/admin_draw_result_page.dart';
+import 'package:jimanna/pages/admin_name_list_page.dart';
+import 'package:jimanna/pages/admin_page.dart';
+import 'package:jimanna/pages/home_page.dart';
+import 'package:jimanna/pages/register_page.dart';
 
 class Routes {
   static const String home = '/';
   static const String register = '/register';
+  static const String admin = '/qlalftmfjdnsghkaus';
+  static const String adminDraw = '/qlalftmfjdnsghkaus/draw';
+  static const String adminDrawResult = '/qlalftmfjdnsghkaus/drawResult';
+  static const String adminBlackList = '/qlalftmfjdnsghkaus/blacklist';
+  static const String adminNameList = '/qlalftmfjdnsghkaus/namelist';
 }
 
 class Pages {
@@ -16,11 +26,20 @@ class Pages {
         return router.create(child: const HomePage());
       case Routes.register:
         return router.create(child: const RegisterPage());
+      case Routes.admin:
+        return router.create(child: const AdminPage());
+      case Routes.adminDraw:
+        return router.create(child: const AdminDrawPage());
+      case Routes.adminDrawResult:
+        return router.create(child: const AdminDrawResultPage());
+      case Routes.adminBlackList:
+        return router.create(child: const AdminBlackListPage());
+      case Routes.adminNameList:
+        return router.create(child: const AdminNameListPage());
     }
     return null;
   }
 }
-
 
 class _PageRouter {
   _PageRouter(this.arguments);
