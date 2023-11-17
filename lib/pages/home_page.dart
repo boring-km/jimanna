@@ -10,7 +10,6 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-
   @override
   void initState() {
     super.initState();
@@ -30,7 +29,13 @@ class _HomePageState extends ConsumerState<HomePage> {
             itemCount: names.length,
             itemBuilder: (context, index) {
               return ListTile(
-                title: Text(names[index]),
+                title: Text(
+                  names[index],
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                ),
               );
             },
           ),

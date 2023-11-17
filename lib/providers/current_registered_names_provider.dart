@@ -7,13 +7,18 @@ final currentRegisteredNamesProvider = StateNotifierProvider<CurrentRegisteredNa
 });
 
 class CurrentRegisteredNamesNotifier extends StateNotifier<List<String>> {
-  CurrentRegisteredNamesNotifier() : super([]);
 
-  final nameRef = FirebaseFirestore.instance
-      .collection('202312')
-      .withConverter(
-      fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
-      toFirestore: (name, _) => name.toJson());
+  late final CollectionReference<Name> nameRef;
+
+  CurrentRegisteredNamesNotifier() : super([]) {
+    var now = DateTime.now();
+    var yearMonth = now.year.toString() + now.month.toString().padLeft(2, '0');
+    nameRef = FirebaseFirestore.instance
+        .collection(yearMonth)
+        .withConverter(
+    fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
+    toFirestore: (name, _) => name.toJson());
+  }
 
   void loadOnRealTime() {
     nameRef.snapshots().listen((event) {
