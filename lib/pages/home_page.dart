@@ -24,18 +24,13 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     final List<String> names = ref.watch(currentRegisteredNamesProvider);
 
+    final height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: SafeArea(
         child: Center(
           child: Column(
             children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.arrow_back, color: Colors.black, size: 50,),
-                ),
-              ),
               QrImageView(
                 data: homeUrl,
                 version: QrVersions.auto,
@@ -43,7 +38,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 gapless: false,
               ),
               SizedBox(
-                height: 300,
+                height: height - 400,
                 child: GridView.builder(
                   itemCount: names.length,
                   itemBuilder: (context, index) {

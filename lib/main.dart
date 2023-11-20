@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         initialRoute: Routes.register,
+        onGenerateRoute: Pages.getPages,
         routes: {
           Routes.home: (context) => const HomePage(),
           Routes.register: (context) => const RegisterPage(),

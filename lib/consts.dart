@@ -1,1 +1,1 @@
-const homeUrl = 'https://boring-km.dev/jimanna';
+const homeUrl = 'https://boring-km.dev/jimanna/register';
