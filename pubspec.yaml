@@ -19,6 +19,7 @@ dependencies:
   freezed:
   freezed_annotation:
   qr_flutter: ^4.1.0
+  url_strategy: ^0.2.0
 
 dev_dependencies:
   flutter_test:

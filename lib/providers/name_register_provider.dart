@@ -4,17 +4,15 @@ import 'package:jimanna/models/name.dart';
 import 'package:jimanna/models/result.dart';
 import 'package:jimanna/utils/date_utils.dart';
 
-final nameRegisterProvider = StateNotifierProvider<NameRegisterNotifier, Result<bool>>((ref) {
+final nameRegisterProvider =
+    StateNotifierProvider<NameRegisterNotifier, Result<bool>>((ref) {
   return NameRegisterNotifier();
 });
 
 class NameRegisterNotifier extends StateNotifier<Result<bool>> {
-
   NameRegisterNotifier() : super(const Result.empty()) {
     final yearMonth = getYearMonthOnly();
-    nameRef = FirebaseFirestore.instance
-        .collection(yearMonth)
-        .withConverter(
+    nameRef = FirebaseFirestore.instance.collection(yearMonth).withConverter(
         fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
         toFirestore: (name, _) => name.toJson());
   }
@@ -24,5 +22,9 @@ class NameRegisterNotifier extends StateNotifier<Result<bool>> {
   void registerNameToFirestore(String name) {
     nameRef.add(Name(name));
     state = const Result.success(true);
+    Future.delayed(
+      const Duration(milliseconds: 500),
+      () => state = const Result.empty(),
+    );
   }
 }

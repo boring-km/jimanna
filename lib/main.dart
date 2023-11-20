@@ -11,9 +11,11 @@ import 'package:jimanna/pages/admin_page.dart';
 import 'package:jimanna/pages/home_page.dart';
 import 'package:jimanna/pages/register_page.dart';
 import 'package:jimanna/routes.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  setPathUrlStrategy();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseFirestore.instance.settings = const Settings(
     persistenceEnabled: true,
