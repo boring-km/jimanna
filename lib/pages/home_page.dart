@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jimanna/consts.dart';
 import 'package:jimanna/providers/current_registered_names_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -11,8 +12,6 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  final homeUrl = 'https://boring-km.dev/jimanna/home';
-
   @override
   void initState() {
     super.initState();
@@ -30,6 +29,13 @@ class _HomePageState extends ConsumerState<HomePage> {
         child: Center(
           child: Column(
             children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.arrow_back, color: Colors.black, size: 50,),
+                ),
+              ),
               QrImageView(
                 data: homeUrl,
                 version: QrVersions.auto,

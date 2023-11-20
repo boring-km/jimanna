@@ -20,11 +20,24 @@ class NameRegisterNotifier extends StateNotifier<Result<bool>> {
   late final CollectionReference<Name> nameRef;
 
   void registerNameToFirestore(String name) {
-    nameRef.add(Name(name));
-    state = const Result.success(true);
+    alwaysTrueIfAdmin(name);
+    addNameIfNotAdmin(name);
     Future.delayed(
       const Duration(milliseconds: 500),
       () => state = const Result.empty(),
     );
+  }
+
+  void addNameIfNotAdmin(String name) {
+    if (name != 'admin') {
+      nameRef.add(Name(name));
+      state = const Result.success(true);
+    }
+  }
+
+  void alwaysTrueIfAdmin(String name) {
+    if (name == 'admin') {
+      state = const Result.success(true);
+    }
   }
 }
