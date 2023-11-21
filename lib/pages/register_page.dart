@@ -18,10 +18,13 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   Widget build(BuildContext context) {
     processNameRegister(context);
 
-    final width = MediaQuery.of(context).size.width;
+    var width = MediaQuery.of(context).size.width;
+    if (width > 740) width = 740;
+
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           CustomPaint(
@@ -84,50 +87,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         ?.copyWith(color: Colors.white, fontSize: width / 24),
                   ),
                   SizedBox(height: height / 60),
-                  Stack(
-                    children: [
-                      Center(
-                        child: Image.asset(
-                          'assets/images/character_image.png',
-                          width: width * 6 / 7,
-                        ),
-                      ),
-                      Center(
-                        child: SizedBox(
-                          width: width * 6 / 7,
-                          height: (width * 6 / 7) * (228 / 400),
-                          child: Align(
-                            alignment: Alignment.topLeft,
-                            child: Padding(
-                              padding:
-                                  EdgeInsets.only(top: 12, left: (width / 24)),
-                              child: Image.asset(
-                                'assets/images/emoji.gif',
-                                width: width / 24,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: SizedBox(
-                          width: width * 6 / 7,
-                          height: (width * 6 / 7) * (228 / 400),
-                          child: Align(
-                            alignment: Alignment.topRight,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 12, right: 21),
-                              child: Image.asset(
-                                'assets/images/health.gif',
-                                width: width / 8,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  CharacterImage(width, height),
                   SizedBox(height: height / 30),
                   SizedBox(
                     width: width / 2,
@@ -189,22 +149,68 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     );
   }
 
+  Widget CharacterImage(double width, double height) {
+    return Stack(
+      children: [
+        Center(
+          child: Image.asset(
+            'assets/images/character_image.png',
+            width: width * 6 / 7,
+            fit: BoxFit.cover,
+          ),
+        ),
+        Center(
+          child: SizedBox(
+            width: width * 6 / 7,
+            height: (width * 6 / 7) * (228 / 400),
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: EdgeInsets.only(top: height / 50, left: (width / 24)),
+                child: Image.asset(
+                  'assets/images/emoji.gif',
+                  width: width / 24,
+                ),
+              ),
+            ),
+          ),
+        ),
+        Center(
+          child: SizedBox(
+            width: width * 6 / 7,
+            height: (width * 6 / 7) * (228 / 400),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: EdgeInsets.only(top: height / 50, right: (width / 24)),
+                child: Image.asset(
+                  'assets/images/health.gif',
+                  width: width / 8,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   ElevatedButton NameInputButton(double width) {
     return ElevatedButton(
-                  onPressed: () {
-                    ref
-                        .read(nameRegisterProvider.notifier)
-                        .registerNameToFirestore(_nameController.text);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent,
-                  ),
-                  child: Image.asset(
-                    'assets/images/confirm_button.png',
-                    width: width * (2/3),
-                  ),
-                );
+      onPressed: () {
+        ref
+            .read(nameRegisterProvider.notifier)
+            .registerNameToFirestore(_nameController.text);
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+      ),
+      child: Image.asset(
+        'assets/images/confirm_button.png',
+        width: width * (2 / 3),
+      ),
+    );
   }
 
   void processNameRegister(BuildContext context) {
