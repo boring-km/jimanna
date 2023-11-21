@@ -24,52 +24,63 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     final List<String> names = ref.watch(currentRegisteredNamesProvider);
 
+    final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+
+    final isMobile = width < 787;
 
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              QrImageView(
-                data: homeUrl,
-                version: QrVersions.auto,
-                size: 300.0,
-                gapless: false,
-              ),
-              SizedBox(
-                height: height - 400,
-                child: GridView.builder(
-                  itemCount: names.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.green,
-                        ),
-                        child: Center(
-                          child: Text(
-                            names[index],
-                            style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
+        child: Stack(
+          children: [
+            Center(
+              child: Column(
+                children: [
+                  isMobile ? const SizedBox.shrink() : buildQrImageView(),
+                  SizedBox(
+                    height: height - 400,
+                    child: GridView.builder(
+                      itemCount: names.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.green,
+                            ),
+                            child: Center(
+                              child: Text(
+                                names[index],
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                        );
+                      },
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: isMobile ? 4 : 8,
                       ),
-                    );
-                  },
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 8,
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  Widget buildQrImageView() {
+    return QrImageView(
+      data: homeUrl,
+      version: QrVersions.auto,
+      size: 300.0,
+      gapless: false,
     );
   }
 }

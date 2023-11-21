@@ -11,6 +11,7 @@ import 'package:jimanna/pages/admin_page.dart';
 import 'package:jimanna/pages/home_page.dart';
 import 'package:jimanna/pages/register_page.dart';
 import 'package:jimanna/routes.dart';
+import 'package:jimanna/ui/themes.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 Future<void> main() async {
@@ -34,8 +35,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          fontFamily: 'NotoSansKR',
+          fontFamily: 'DungGeunMo',
           useMaterial3: true,
+          textTheme: textTheme,
         ),
         initialRoute: Routes.register,
         onGenerateRoute: Pages.getPages,
