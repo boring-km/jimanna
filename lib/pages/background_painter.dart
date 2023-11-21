@@ -50,23 +50,23 @@ class BackgroundPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 5;
 
-    final rect = Rect.fromLTWH(30, 20, size.width - 60, size.height - 110);
+    final rect = Rect.fromLTWH(30, 20, size.width - 60, size.height - 80);
     final rectPath = Path()
       ..addRRect(RRect.fromRectAndRadius(rect, const Radius.circular(20)));
 
-    final shadowRect1 = Rect.fromLTWH(30, 20, size.width - 60, size.height - 110);
+    final shadowRect1 = Rect.fromLTWH(30, 20, size.width - 60, size.height - 80);
     final shadowPath1 = Path()
       ..addRRect(RRect.fromRectAndRadius(shadowRect1, const Radius.circular(20)));
 
-    final shadowRect2 = Rect.fromLTWH(33, 23, size.width - 60, size.height - 110);
+    final shadowRect2 = Rect.fromLTWH(33, 23, size.width - 60, size.height - 80);
     final shadowPath2 = Path()
       ..addRRect(RRect.fromRectAndRadius(shadowRect2, const Radius.circular(20)));
 
-    final shadowRect3 = Rect.fromLTWH(33, 20, size.width - 60, size.height - 110);
+    final shadowRect3 = Rect.fromLTWH(33, 20, size.width - 60, size.height - 80);
     final shadowPath3 = Path()
       ..addRRect(RRect.fromRectAndRadius(shadowRect3, const Radius.circular(20)));
 
-    final shadowRect4 = Rect.fromLTWH(30, 23, size.width - 60, size.height - 110);
+    final shadowRect4 = Rect.fromLTWH(30, 23, size.width - 60, size.height - 80);
     final shadowPath4 = Path()
       ..addRRect(RRect.fromRectAndRadius(shadowRect4, const Radius.circular(20)));
 
