@@ -20,6 +20,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   Widget build(BuildContext context) {
     processNameRegister(context);
 
+    var bottomPadding = MediaQuery.of(context).viewInsets.bottom;
     var width = MediaQuery.of(context).size.width;
     if (width > 740) width = 740;
 
@@ -32,6 +33,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
         child: Center(
           child: KeyboardVisibilityBuilder(
             builder: (context, isKeyboardVisible) {
+              print('isKeyboardVisible: $isKeyboardVisible');
+              print('bottomPadding: $bottomPadding');
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
