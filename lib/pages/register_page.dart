@@ -24,7 +24,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           CustomPaint(
