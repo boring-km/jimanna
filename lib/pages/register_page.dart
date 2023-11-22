@@ -27,10 +27,11 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     return Scaffold(
       body: CustomPaint(
         painter: BackgroundPainter(),
-        child: Stack(
-          children: [
-            Center(
-              child: CustomPaint(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomPaint(
                 painter: FramePainter(),
                 child: Padding(
                   padding: const EdgeInsets.all(20),
@@ -139,10 +140,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   ),
                 ),
               ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
+              Padding(
                 padding: EdgeInsets.only(bottom: height / 70),
                 child: Text(
                   '아바드',
@@ -152,8 +150,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       ?.copyWith(color: Colors.white),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
