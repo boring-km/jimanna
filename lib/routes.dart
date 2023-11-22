@@ -9,8 +9,8 @@ import 'package:jimanna/pages/register_page.dart';
 import 'pages/admin_name_list_page.dart';
 
 class Routes {
+  static const String register = '/';
   static const String home = '/home';
-  static const String register = '/register';
   static const String admin = '/qlalftmfjdnsghkaus';
   static const String adminDraw = '/qlalftmfjdnsghkaus/draw';
   static const String adminDrawResult = '/qlalftmfjdnsghkaus/drawResult';
@@ -23,10 +23,10 @@ class Pages {
     final arguments = settings.arguments;
     final router = _PageRouter(arguments);
     switch (settings.name) {
-      case Routes.home:
-        return router.create(child: const HomePage());
       case Routes.register:
         return router.create(child: const RegisterPage());
+      case Routes.home:
+        return router.create(child: const HomePage());
       case Routes.admin:
         return router.create(child: const AdminPage());
       case Routes.adminDraw:

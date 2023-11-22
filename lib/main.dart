@@ -42,8 +42,8 @@ class MyApp extends StatelessWidget {
         initialRoute: Routes.register,
         onGenerateRoute: Pages.getPages,
         routes: {
-          Routes.home: (context) => const HomePage(),
           Routes.register: (context) => const RegisterPage(),
+          Routes.home: (context) => const HomePage(),
           Routes.admin: (context) => const AdminPage(),
           Routes.adminDraw: (context) => const AdminDrawPage(),
           Routes.adminDrawResult: (context) => const AdminDrawResultPage(),

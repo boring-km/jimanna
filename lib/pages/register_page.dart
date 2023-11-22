@@ -19,6 +19,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   Widget build(BuildContext context) {
     processNameRegister(context);
 
+    final bottomPadding = MediaQuery.of(context).viewInsets.bottom;
+
     var width = MediaQuery.of(context).size.width;
     if (width > 740) width = 740;
 
@@ -152,6 +154,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       ?.copyWith(color: Colors.white),
                 ),
               ),
+              SizedBox(height: bottomPadding),
             ],
           ),
         ),
