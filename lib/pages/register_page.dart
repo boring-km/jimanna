@@ -25,6 +25,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      backgroundColor: const Color(0xFF185ABD),
       body: CustomPaint(
         painter: BackgroundPainter(),
         child: Center(
@@ -36,6 +37,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(20),
                   child: SingleChildScrollView(
+                    reverse: true,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 20, bottom: 10),
                       child: Column(

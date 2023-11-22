@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         title: '평화교회 아바드 지만나',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF185ABD)),
           fontFamily: 'DungGeunMo',
           useMaterial3: true,
           textTheme: textTheme,
