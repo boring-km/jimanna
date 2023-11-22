@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/ui/background_painter.dart';
 import 'package:jimanna/providers/name_register_provider.dart';
@@ -19,8 +20,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   Widget build(BuildContext context) {
     processNameRegister(context);
 
-    final bottomPadding = MediaQuery.of(context).viewInsets.bottom;
-
     var width = MediaQuery.of(context).size.width;
     if (width > 740) width = 740;
 
@@ -31,131 +30,138 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       body: CustomPaint(
         painter: BackgroundPainter(),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomPaint(
-                painter: FramePainter(),
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: SingleChildScrollView(
-                    reverse: true,
+          child: KeyboardVisibilityBuilder(
+            builder: (context, isKeyboardVisible) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomPaint(
+                    painter: FramePainter(),
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 20, bottom: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset('assets/images/star.gif', width: width / 10),
-                              const SizedBox(width: 10),
-                              Text(
-                                '아바드',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .displayLarge
-                                    ?.copyWith(
-                                        color: Colors.white, fontSize: width / 8),
-                              ),
-                              const SizedBox(width: 10),
-                              Image.asset('assets/images/star.gif', width: width / 10),
-                            ],
-                          ),
-                          SizedBox(height: height / 80),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                '지금우리',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .displayMedium
-                                    ?.copyWith(
-                                        color: Colors.white, fontSize: width / 12),
-                              ),
-                              Image.asset('assets/images/heart.gif', width: width / 8),
-                              Text(
-                                '만나',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .displayMedium
-                                    ?.copyWith(
-                                        color: Colors.white, fontSize: width / 12),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: height / 80),
-                          Text(
-                            '화합과 사랑을 위한 우리만의 이벤트',
-                            style: Theme.of(context)
-                                .textTheme
-                                .displaySmall
-                                ?.copyWith(color: Colors.white, fontSize: width / 24),
-                          ),
-                          SizedBox(height: height / 60),
-                          CharacterImage(width, height),
-                          SizedBox(height: height / 30),
-                          SizedBox(
-                            width: width / 2,
-                            child: TextField(
-                              controller: _nameController,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .displaySmall
-                                  ?.copyWith(color: Colors.white, letterSpacing: 2),
-                              textAlign: TextAlign.center,
-                              cursorColor: Colors.black,
-                              decoration: InputDecoration(
-                                border: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                                ),
-                                hintText: '이름입력',
-                                hintStyle: Theme.of(context)
-                                    .textTheme
-                                    .displaySmall
-                                    ?.copyWith(color: Colors.white),
-                                fillColor: const Color(0xFF6BCDFF),
-                                filled: true,
-                                focusColor: Colors.black,
-                                enabledBorder: buildOutlineInputBorder(),
-                                disabledBorder: buildOutlineInputBorder(),
-                                focusedBorder: buildOutlineInputBorder(),
+                      padding: const EdgeInsets.all(20),
+                      child: SingleChildScrollView(
+                        reverse: true,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 20, bottom: 10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset('assets/images/star.gif', width: width / 10),
+                                      const SizedBox(width: 10),
+                                      Text(
+                                        '아바드',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .displayLarge
+                                            ?.copyWith(
+                                                color: Colors.white, fontSize: width / 8),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Image.asset('assets/images/star.gif', width: width / 10),
+                                    ],
+                                  ),
+                                  SizedBox(height: height / 80),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '지금우리',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .displayMedium
+                                            ?.copyWith(
+                                                color: Colors.white, fontSize: width / 12),
+                                      ),
+                                      Image.asset('assets/images/heart.gif', width: width / 8),
+                                      Text(
+                                        '만나',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .displayMedium
+                                            ?.copyWith(
+                                                color: Colors.white, fontSize: width / 12),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: height / 80),
+                                  Text(
+                                    '화합과 사랑을 위한 우리만의 이벤트',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .displaySmall
+                                        ?.copyWith(color: Colors.white, fontSize: width / 24),
+                                  ),
+                                  SizedBox(height: height / 60),
+                                  CharacterImage(width, height),
+                                  SizedBox(height: height / 30),
+                                  SizedBox(
+                                    width: width / 2,
+                                    child: TextField(
+                                      controller: _nameController,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .displaySmall
+                                          ?.copyWith(color: Colors.white, letterSpacing: 2),
+                                      textAlign: TextAlign.center,
+                                      cursorColor: Colors.black,
+                                      decoration: InputDecoration(
+                                        border: const OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                                        ),
+                                        hintText: '이름입력',
+                                        hintStyle: Theme.of(context)
+                                            .textTheme
+                                            .displaySmall
+                                            ?.copyWith(color: Colors.white),
+                                        fillColor: const Color(0xFF6BCDFF),
+                                        filled: true,
+                                        focusColor: Colors.black,
+                                        enabledBorder: buildOutlineInputBorder(),
+                                        disabledBorder: buildOutlineInputBorder(),
+                                        focusedBorder: buildOutlineInputBorder(),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: height / 40),
+                                  NameInputButton(width),
+                                  SizedBox(height: height / 40),
+                                  Text(
+                                    '문의사항은 이근복 목사님께 문의바랍니다.',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .displaySmall
+                                        ?.copyWith(color: Colors.white, fontSize: width / 30),
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                          SizedBox(height: height / 40),
-                          NameInputButton(width),
-                          SizedBox(height: height / 40),
-                          Text(
-                            '문의사항은 이근복 목사님께 문의바랍니다.',
-                            style: Theme.of(context)
-                                .textTheme
-                                .displaySmall
-                                ?.copyWith(color: Colors.white, fontSize: width / 30),
-                          ),
-                        ],
+                            SizedBox(height: isKeyboardVisible ? 600 : 0),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: height / 70),
-                child: Text(
-                  '아바드',
-                  style: Theme.of(context)
-                      .textTheme
-                      .displaySmall
-                      ?.copyWith(color: Colors.white),
-                ),
-              ),
-              SizedBox(height: bottomPadding),
-            ],
+                  Padding(
+                    padding: EdgeInsets.only(bottom: height / 70),
+                    child: Text(
+                      '아바드',
+                      style: Theme.of(context)
+                          .textTheme
+                          .displaySmall
+                          ?.copyWith(color: Colors.white),
+                    ),
+                  ),
+                ],
+              );
+            }
           ),
         ),
       ),
