@@ -9,7 +9,7 @@ import 'package:jimanna/pages/register_page.dart';
 import 'pages/admin_name_list_page.dart';
 
 class Routes {
-  static const String register = '/';
+  static const String register = '/register';
   static const String home = '/home';
   static const String admin = '/qlalftmfjdnsghkaus';
   static const String adminDraw = '/qlalftmfjdnsghkaus/draw';
