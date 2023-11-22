@@ -1,15 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/models/name.dart';
+import 'package:jimanna/models/register_state.dart';
 import 'package:jimanna/models/result.dart';
 import 'package:jimanna/utils/date_utils.dart';
 
 final nameRegisterProvider =
-    StateNotifierProvider<NameRegisterNotifier, Result<bool>>((ref) {
+    StateNotifierProvider<NameRegisterNotifier, Result<RegisterState>>((ref) {
   return NameRegisterNotifier();
 });
 
-class NameRegisterNotifier extends StateNotifier<Result<bool>> {
+class NameRegisterNotifier extends StateNotifier<Result<RegisterState>> {
   NameRegisterNotifier() : super(const Result.empty()) {
     final yearMonth = getYearMonthOnly();
     nameRef = FirebaseFirestore.instance.collection(yearMonth).withConverter(
@@ -28,16 +29,21 @@ class NameRegisterNotifier extends StateNotifier<Result<bool>> {
     );
   }
 
+  final adminPassword = 'qlalfdlwlfhd';
+  final screenOnly = '관리자';
+
   void addNameIfNotAdmin(String name) {
-    if (name != 'admin') {
+    if (name != adminPassword && name != screenOnly) {
       nameRef.add(Name(name));
-      state = const Result.success(true);
+      state = const Result.success(RegisterState.success);
     }
   }
 
   void alwaysTrueIfAdmin(String name) {
-    if (name == 'admin') {
-      state = const Result.success(true);
+    if (name == adminPassword) {
+      state = const Result.success(RegisterState.admin);
+    } else if (name == screenOnly) {
+      state = const Result.success(RegisterState.success);
     }
   }
 }

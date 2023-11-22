@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jimanna/models/register_state.dart';
 import 'package:jimanna/ui/background_painter.dart';
 import 'package:jimanna/providers/name_register_provider.dart';
 import 'package:jimanna/routes.dart';
@@ -247,8 +248,10 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
           );
         },
         success: (data) {
-          if (data) {
+          if (data == RegisterState.success) {
             Navigator.pushNamed(context, Routes.home);
+          } else if (data == RegisterState.admin) {
+            Navigator.pushNamed(context, Routes.admin);
           }
         },
       );
