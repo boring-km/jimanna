@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jimanna/models/register_state.dart';
+import 'package:jimanna/models/result.dart';
+import 'package:jimanna/providers/event_switch_provider.dart';
+import 'package:jimanna/providers/register_error_provider.dart';
 import 'package:jimanna/ui/background_painter.dart';
 import 'package:jimanna/providers/name_register_provider.dart';
-import 'package:jimanna/routes.dart';
 import 'package:jimanna/ui/frame_painter.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
@@ -107,11 +108,14 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                           isKeyboardUp
                               ? const SizedBox.shrink()
                               : CharacterImage(width, height),
-                          SizedBox(height: height / 30),
+                          SizedBox(height: height / 60),
                           SizedBox(
                             width: width / 2,
                             child: TextField(
                               controller: _nameController,
+                              onEditingComplete: () {
+                                onPressInputButton();
+                              },
                               style: Theme.of(context)
                                   .textTheme
                                   .displaySmall
@@ -138,9 +142,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               ),
                             ),
                           ),
-                          SizedBox(height: height / 40),
+                          ErrorText(height, context, width),
                           NameInputButton(width),
-                          SizedBox(height: height / 40),
+                          SizedBox(height: height / 80),
                           Text(
                             '문의사항은 이근복 목사님께 문의바랍니다.',
                             style: Theme.of(context)
@@ -168,6 +172,25 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  bool canRegister() {
+    return ref.watch(eventSwitchProvider) is Success<bool> &&
+        (ref.watch(eventSwitchProvider) as Success<bool>).data;
+  }
+
+  Widget ErrorText(double height, BuildContext context, double width) {
+    final errorText = ref.watch(registerErrorProvider);
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: height / 100),
+      child: errorText.isEmpty ? const SizedBox.shrink() : Text(
+        errorText,
+        style: Theme.of(context)
+            .textTheme
+            .displaySmall
+            ?.copyWith(color: Colors.white, fontSize: width / 30),
       ),
     );
   }
@@ -222,9 +245,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   ElevatedButton NameInputButton(double width) {
     return ElevatedButton(
       onPressed: () {
-        ref
-            .read(nameRegisterProvider.notifier)
-            .registerNameToFirestore(_nameController.text);
+        onPressInputButton();
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.transparent,
@@ -237,24 +258,43 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     );
   }
 
+  void onPressInputButton() {
+    if (canRegister()) {
+      registerNameToFireStore();
+    } else {
+      setNotPossibleToRegister();
+    }
+  }
+
+  void setNotPossibleToRegister() {
+    ref.read(registerErrorProvider.notifier).setError('지금은 등록할 수 없습니다.');
+    ref.read(nameRegisterProvider.notifier).checkAdmin(_nameController.text);
+  }
+
+  void registerNameToFireStore() {
+    ref
+        .read(nameRegisterProvider.notifier)
+        .registerNameToFirestore(_nameController.text);
+  }
+
   void processNameRegister(BuildContext context) {
     ref.listen(nameRegisterProvider, (previous, result) {
       result.whenOrNull(
         error: (e) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(e.toString()),
-            ),
-          );
+          ref.read(registerErrorProvider.notifier).setError(e);
         },
-        success: (data) {
-          if (data == RegisterState.success) {
-            Navigator.pushNamed(context, Routes.home);
-          } else if (data == RegisterState.admin) {
-            Navigator.pushNamed(context, Routes.admin);
-          }
+        success: (page) {
+          Navigator.pushNamed(context, page);
         },
       );
+    });
+
+    ref.listen(eventSwitchProvider, (previous, next) {
+      if (next is Success<bool>) {
+        if (!next.data) {
+          setNotPossibleToRegister();
+        }
+      }
     });
   }
 

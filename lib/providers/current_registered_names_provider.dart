@@ -18,6 +18,8 @@ class CurrentRegisteredNamesNotifier extends StateNotifier<List<String>> {
         .withConverter(
     fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
     toFirestore: (name, _) => name.toJson());
+
+    loadOnRealTime();
   }
 
   void loadOnRealTime() {

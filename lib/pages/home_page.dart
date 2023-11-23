@@ -4,24 +4,11 @@ import 'package:jimanna/consts.dart';
 import 'package:jimanna/providers/current_registered_names_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class HomePage extends ConsumerStatefulWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  ConsumerState<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends ConsumerState<HomePage> {
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(const Duration(milliseconds: 500), () {
-      ref.read(currentRegisteredNamesProvider.notifier).loadOnRealTime();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final List<String> names = ref.watch(currentRegisteredNamesProvider);
 
     final width = MediaQuery.of(context).size.width;
