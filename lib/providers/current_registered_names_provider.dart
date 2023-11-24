@@ -9,8 +9,6 @@ final currentRegisteredNamesProvider = StateNotifierProvider<CurrentRegisteredNa
 
 class CurrentRegisteredNamesNotifier extends StateNotifier<List<String>> {
 
-  late final CollectionReference<Name> nameRef;
-
   CurrentRegisteredNamesNotifier() : super([]) {
     final yearMonth = getYearMonthOnly();
     nameRef = FirebaseFirestore.instance
@@ -22,13 +20,20 @@ class CurrentRegisteredNamesNotifier extends StateNotifier<List<String>> {
     loadOnRealTime();
   }
 
+  late final CollectionReference<Name> nameRef;
+
   void loadOnRealTime() {
     nameRef.snapshots().listen((event) {
       state = event.docs.map((e) => e.data().name).toList();
     });
   }
 
-  void remove(String name) {
-    state = state.where((element) => element != name).toList();
+  void removeAll() {
+    nameRef.get().then((value) {
+      for (final element in value.docs) {
+        nameRef.doc(element.id).delete();
+      }
+    });
+    state = [];
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/models/result.dart';
+import 'package:jimanna/providers/admin_draw_provider.dart';
+import 'package:jimanna/providers/current_registered_names_provider.dart';
 import 'package:jimanna/providers/event_switch_provider.dart';
 import 'package:jimanna/routes.dart';
 
@@ -28,12 +30,17 @@ class AdminPage extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.all(20),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  ref.read(adminDrawProvider.notifier).resetTeams();
+                  Navigator.pushNamed(context, Routes.adminDraw);
+                },
                 child: const Text('조 추첨 시작'),
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                ref.read(adminDrawProvider.notifier).resetTeams();
+              },
               child: const Text(
                 '추첨 초기화\n(이름 보존됨)',
                 textAlign: TextAlign.center,
@@ -41,7 +48,10 @@ class AdminPage extends ConsumerWidget {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                ref.read(adminDrawProvider.notifier).resetTeams();
+                ref.read(currentRegisteredNamesProvider.notifier).removeAll();
+              },
               child: const Text(
                 '추첨 초기화\n(이번달 등록 이름 제거)',
                 textAlign: TextAlign.center,
