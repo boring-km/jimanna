@@ -21,12 +21,12 @@ class AdminDrawPage extends ConsumerWidget {
                   height: 200,
                   child: teamDraw.groupNumber > 0 ? ListView.builder(
                     shrinkWrap: true,
-                    itemCount: teamDraw.teams[teamDraw.groupNumber].length,
+                    itemCount: teamDraw.teams[teamDraw.groupNumber - 1].length,
                     itemBuilder: (context, index2) {
                       return Padding(
                         padding: const EdgeInsets.all(8),
                         child: Text(
-                          teamDraw.teams[teamDraw.groupNumber][index2],
+                          teamDraw.teams[teamDraw.groupNumber - 1][index2],
                           style: const TextStyle(fontSize: 20),
                         ),
                       );

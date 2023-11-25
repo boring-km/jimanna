@@ -56,7 +56,7 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
   }
 
   bool addTeam() {
-    if (groupNumber + 1 >= state.teams.length) return true;
+    if (groupNumber + 1 > state.teams.length) return true;
     final team = Team(state.teams[groupNumber]);
     teamRef.add(team);
     groupNumber++;

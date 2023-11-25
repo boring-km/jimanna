@@ -15,16 +15,25 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
   NameRegisterNotifier() : super(const Result.empty()) {
     final yearMonth = getYearMonthOnly();
     nameRef = FirebaseFirestore.instance.collection(yearMonth).withConverter(
-        fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
-        toFirestore: (name, _) => name.toJson());
+          fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
+          toFirestore: (name, _) => name.toJson(),
+        );
 
-    adminOptionRef = FirebaseFirestore.instance.collection('current').withConverter(
-        fromFirestore: (sn, _) => AdminOption.fromJson(sn.data()!),
-        toFirestore: (name, _) => name.toJson());
+    adminOptionRef =
+        FirebaseFirestore.instance.collection('current').withConverter(
+              fromFirestore: (sn, _) => AdminOption.fromJson(sn.data()!),
+              toFirestore: (name, _) => name.toJson(),
+            );
+
+    nameListRef = FirebaseFirestore.instance.collection('names').withConverter(
+          fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
+          toFirestore: (name, _) => name.toJson(),
+        );
   }
 
   late final CollectionReference<Name> nameRef;
   late final CollectionReference<AdminOption> adminOptionRef;
+  late final CollectionReference<Name> nameListRef;
 
   void registerNameToFirestore(String name) {
     alwaysTrueIfAdmin(name);
@@ -38,10 +47,22 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
   final adminPassword = 'qlalfdlwlfhd';
   final screenOnly = '관리자';
 
-  void addNameIfNotAdmin(String name) {
+  Future<void> addNameIfNotAdmin(String name) async {
     if (name != adminPassword && name != screenOnly && name.isNotEmpty) {
-      nameRef.add(Name(name));
-      state = const Result.success(Routes.home);
+      // nameListRef 에 모든 doc 중에 name이 있을 때만 추가
+      final nameListDocs = await nameListRef.get();
+      if (nameListDocs.docs.any((element) => element.data().name == name)) {
+        // nameRef 에 name이 없을 때만 추가
+        final nameDocs = await nameRef.get();
+        if (!nameDocs.docs.any((element) => element.data().name == name)) {
+          await nameRef.add(Name(name));
+          state = const Result.success(Routes.home);
+        } else {
+          state = const Result.error('이미 등록된 이름입니다.');
+        }
+      } else {
+        state = const Result.error('등록되지 않은 이름입니다.');
+      }
     }
   }
 

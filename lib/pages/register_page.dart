@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/models/result.dart';
 import 'package:jimanna/providers/event_switch_provider.dart';
+import 'package:jimanna/providers/name_register_provider.dart';
 import 'package:jimanna/providers/register_error_provider.dart';
 import 'package:jimanna/ui/background_painter.dart';
-import 'package:jimanna/providers/name_register_provider.dart';
 import 'package:jimanna/ui/frame_painter.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
@@ -44,15 +44,16 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 20, bottom: 10),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image.asset('assets/images/star.gif',
-                                  width: width / 10),
+                              Image.asset(
+                                'assets/images/star.gif',
+                                width: width / 10,
+                              ),
                               const SizedBox(width: 10),
                               Text(
                                 '아바드',
@@ -60,18 +61,20 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                     .textTheme
                                     .displayLarge
                                     ?.copyWith(
-                                        color: Colors.white,
-                                        fontSize: width / 8),
+                                      color: Colors.white,
+                                      fontSize: width / 8,
+                                    ),
                               ),
                               const SizedBox(width: 10),
-                              Image.asset('assets/images/star.gif',
-                                  width: width / 10),
+                              Image.asset(
+                                'assets/images/star.gif',
+                                width: width / 10,
+                              ),
                             ],
                           ),
                           SizedBox(height: height / 80),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
                                 '지금우리',
@@ -79,19 +82,23 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                     .textTheme
                                     .displayMedium
                                     ?.copyWith(
-                                        color: Colors.white,
-                                        fontSize: width / 12),
+                                      color: Colors.white,
+                                      fontSize: width / 12,
+                                    ),
                               ),
-                              Image.asset('assets/images/heart.gif',
-                                  width: width / 8),
+                              Image.asset(
+                                'assets/images/heart.gif',
+                                width: width / 8,
+                              ),
                               Text(
                                 '만나',
                                 style: Theme.of(context)
                                     .textTheme
                                     .displayMedium
                                     ?.copyWith(
-                                        color: Colors.white,
-                                        fontSize: width / 12),
+                                      color: Colors.white,
+                                      fontSize: width / 12,
+                                    ),
                               ),
                             ],
                           ),
@@ -102,25 +109,28 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                 .textTheme
                                 .displaySmall
                                 ?.copyWith(
-                                    color: Colors.white, fontSize: width / 24),
+                                  color: Colors.white,
+                                  fontSize: width / 24,
+                                ),
                           ),
                           SizedBox(height: height / 60),
-                          isKeyboardUp
-                              ? const SizedBox.shrink()
-                              : CharacterImage(width, height),
+                          if (isKeyboardUp)
+                            const SizedBox.shrink()
+                          else
+                            CharacterImage(width, height),
                           SizedBox(height: height / 60),
                           SizedBox(
                             width: width / 2,
                             child: TextField(
                               controller: _nameController,
-                              onEditingComplete: () {
-                                onPressInputButton();
-                              },
+                              onEditingComplete: onPressInputButton,
                               style: Theme.of(context)
                                   .textTheme
                                   .displaySmall
                                   ?.copyWith(
-                                      color: Colors.white, letterSpacing: 2),
+                                    color: Colors.white,
+                                    letterSpacing: 2,
+                                  ),
                               textAlign: TextAlign.center,
                               cursorColor: Colors.black,
                               decoration: InputDecoration(
@@ -151,7 +161,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                 .textTheme
                                 .displaySmall
                                 ?.copyWith(
-                                    color: Colors.white, fontSize: width / 30),
+                                  color: Colors.white,
+                                  fontSize: width / 30,
+                                ),
                           ),
                         ],
                       ),
@@ -185,13 +197,15 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     final errorText = ref.watch(registerErrorProvider);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: height / 100),
-      child: errorText.isEmpty ? const SizedBox.shrink() : Text(
-        errorText,
-        style: Theme.of(context)
-            .textTheme
-            .displaySmall
-            ?.copyWith(color: Colors.white, fontSize: width / 30),
-      ),
+      child: errorText.isEmpty
+          ? const SizedBox.shrink()
+          : Text(
+              errorText,
+              style: Theme.of(context)
+                  .textTheme
+                  .displaySmall
+                  ?.copyWith(color: Colors.white, fontSize: width / 30),
+            ),
     );
   }
 
@@ -213,7 +227,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
             child: Align(
               alignment: Alignment.topLeft,
               child: Padding(
-                padding: EdgeInsets.only(top: height / 70, left: (width / 24)),
+                padding: EdgeInsets.only(top: height / 70, left: width / 24),
                 child: Image.asset(
                   'assets/images/emoji.gif',
                   width: width / 24,
@@ -229,7 +243,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
             child: Align(
               alignment: Alignment.topRight,
               child: Padding(
-                padding: EdgeInsets.only(top: height / 70, right: (width / 24)),
+                padding: EdgeInsets.only(top: height / 70, right: width / 24),
                 child: Image.asset(
                   'assets/images/health.gif',
                   width: width / 8,
@@ -244,9 +258,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
   ElevatedButton NameInputButton(double width) {
     return ElevatedButton(
-      onPressed: () {
-        onPressInputButton();
-      },
+      onPressed: onPressInputButton,
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
@@ -278,29 +290,29 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   }
 
   void processNameRegister(BuildContext context) {
-    ref.listen(nameRegisterProvider, (previous, result) {
-      result.whenOrNull(
-        error: (e) {
-          ref.read(registerErrorProvider.notifier).setError(e);
-        },
-        success: (page) {
-          Navigator.pushNamed(context, page);
-        },
-      );
-    });
-
-    ref.listen(eventSwitchProvider, (previous, next) {
-      if (next is Success<bool>) {
-        if (!next.data) {
-          setNotPossibleToRegister();
+    ref
+      ..listen(nameRegisterProvider, (previous, result) {
+        result.whenOrNull(
+          error: (e) {
+            ref.read(registerErrorProvider.notifier).setError(e);
+          },
+          success: (page) {
+            Navigator.pushNamed(context, page);
+          },
+        );
+      })
+      ..listen(eventSwitchProvider, (previous, next) {
+        if (next is Success<bool>) {
+          if (!next.data) {
+            setNotPossibleToRegister();
+          }
         }
-      }
-    });
+      });
   }
 
   OutlineInputBorder buildOutlineInputBorder() {
     return const OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.black, width: 3),
+      borderSide: BorderSide(width: 3),
       borderRadius: BorderRadius.all(Radius.circular(20)),
     );
   }
