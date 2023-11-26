@@ -1,4 +1,3 @@
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'team.g.dart';
@@ -7,8 +6,9 @@ part 'team.g.dart';
 class Team {
   Team(this.names);
 
+  factory Team.fromJson(Map<String, dynamic> json) => _$TeamFromJson(json);
+
   final List<String> names;
 
-  factory Team.fromJson(Map<String, dynamic> json) => _$TeamFromJson(json);
   Map<String, dynamic> toJson() => _$TeamToJson(this);
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/consts.dart';
+import 'package:jimanna/providers/admin_draw_provider.dart';
 import 'package:jimanna/providers/current_registered_names_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -9,7 +10,9 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<String> names = ref.watch(currentRegisteredNamesProvider);
+    final names = ref.watch(currentRegisteredNamesProvider);
+    final adminDraws = ref.watch(adminDrawProvider);
+    final drawsNotEmpty = adminDraws.teams.isNotEmpty;
 
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
@@ -23,36 +26,11 @@ class HomePage extends ConsumerWidget {
             Center(
               child: Column(
                 children: [
-                  isMobile ? const SizedBox.shrink() : buildQrImageView(),
-                  SizedBox(
-                    height: height - 400,
-                    child: GridView.builder(
-                      itemCount: names.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.green,
-                            ),
-                            child: Center(
-                              child: Text(
-                                names[index],
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: isMobile ? 4 : 8,
-                      ),
-                    ),
-                  ),
+                  if (isMobile) const SizedBox.shrink() else buildQrImageView(),
+                  if (drawsNotEmpty)
+                    TeamsGrid(height, adminDraws.teams, isMobile)
+                  else
+                    NamesGrid(height, names, isMobile),
                 ],
               ),
             ),
@@ -62,12 +40,76 @@ class HomePage extends ConsumerWidget {
     );
   }
 
+  SizedBox NamesGrid(double height, List<String> names, bool isMobile) {
+    return SizedBox(
+      height: height - 400,
+      child: GridView.builder(
+        itemCount: names.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.all(8),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.green,
+              ),
+              child: Center(
+                child: Text(
+                  names[index],
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: isMobile ? 4 : 8,
+        ),
+      ),
+    );
+  }
+
   Widget buildQrImageView() {
     return QrImageView(
       data: homeUrl,
-      version: QrVersions.auto,
-      size: 300.0,
+      size: 300,
       gapless: false,
+    );
+  }
+
+  Widget TeamsGrid(double height, List<List<String>> teams, bool isMobile) {
+    return SizedBox(
+      height: height - 400,
+      child: GridView.builder(
+        itemCount: teams.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.all(8),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.green,
+              ),
+              child: Center(
+                child: Text(
+                  teams[index].join('\n'),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: isMobile ? 4 : 8,
+        ),
+      ),
     );
   }
 }
