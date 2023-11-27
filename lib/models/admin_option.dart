@@ -4,10 +4,6 @@ part 'admin_option.g.dart';
 
 @JsonSerializable()
 class AdminOption {
-  final bool can_register;
-  final int group_number;
-  final String password;
-
   AdminOption({
     required this.can_register,
     required this.group_number,
@@ -16,6 +12,9 @@ class AdminOption {
 
   factory AdminOption.fromJson(Map<String, dynamic> json) =>
       _$AdminOptionFromJson(json);
+  final bool can_register;
+  final int group_number;
+  final String password;
 
   Map<String, dynamic> toJson() => _$AdminOptionToJson(this);
 }
