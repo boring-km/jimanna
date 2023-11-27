@@ -5,13 +5,11 @@ part 'admin_option.g.dart';
 @JsonSerializable()
 class AdminOption {
   final bool can_register;
-  final int count;
   final int group_number;
   final String password;
 
   AdminOption({
     required this.can_register,
-    required this.count,
     required this.group_number,
     required this.password,
   });

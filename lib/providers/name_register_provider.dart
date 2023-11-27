@@ -20,7 +20,7 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
         );
 
     adminOptionRef =
-        FirebaseFirestore.instance.collection('current').withConverter(
+        FirebaseFirestore.instance.collection('admin').withConverter(
               fromFirestore: (sn, _) => AdminOption.fromJson(sn.data()!),
               toFirestore: (name, _) => name.toJson(),
             );

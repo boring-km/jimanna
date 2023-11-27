@@ -10,7 +10,7 @@ final eventSwitchProvider = StateNotifierProvider<EventSwitchNotifier, Result<bo
 class EventSwitchNotifier extends StateNotifier<Result<bool>> {
   EventSwitchNotifier() : super(const Result.empty()) {
 
-    adminOptionRef = FirebaseFirestore.instance.collection('current').withConverter(
+    adminOptionRef = FirebaseFirestore.instance.collection('admin').withConverter(
         fromFirestore: (data, _) => AdminOption.fromJson(data.data()!),
         toFirestore: (data, _) => data.toJson());
     loadOnRealTime();

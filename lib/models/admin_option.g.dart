@@ -8,7 +8,6 @@ part of 'admin_option.dart';
 
 AdminOption _$AdminOptionFromJson(Map<String, dynamic> json) => AdminOption(
       can_register: json['can_register'] as bool,
-      count: json['count'] as int,
       group_number: json['group_number'] as int,
       password: json['password'] as String,
     );
@@ -16,7 +15,6 @@ AdminOption _$AdminOptionFromJson(Map<String, dynamic> json) => AdminOption(
 Map<String, dynamic> _$AdminOptionToJson(AdminOption instance) =>
     <String, dynamic>{
       'can_register': instance.can_register,
-      'count': instance.count,
       'group_number': instance.group_number,
       'password': instance.password,
     };

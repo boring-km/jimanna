@@ -26,7 +26,7 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
         );
 
     adminOptionRef =
-        FirebaseFirestore.instance.collection('current').withConverter(
+        FirebaseFirestore.instance.collection('admin').withConverter(
               fromFirestore: (sn, _) => AdminOption.fromJson(sn.data()!),
               toFirestore: (adminOption, _) => adminOption.toJson(),
             );
