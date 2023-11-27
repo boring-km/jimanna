@@ -14,23 +14,33 @@ final adminDrawProvider =
 class AdminDrawNotifier extends StateNotifier<TeamDraw> {
   AdminDrawNotifier() : super(TeamDraw([], 0)) {
     final yearMonth = getYearMonthOnly();
-    nameRef = FirebaseFirestore.instance
-        .collection(yearMonth)
-        .withConverter(
-        fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
-        toFirestore: (name, _) => name.toJson());
+    initializeNameRef(yearMonth);
+    initializeTeamRef();
+    initializeAdminOptionRef();
+    loadOnRealTime();
+  }
 
-    teamRef = FirebaseFirestore.instance.collection('teams').withConverter(
-          fromFirestore: (sn, _) => Team.fromJson(sn.data()!),
-          toFirestore: (team, _) => team.toJson(),
-        );
-
+  void initializeAdminOptionRef() {
     adminOptionRef =
         FirebaseFirestore.instance.collection('admin').withConverter(
               fromFirestore: (sn, _) => AdminOption.fromJson(sn.data()!),
               toFirestore: (adminOption, _) => adminOption.toJson(),
             );
-    loadOnRealTime();
+  }
+
+  void initializeTeamRef() {
+    teamRef = FirebaseFirestore.instance.collection('teams').withConverter(
+          fromFirestore: (sn, _) => Team.fromJson(sn.data()!),
+          toFirestore: (team, _) => team.toJson(),
+        );
+  }
+
+  void initializeNameRef(String yearMonth) {
+    nameRef = FirebaseFirestore.instance
+        .collection(yearMonth)
+        .withConverter(
+        fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
+        toFirestore: (name, _) => name.toJson());
   }
 
   late final CollectionReference<Name> nameRef;
@@ -38,9 +48,21 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
   late final CollectionReference<AdminOption> adminOptionRef;
 
   void loadOnRealTime() {
+    listenNames();
+    listenTeamDraw();
+  }
+
+  void listenNames() {
     nameRef.snapshots().listen((event) {
       final list = event.docs.map((e) => e.data().name).toList();
       state = TeamDraw(organizeGroupsOfFourOrThree(list), 0);
+    });
+  }
+
+  void listenTeamDraw() {
+    adminOptionRef.snapshots().listen((event) {
+      groupNumber = event.docs.first.data().group_number;
+      state = TeamDraw(state.teams, groupNumber);
     });
   }
 
@@ -48,40 +70,42 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
 
   void resetGroupNumber() {
     groupNumber = 0;
-    adminOptionRef.get().then((value) {
-      adminOptionRef.doc(value.docs.first.id).update(
-        {'group_number': groupNumber},
-      );
-    });
+    updateGroupNumberFromAdminOptionRef();
   }
 
   bool addTeam() {
     if (groupNumber + 1 > state.teams.length) return true;
-    final team = Team(state.teams[groupNumber]);
-    teamRef.add(team);
+    teamRef.add(Team(state.teams[groupNumber]));
     groupNumber++;
+    updateGroupNumberFromAdminOptionRef();
+    return false;
+  }
+
+  void updateGroupNumberFromAdminOptionRef() {
     adminOptionRef.get().then((value) {
       adminOptionRef.doc(value.docs.first.id).update(
         {'group_number': groupNumber},
       );
     });
-    state = TeamDraw(state.teams, groupNumber);
-    return false;
   }
 
   // 4명씩 랜덤으로 조를 짜는데 4명이 안되는 경우는 3명으로 조를 짜도록 함
   List<List<String>> organizeGroupsOfFourOrThree(List<String> names) {
-    var shuffledNames = List<String>.from(names)..shuffle();
     final teams = <List<String>>[];
-
-    while (shuffledNames.isNotEmpty) {
-      final teamSize =
-          (shuffledNames.length % 3 == 0 && shuffledNames.length <= 9) ? 3 : 4;
-      teams.add(shuffledNames.sublist(0, teamSize));
-      shuffledNames = shuffledNames.sublist(teamSize);
-    }
-
+    final shuffledNames = List<String>.from(names)..shuffle();
+    addShuffledNamesToTeams(shuffledNames, teams);
     return teams;
+  }
+
+  void addShuffledNamesToTeams(List<String> shuffledNames, List<List<String>> teams) {
+    if (shuffledNames.isEmpty) return;
+    final teamSize = chooseTeamSize(shuffledNames);
+    teams.add(shuffledNames.sublist(0, teamSize));
+    addShuffledNamesToTeams(shuffledNames.sublist(teamSize), teams);
+  }
+
+  int chooseTeamSize(List<String> shuffledNames) {
+    return (shuffledNames.length % 3 == 0 && shuffledNames.length <= 9) ? 3 : 4;
   }
 
   void resetTeams() {
