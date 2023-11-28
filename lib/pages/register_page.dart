@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jimanna/gen/colors.gen.dart';
 import 'package:jimanna/models/result.dart';
 import 'package:jimanna/providers/event_switch_provider.dart';
 import 'package:jimanna/providers/name_register_provider.dart';
@@ -28,7 +29,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF185ABD),
+      backgroundColor: ColorName.blueDark,
       body: CustomPaint(
         painter: BackgroundPainter(),
         child: Center(
@@ -143,7 +144,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                     .textTheme
                                     .displaySmall
                                     ?.copyWith(color: Colors.white),
-                                fillColor: const Color(0xFF6BCDFF),
+                                fillColor: ColorName.cyan,
                                 filled: true,
                                 focusColor: Colors.black,
                                 enabledBorder: buildOutlineInputBorder(),

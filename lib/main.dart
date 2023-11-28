@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/firebase_options.dart';
+import 'package:jimanna/gen/colors.gen.dart';
+import 'package:jimanna/gen/fonts.gen.dart';
 import 'package:jimanna/pages/admin_black_list_page.dart';
 import 'package:jimanna/pages/admin_draw_page.dart';
 import 'package:jimanna/pages/admin_draw_result_page.dart';
@@ -34,8 +36,8 @@ class MyApp extends StatelessWidget {
         title: '평화교회 아바드 지만나',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF185ABD)),
-          fontFamily: 'DungGeunMo',
+          colorScheme: ColorScheme.fromSeed(seedColor: ColorName.blueDark),
+          fontFamily: FontFamily.dungGeunMo,
           useMaterial3: true,
           textTheme: textTheme,
         ),

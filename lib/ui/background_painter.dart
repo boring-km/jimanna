@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jimanna/gen/colors.gen.dart';
 
 class BackgroundPainter extends CustomPainter {
 
@@ -9,11 +10,11 @@ class BackgroundPainter extends CustomPainter {
     // 원의 크기는 5으로 그린다.
     // 원의 간격은 30으로 그린다.
     final paint = Paint()
-      ..color = const Color(0xFF185ABD)
+      ..color = ColorName.blueDark
       ..style = PaintingStyle.fill;
 
     final circlePaint = Paint()
-      ..color = const Color(0xFF3173D6)
+      ..color = ColorName.blueLight
       ..style = PaintingStyle.fill;
 
     const circleRadius = 1.5;

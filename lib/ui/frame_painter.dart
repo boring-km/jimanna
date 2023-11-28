@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:jimanna/gen/colors.gen.dart';
 
 class FramePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final rectPaint = Paint()
-      ..color = const Color(0xFF185ABD)
+      ..color = ColorName.blueDark
       ..style = PaintingStyle.fill;
 
     final rectShadowPaint = Paint()
