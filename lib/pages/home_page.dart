@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/consts.dart';
-import 'package:jimanna/providers/admin_draw_provider.dart';
 import 'package:jimanna/providers/current_registered_names_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -11,8 +10,6 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final names = ref.watch(currentRegisteredNamesProvider);
-    final adminDraws = ref.watch(adminDrawProvider);
-    final drawsNotEmpty = adminDraws.teams.isNotEmpty;
 
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
@@ -27,10 +24,7 @@ class HomePage extends ConsumerWidget {
               child: Column(
                 children: [
                   if (isMobile) const SizedBox.shrink() else buildQrImageView(),
-                  if (drawsNotEmpty)
-                    TeamsGrid(height, adminDraws.teams, isMobile)
-                  else
-                    NamesGrid(height, names, isMobile),
+                  NamesGrid(height, names, isMobile),
                 ],
               ),
             ),

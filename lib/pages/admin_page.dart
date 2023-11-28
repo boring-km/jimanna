@@ -5,6 +5,7 @@ import 'package:jimanna/providers/admin_draw_provider.dart';
 import 'package:jimanna/providers/current_registered_names_provider.dart';
 import 'package:jimanna/providers/event_switch_provider.dart';
 import 'package:jimanna/routes.dart';
+import 'package:jimanna/utils/date_utils.dart';
 
 class AdminPage extends ConsumerWidget {
   const AdminPage({super.key});
@@ -70,6 +71,20 @@ class AdminPage extends ConsumerWidget {
                 Navigator.pushNamed(context, Routes.adminBlackList);
               },
               child: const Text('만나면 안되는'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, Routes.adminDrawResult);
+              },
+              child: const Text('조 추첨 결과'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, Routes.adminCurrentParticipants);
+              },
+              child: Text('${getYearMonthOnly()} 참가자'),
             ),
           ],
         ),
