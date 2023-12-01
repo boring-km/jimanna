@@ -6,6 +6,7 @@ import 'package:jimanna/providers/event_switch_provider.dart';
 import 'package:jimanna/providers/name_register_provider.dart';
 import 'package:jimanna/providers/register_error_provider.dart';
 import 'package:jimanna/ui/background_painter.dart';
+import 'package:jimanna/ui/bottom_text.dart';
 import 'package:jimanna/ui/frame_painter.dart';
 
 part 'register/header_top.dart';
@@ -16,7 +17,6 @@ part 'register/name_input_view.dart';
 part 'register/error_text_view.dart';
 part 'register/input_button_view.dart';
 part 'register/contact_text_view.dart';
-part 'register/bottom_text.dart';
 part 'register/register_scaffold.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
@@ -51,7 +51,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
         onPressInputButton: onPressInputButton,
       ),
       contactTextView: _ContactTextView(width),
-      bottomText: _BottomText(width),
+      bottomText: BottomText(width),
       onSetNotPossibleToRegister: setNotPossibleToRegister,
     );
   }

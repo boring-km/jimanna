@@ -37,38 +37,37 @@ class _Scaffold extends ConsumerWidget {
       body: CustomPaint(
         painter: BackgroundPainter(),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomPaint(
-                painter: FramePainter(),
-                child: Padding(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomPaint(
+                  painter: FramePainter(),
+                  child: Padding(
                     padding: const EdgeInsets.all(20),
-                    child: SingleChildScrollView(
-                      reverse: true,
-                      padding: const EdgeInsets.only(top: 20, bottom: 10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          headerTop,
-                          SizedBox(height: height / 80),
-                          headerMiddle,
-                          SizedBox(height: height / 80),
-                          headerBottom,
-                          SizedBox(height: height / 60),
-                          characterImageView,
-                          SizedBox(height: height / 60),
-                          nameInputView,
-                          errorTextView,
-                          inputButtonView,
-                          SizedBox(height: height / 80),
-                          contactTextView
-                        ],
-                      ),
-                    )),
-              ),
-              bottomText,
-            ],
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        headerTop,
+                        SizedBox(height: height / 80),
+                        headerMiddle,
+                        SizedBox(height: height / 80),
+                        headerBottom,
+                        SizedBox(height: height / 60),
+                        characterImageView,
+                        SizedBox(height: height / 60),
+                        nameInputView,
+                        errorTextView,
+                        inputButtonView,
+                        SizedBox(height: height / 80),
+                        contactTextView,
+                      ],
+                    ),
+                  ),
+                ),
+                bottomText,
+              ],
+            ),
           ),
         ),
       ),

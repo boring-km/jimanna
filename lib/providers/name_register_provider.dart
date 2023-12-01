@@ -29,6 +29,8 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
           fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
           toFirestore: (name, _) => name.toJson(),
         );
+
+    getAdminPassword().then((value) => _adminPassword = value);
   }
 
   late final CollectionReference<Name> nameRef;
@@ -44,11 +46,13 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
     );
   }
 
-  final adminPassword = 'qlalfdlwlfhd';
   final screenOnly = '관리자';
+  String _adminPassword = 'adminPassword';
 
   Future<void> addNameIfNotAdmin(String name) async {
-    if (name != adminPassword && name != screenOnly && name.isNotEmpty) {
+    // get password from adminOptionRef
+
+    if (name != _adminPassword && name != screenOnly && name.isNotEmpty) {
       // nameListRef 에 모든 doc 중에 name이 있을 때만 추가
       final nameListDocs = await nameListRef.get();
       if (nameListDocs.docs.any((element) => element.data().name == name)) {
@@ -66,8 +70,15 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
     }
   }
 
+  Future<String> getAdminPassword() async {
+    final adminOptionDocs = await adminOptionRef.get();
+    final adminOption = adminOptionDocs.docs.first.data();
+    final adminPassword = adminOption.password;
+    return adminPassword;
+  }
+
   void alwaysTrueIfAdmin(String name) {
-    if (name == adminPassword) {
+    if (name == _adminPassword) {
       state = const Result.success(Routes.admin);
     } else if (name == screenOnly) {
       state = const Result.success(Routes.home);
@@ -75,7 +86,7 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
   }
 
   void checkAdmin(String name) {
-    if (name == adminPassword) {
+    if (name == _adminPassword) {
       state = const Result.success(Routes.admin);
     } else if (name == screenOnly) {
       state = const Result.success(Routes.home);

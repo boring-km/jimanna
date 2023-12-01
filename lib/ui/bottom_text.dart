@@ -1,7 +1,7 @@
-part of '../register_page.dart';
+import 'package:flutter/material.dart';
 
-class _BottomText extends StatelessWidget {
-  const _BottomText(this.height);
+class BottomText extends StatelessWidget {
+  const BottomText(this.height, {super.key});
 
   final double height;
 

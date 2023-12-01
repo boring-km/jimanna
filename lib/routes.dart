@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:jimanna/pages/admin_black_list_page.dart';
-import 'package:jimanna/pages/admin_draw_page.dart';
-import 'package:jimanna/pages/admin_draw_result_page.dart';
-import 'package:jimanna/pages/admin_name_list_page.dart';
-import 'package:jimanna/pages/admin_page.dart';
-import 'package:jimanna/pages/current_month_name_list_page.dart';
-import 'package:jimanna/pages/home_page.dart';
+import 'package:jimanna/pages/admin/admin_black_list_page.dart';
+import 'package:jimanna/pages/admin/admin_draw_page.dart';
+import 'package:jimanna/pages/admin/admin_draw_result_page.dart';
+import 'package:jimanna/pages/admin/admin_name_list_page.dart';
+import 'package:jimanna/pages/admin/admin_page.dart';
+import 'package:jimanna/pages/admin/admin_current_month_name_list_page.dart';
+import 'package:jimanna/pages/home/home_page.dart';
 import 'package:jimanna/pages/register_page.dart';
 
 class Routes {
@@ -39,7 +39,7 @@ class Pages {
       case Routes.adminNameList:
         return router.create(child: const AdminNameListPage());
       case Routes.adminCurrentParticipants:
-        return router.create(child: const CurrentMonthNameListPage());
+        return router.create(child: const AdminCurrentMonthNameListPage());
     }
     return null;
   }

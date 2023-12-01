@@ -22,35 +22,27 @@ List<Shadow> shadows() {
   return [
     const Shadow(
       offset: Offset(0, -5),
-      color: Colors.black,
     ),
     const Shadow(
       offset: Offset(-5, 0),
-      color: Colors.black,
     ),
     const Shadow(
       offset: Offset(5, 0),
-      color: Colors.black,
     ),
     const Shadow(
       offset: Offset(0, 5),
-      color: Colors.black,
     ),
     const Shadow(
       offset: Offset(-3, -3),
-      color: Colors.black,
     ),
     const Shadow(
       offset: Offset(3, -3),
-      color: Colors.black,
     ),
     const Shadow(
       offset: Offset(-3, 3),
-      color: Colors.black,
     ),
     const Shadow(
       offset: Offset(6, 6),
-      color: Colors.black,
     ),
   ];
 }
@@ -60,35 +52,27 @@ List<Shadow> smallShadows() {
   return [
     const Shadow(
       offset: Offset(2, 0),
-      color: Colors.black,
     ),
     const Shadow(
       offset: Offset(0, 2),
-      color: Colors.black,
     ),
     const Shadow(
       offset: Offset(0, -2),
-      color: Colors.black,
     ),
     const Shadow(
       offset: Offset(-2, 0),
-      color: Colors.black,
     ),
     const Shadow(
       offset: Offset(-2, 2),
-      color: Colors.black,
     ),
     const Shadow(
       offset: Offset(2, -2),
-      color: Colors.black,
     ),
     const Shadow(
       offset: Offset(-2, -2),
-      color: Colors.black,
     ),
     const Shadow(
       offset: Offset(2, 2),
-      color: Colors.black,
     ),
   ];
 }

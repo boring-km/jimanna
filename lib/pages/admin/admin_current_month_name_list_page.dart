@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/providers/current_registered_names_provider.dart';
 
-class CurrentMonthNameListPage extends ConsumerWidget {
-  const CurrentMonthNameListPage({super.key});
+class AdminCurrentMonthNameListPage extends ConsumerWidget {
+  const AdminCurrentMonthNameListPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
