@@ -8,6 +8,17 @@ import 'package:jimanna/providers/register_error_provider.dart';
 import 'package:jimanna/ui/background_painter.dart';
 import 'package:jimanna/ui/frame_painter.dart';
 
+part 'register/header_top.dart';
+part 'register/header_middle.dart';
+part 'register/header_bottom.dart';
+part 'register/character_image_view.dart';
+part 'register/name_input_view.dart';
+part 'register/error_text_view.dart';
+part 'register/input_button_view.dart';
+part 'register/contact_text_view.dart';
+part 'register/bottom_text.dart';
+part 'register/register_scaffold.dart';
+
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
 
@@ -20,255 +31,40 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    processNameRegister(context);
-
     final isKeyboardUp = MediaQuery.of(context).viewInsets.bottom > 0;
-    var width = MediaQuery.of(context).size.width;
-    if (width > 740) width = 740;
-
+    final width = getDefaultWidth(context);
     final height = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      backgroundColor: ColorName.blueDark,
-      body: CustomPaint(
-        painter: BackgroundPainter(),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomPaint(
-                painter: FramePainter(),
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: SingleChildScrollView(
-                    reverse: true,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 20, bottom: 10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/images/star.gif',
-                                width: width / 10,
-                              ),
-                              const SizedBox(width: 10),
-                              Text(
-                                '아바드',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .displayLarge
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      fontSize: width / 8,
-                                    ),
-                              ),
-                              const SizedBox(width: 10),
-                              Image.asset(
-                                'assets/images/star.gif',
-                                width: width / 10,
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: height / 80),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '지금우리',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .displayMedium
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      fontSize: width / 12,
-                                    ),
-                              ),
-                              Image.asset(
-                                'assets/images/heart.gif',
-                                width: width / 8,
-                              ),
-                              Text(
-                                '만나',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .displayMedium
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      fontSize: width / 12,
-                                    ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: height / 80),
-                          Text(
-                            '화합과 사랑을 위한 우리만의 이벤트',
-                            style: Theme.of(context)
-                                .textTheme
-                                .displaySmall
-                                ?.copyWith(
-                                  color: Colors.white,
-                                  fontSize: width / 24,
-                                ),
-                          ),
-                          SizedBox(height: height / 60),
-                          if (isKeyboardUp)
-                            const SizedBox.shrink()
-                          else
-                            CharacterImage(width, height),
-                          SizedBox(height: height / 60),
-                          SizedBox(
-                            width: width / 2,
-                            child: TextField(
-                              controller: _nameController,
-                              onEditingComplete: onPressInputButton,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .displaySmall
-                                  ?.copyWith(
-                                    color: Colors.white,
-                                    letterSpacing: 2,
-                                  ),
-                              textAlign: TextAlign.center,
-                              cursorColor: Colors.black,
-                              decoration: InputDecoration(
-                                border: const OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                ),
-                                hintText: '이름입력',
-                                hintStyle: Theme.of(context)
-                                    .textTheme
-                                    .displaySmall
-                                    ?.copyWith(color: Colors.white),
-                                fillColor: ColorName.cyan,
-                                filled: true,
-                                focusColor: Colors.black,
-                                enabledBorder: buildOutlineInputBorder(),
-                                disabledBorder: buildOutlineInputBorder(),
-                                focusedBorder: buildOutlineInputBorder(),
-                              ),
-                            ),
-                          ),
-                          ErrorText(height, context, width),
-                          NameInputButton(width),
-                          SizedBox(height: height / 80),
-                          Text(
-                            '문의사항은 이근복 목사님께 문의바랍니다.',
-                            style: Theme.of(context)
-                                .textTheme
-                                .displaySmall
-                                ?.copyWith(
-                                  color: Colors.white,
-                                  fontSize: width / 30,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: height / 70),
-                child: Text(
-                  '아바드',
-                  style: Theme.of(context)
-                      .textTheme
-                      .displaySmall
-                      ?.copyWith(color: Colors.white),
-                ),
-              ),
-            ],
-          ),
-        ),
+    return _Scaffold(
+      headerTop: _HeaderTop(width),
+      headerMiddle: _HeaderMiddle(width),
+      headerBottom: _HeaderBottom(width),
+      characterImageView: _CharacterImageView(isKeyboardUp, width, height),
+      nameInputView: _NameInputView(
+        nameController: _nameController,
+        onPressInputButton: onPressInputButton,
+        width: width,
       ),
+      errorTextView: _ErrorTextView(width, height),
+      inputButtonView: _InputButtonView(
+        width: width,
+        onPressInputButton: onPressInputButton,
+      ),
+      contactTextView: _ContactTextView(width),
+      bottomText: _BottomText(width),
+      onSetNotPossibleToRegister: setNotPossibleToRegister,
     );
+  }
+
+  double getDefaultWidth(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    if (width > 740) width = 740;
+    return width;
   }
 
   bool canRegister() {
     return ref.watch(eventSwitchProvider) is Success<bool> &&
         (ref.watch(eventSwitchProvider) as Success<bool>).data;
-  }
-
-  Widget ErrorText(double height, BuildContext context, double width) {
-    final errorText = ref.watch(registerErrorProvider);
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: height / 100),
-      child: errorText.isEmpty
-          ? const SizedBox.shrink()
-          : Text(
-              errorText,
-              style: Theme.of(context)
-                  .textTheme
-                  .displaySmall
-                  ?.copyWith(color: Colors.white, fontSize: width / 30),
-            ),
-    );
-  }
-
-  Widget CharacterImage(double width, double height) {
-    return Stack(
-      children: [
-        Center(
-          child: Image.asset(
-            'assets/images/character_image.png',
-            width: width * 6 / 7,
-            height: (width * 6 / 7) * (228 / 400),
-            fit: BoxFit.cover,
-          ),
-        ),
-        Center(
-          child: SizedBox(
-            width: width * 6 / 7,
-            height: (width * 6 / 7) * (228 / 400),
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: EdgeInsets.only(top: height / 70, left: width / 24),
-                child: Image.asset(
-                  'assets/images/emoji.gif',
-                  width: width / 24,
-                ),
-              ),
-            ),
-          ),
-        ),
-        Center(
-          child: SizedBox(
-            width: width * 6 / 7,
-            height: (width * 6 / 7) * (228 / 400),
-            child: Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: EdgeInsets.only(top: height / 70, right: width / 24),
-                child: Image.asset(
-                  'assets/images/health.gif',
-                  width: width / 8,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  ElevatedButton NameInputButton(double width) {
-    return ElevatedButton(
-      onPressed: onPressInputButton,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.transparent,
-        shadowColor: Colors.transparent,
-      ),
-      child: Image.asset(
-        'assets/images/confirm_button.png',
-        width: width * (2 / 3),
-      ),
-    );
   }
 
   void onPressInputButton() {
@@ -288,33 +84,5 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     ref
         .read(nameRegisterProvider.notifier)
         .registerNameToFirestore(_nameController.text);
-  }
-
-  void processNameRegister(BuildContext context) {
-    ref
-      ..listen(nameRegisterProvider, (previous, result) {
-        result.whenOrNull(
-          error: (e) {
-            ref.read(registerErrorProvider.notifier).setError(e);
-          },
-          success: (page) {
-            Navigator.pushNamed(context, page);
-          },
-        );
-      })
-      ..listen(eventSwitchProvider, (previous, next) {
-        if (next is Success<bool>) {
-          if (!next.data) {
-            setNotPossibleToRegister();
-          }
-        }
-      });
-  }
-
-  OutlineInputBorder buildOutlineInputBorder() {
-    return const OutlineInputBorder(
-      borderSide: BorderSide(width: 3),
-      borderRadius: BorderRadius.all(Radius.circular(20)),
-    );
   }
 }
