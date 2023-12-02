@@ -32,6 +32,22 @@ class $AssetsImagesGen {
   /// File path: assets/images/heart.gif
   AssetGenImage get heart => const AssetGenImage('assets/images/heart.gif');
 
+  /// File path: assets/images/home_desktop_background.png
+  AssetGenImage get homeDesktopBackground =>
+      const AssetGenImage('assets/images/home_desktop_background.png');
+
+  /// File path: assets/images/home_desktop_bottom.png
+  AssetGenImage get homeDesktopBottom =>
+      const AssetGenImage('assets/images/home_desktop_bottom.png');
+
+  /// File path: assets/images/home_desktop_bottom_button.png
+  AssetGenImage get homeDesktopBottomButton =>
+      const AssetGenImage('assets/images/home_desktop_bottom_button.png');
+
+  /// File path: assets/images/home_desktop_top.png
+  AssetGenImage get homeDesktopTop =>
+      const AssetGenImage('assets/images/home_desktop_top.png');
+
   /// File path: assets/images/home_image.png
   AssetGenImage get homeImage =>
       const AssetGenImage('assets/images/home_image.png');
@@ -47,6 +63,10 @@ class $AssetsImagesGen {
         emoji,
         health,
         heart,
+        homeDesktopBackground,
+        homeDesktopBottom,
+        homeDesktopBottomButton,
+        homeDesktopTop,
         homeImage,
         star
       ];

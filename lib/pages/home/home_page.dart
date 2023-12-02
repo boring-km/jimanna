@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/consts.dart';
 import 'package:jimanna/gen/assets.gen.dart';
 import 'package:jimanna/gen/colors.gen.dart';
-import 'package:jimanna/providers/current_registered_names_provider.dart';
+import 'package:jimanna/pages/home/home_desktop_view.dart';
+import 'package:jimanna/pages/home/home_mobile_view.dart';
 import 'package:jimanna/ui/background_painter.dart';
 import 'package:jimanna/ui/bottom_text.dart';
 import 'package:jimanna/ui/frame_painter.dart';
@@ -14,15 +15,13 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final names = ref.watch(currentRegisteredNamesProvider);
-
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
     final isMobile = width < 787 || height < 787;
 
     return Scaffold(
-      body: isMobile ? mobileBody(height, names) : desktopBody(height, names),
+      body: isMobile ? const HomeMobileView() : const HomeDesktopView(),
     );
   }
 
