@@ -52,6 +52,10 @@ class $AssetsImagesGen {
   AssetGenImage get homeImage =>
       const AssetGenImage('assets/images/home_image.png');
 
+  /// File path: assets/images/name_background.png
+  AssetGenImage get nameBackground =>
+      const AssetGenImage('assets/images/name_background.png');
+
   /// File path: assets/images/star.gif
   AssetGenImage get star => const AssetGenImage('assets/images/star.gif');
 
@@ -68,6 +72,7 @@ class $AssetsImagesGen {
         homeDesktopBottomButton,
         homeDesktopTop,
         homeImage,
+        nameBackground,
         star
       ];
 }
