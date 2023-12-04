@@ -8,15 +8,14 @@ abstract class RegisterState {
   final String errorText;
 
   void check(WidgetRef ref, String text);
+
   bool getOpposite();
 }
 
 class CanRegisterState implements RegisterState {
   @override
   void check(WidgetRef ref, String text) {
-    ref
-        .read(nameRegisterProvider.notifier)
-        .registerNameToFirestore(text);
+    ref.read(nameRegisterProvider.notifier).registerNameToFirestore(text);
   }
 
   @override
@@ -51,8 +50,7 @@ class CannotRegisterState implements RegisterState {
 
 class EmptyRegisterState implements RegisterState {
   @override
-  void check(WidgetRef ref, String text) {
-  }
+  void check(WidgetRef ref, String text) {}
 
   @override
   bool getOpposite() {
@@ -64,14 +62,11 @@ class EmptyRegisterState implements RegisterState {
 
   @override
   String get errorText => '';
-
 }
 
 class ErrorRegisterState implements RegisterState {
   @override
-  void check(WidgetRef ref, String text) {
-
-  }
+  void check(WidgetRef ref, String text) {}
 
   @override
   bool getOpposite() {
@@ -82,5 +77,5 @@ class ErrorRegisterState implements RegisterState {
   String get text => '현재상태: 에러';
 
   @override
-  String get errorText => '';
+  String get errorText => '지금은 등록할 수 없습니다.';
 }

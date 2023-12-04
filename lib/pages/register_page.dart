@@ -30,24 +30,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _nameController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    listenAdminInput();
-  }
-
-  void listenAdminInput() {
-    Future.delayed(const Duration(milliseconds: 300), () {
-      ref.listen(registerStateProvider, (previous, next) {
-        if (next is CannotRegisterState) {
-          next.check(ref, _nameController.text);
-        }
-      });
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final registerState = ref.watch(registerStateProvider);
+    checkAdminInput(registerState);
 
     return _Scaffold(
       headerTop: const _HeaderTop(),
@@ -67,5 +52,11 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       contactTextView: const _ContactTextView(),
       bottomText: const BottomText(),
     );
+  }
+
+  void checkAdminInput(RegisterState registerState) {
+    if (registerState is CannotRegisterState) {
+      registerState.check(ref, _nameController.text);
+    }
   }
 }

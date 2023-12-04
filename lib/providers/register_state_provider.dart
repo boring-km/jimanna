@@ -4,18 +4,22 @@ import 'package:jimanna/models/admin_option.dart';
 import 'package:jimanna/pages/register/register_state.dart';
 
 final registerStateProvider =
-    StateNotifierProvider<EventSwitchNotifier, RegisterState>((ref) {
-  return EventSwitchNotifier();
+    StateNotifierProvider<RegisterStateProvider, RegisterState>((ref) {
+  return RegisterStateProvider();
 });
 
-class EventSwitchNotifier extends StateNotifier<RegisterState> {
-  EventSwitchNotifier() : super(EmptyRegisterState()) {
+class RegisterStateProvider extends StateNotifier<RegisterState> {
+  RegisterStateProvider() : super(EmptyRegisterState()) {
+    initializeAdminOption();
+    loadOnRealTime();
+  }
+
+  void initializeAdminOption() {
     adminOptionRef =
         FirebaseFirestore.instance.collection('admin').withConverter(
               fromFirestore: (data, _) => AdminOption.fromJson(data.data()!),
               toFirestore: (data, _) => data.toJson(),
             );
-    loadOnRealTime();
   }
 
   late final CollectionReference<AdminOption> adminOptionRef;
