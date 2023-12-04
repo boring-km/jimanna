@@ -4,15 +4,14 @@ class _NameInputView extends ConsumerWidget {
   const _NameInputView({
     required this.nameController,
     required this.onPressInputButton,
-    required this.width,
   });
 
   final TextEditingController nameController;
   final void Function() onPressInputButton;
-  final double width;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final width = getDefaultWidth(context);
     return SizedBox(
       width: width / 2,
       child: TextField(

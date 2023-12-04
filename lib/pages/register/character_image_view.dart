@@ -1,19 +1,16 @@
 part of '../register_page.dart';
 
 class _CharacterImageView extends StatelessWidget {
-  const _CharacterImageView(
-    this.isKeyboardUp,
-    this.width,
-    this.height,
-  );
-
-  final bool isKeyboardUp;
-  final double width;
-  final double height;
+  const _CharacterImageView();
 
   @override
   Widget build(BuildContext context) {
+    final isKeyboardUp = MediaQuery.of(context).viewInsets.bottom > 0;
     if (isKeyboardUp) return const SizedBox.shrink();
+
+    final width = getDefaultWidth(context);
+    final height = MediaQuery.of(context).size.height;
+
     return Stack(
       children: [
         Center(

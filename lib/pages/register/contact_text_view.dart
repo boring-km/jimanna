@@ -1,12 +1,11 @@
 part of '../register_page.dart';
 
 class _ContactTextView extends StatelessWidget {
-  const _ContactTextView(this.width);
-
-  final double width;
+  const _ContactTextView();
 
   @override
   Widget build(BuildContext context) {
+    final width = getDefaultWidth(context);
     return Text(
       '문의사항은 이근복 목사님께 문의바랍니다.',
       style: Theme.of(context)

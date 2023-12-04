@@ -1,20 +1,19 @@
 part of '../register_page.dart';
 
 class _ErrorTextView extends ConsumerWidget {
-  const _ErrorTextView(this.width, this.height, {super.key});
+  const _ErrorTextView(this.registerState);
 
-  final double width;
-  final double height;
+  final RegisterState registerState;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final errorText = ref.watch(registerErrorProvider);
+    final width = getDefaultWidth(context);
+    final height = MediaQuery.of(context).size.height;
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: height / 100),
-      child: errorText.isEmpty
-          ? const SizedBox.shrink()
-          : Text(
-        errorText,
+      child: Text(
+        registerState.errorText,
         style: Theme.of(context)
             .textTheme
             .displaySmall

@@ -11,7 +11,6 @@ class _Scaffold extends ConsumerWidget {
     required this.inputButtonView,
     required this.contactTextView,
     required this.bottomText,
-    required this.onSetNotPossibleToRegister,
   });
 
   final Widget headerTop;
@@ -26,12 +25,10 @@ class _Scaffold extends ConsumerWidget {
 
   final Widget bottomText;
 
-  final void Function() onSetNotPossibleToRegister;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final height = MediaQuery.of(context).size.height;
-    processNameRegister(context, ref, onSetNotPossibleToRegister);
+    processNameRegister(context, ref);
     return Scaffold(
       backgroundColor: ColorName.blueDark,
       body: CustomPaint(
@@ -77,25 +74,17 @@ class _Scaffold extends ConsumerWidget {
   void processNameRegister(
     BuildContext context,
     WidgetRef ref,
-    void Function() onSetNotPossibleToRegister,
   ) {
     ref
-      ..listen(nameRegisterProvider, (previous, result) {
+      .listen(nameRegisterProvider, (previous, result) {
         result.whenOrNull(
           error: (e) {
-            ref.read(registerErrorProvider.notifier).setError(e);
+            ref.read(registerStateProvider.notifier).setError();
           },
           success: (page) {
             Navigator.pushNamed(context, page);
           },
         );
-      })
-      ..listen(eventSwitchProvider, (previous, next) {
-        if (next is Success<bool>) {
-          if (!next.data) {
-            onSetNotPossibleToRegister();
-          }
-        }
       });
   }
 }

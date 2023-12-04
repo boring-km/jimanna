@@ -1,12 +1,11 @@
 part of '../register_page.dart';
 
 class _HeaderTop extends StatelessWidget {
-  const _HeaderTop(this.width);
-
-  final double width;
+  const _HeaderTop();
 
   @override
   Widget build(BuildContext context) {
+    final width = getDefaultWidth(context);
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,

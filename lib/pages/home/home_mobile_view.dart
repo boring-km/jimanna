@@ -64,7 +64,7 @@ class HomeMobileView extends ConsumerWidget {
                     ),
                   ),
                 ),
-                BottomText(height),
+                const BottomText(),
               ],
             ),
           ),

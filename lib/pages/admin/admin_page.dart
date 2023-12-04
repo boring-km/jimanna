@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jimanna/models/result.dart';
 import 'package:jimanna/providers/admin_draw_provider.dart';
 import 'package:jimanna/providers/current_registered_names_provider.dart';
-import 'package:jimanna/providers/event_switch_provider.dart';
+import 'package:jimanna/providers/register_state_provider.dart';
 import 'package:jimanna/routes.dart';
 import 'package:jimanna/utils/date_utils.dart';
 
@@ -22,7 +21,7 @@ class AdminPage extends ConsumerWidget {
               padding: const EdgeInsets.all(20),
               child: ElevatedButton(
                 onPressed: () {
-                  ref.read(eventSwitchProvider.notifier).switchEvent();
+                  ref.read(registerStateProvider.notifier).switchEvent();
                 },
                 child: const Text('지만나 오픈/닫기'),
               ),
@@ -93,13 +92,10 @@ class AdminPage extends ConsumerWidget {
   }
 
   Widget _EventStateText(WidgetRef ref) {
-    final state = ref.watch(eventSwitchProvider);
-    if (state is Success<bool>) {
-      return Text(
-        state.data ? '현재상태: 열림' : '현재상태: 닫힘',
-        style: const TextStyle(fontSize: 20, color: Colors.black),
-      );
-    }
-    return const SizedBox.shrink();
+    final state = ref.watch(registerStateProvider);
+    return Text(
+      state.text,
+      style: const TextStyle(fontSize: 20, color: Colors.black),
+    );
   }
 }
