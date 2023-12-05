@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:jimanna/consts.dart';
 import 'package:jimanna/gen/assets.gen.dart';
 import 'package:jimanna/providers/current_registered_names_provider.dart';
-import 'package:jimanna/providers/name_register_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class HomeDesktopView extends ConsumerWidget {
@@ -15,7 +15,6 @@ class HomeDesktopView extends ConsumerWidget {
     final height = MediaQuery.of(context).size.height;
 
     final names = ref.watch(currentRegisteredNamesProvider);
-    final convertedNames = convertNames(names);
 
     return Stack(
       children: [
@@ -43,45 +42,120 @@ class HomeDesktopView extends ConsumerWidget {
           ),
         ),
         Center(
-          child: Padding(
-            padding: EdgeInsets.only(bottom: height / 20),
-            child: SizedBox(
-              width: width * 0.95,
-              height: height * 0.7,
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 10,
-                  crossAxisSpacing: 30,
-                  childAspectRatio: 441 / (248 + 60),
-                ),
-                itemCount: 70,
-                itemBuilder: (context, index) {
-                  return Stack(
-                    children: [
-                      buildUserTextBack(index),
-                      buildUserText(convertedNames, index, context, width),
-                    ],
-                  );
-                },
-              ),
-            ),
-          ),
-        ),
-        Center(
-          child: Padding(
-            padding: EdgeInsets.only(bottom: height / 20),
-            child: Stack(
+          child: SizedBox(
+            width: width * 0.95,
+            height: height * 0.8,
+            child: StaggeredGrid.count(
+              crossAxisCount: 10,
+              axisDirection: AxisDirection.down,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(),
+                StaggeredGridTile.count(
+                  crossAxisCellCount: 10,
+                  mainAxisCellCount: 1.2,
+                  child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 10,
+                      childAspectRatio: 441 / 248,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                    ),
+                    itemCount: 20,
+                    itemBuilder: (context, index) {
+                      return Stack(
+                        children: [
+                          buildUserTextBack(),
+                          buildUserText(names, index, context, width),
+                        ],
+                      );
+                    },
                   ),
-                  width: width / 7,
-                  height: width / 7,
                 ),
-                QrImageView(data: homeUrl, size: width / 7),
+                StaggeredGridTile.count(
+                  crossAxisCellCount: 4,
+                  mainAxisCellCount: 1.7,
+                  child: GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      childAspectRatio: 441 / 248,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                    ),
+                    itemCount: 12,
+                    itemBuilder: (context, index) {
+                      return Stack(
+                        children: [
+                          buildUserTextBack(),
+                          buildUserText(names, 20 + index, context, width),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+                StaggeredGridTile.count(
+                  crossAxisCellCount: 2,
+                  mainAxisCellCount: 1.8,
+                  child: Center(
+                    child: Stack(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(),
+                          ),
+                          width: width / 7,
+                          height: width / 7,
+                        ),
+                        QrImageView(data: homeUrl, size: width / 7),
+                      ],
+                    ),
+                  ),
+                ),
+                StaggeredGridTile.count(
+                  crossAxisCellCount: 4,
+                  mainAxisCellCount: 1.7,
+                  child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      childAspectRatio: 441 / 248,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                    ),
+                    itemCount: 12,
+                    itemBuilder: (context, index) {
+                      return Stack(
+                        children: [
+                          buildUserTextBack(),
+                          buildUserText(names, 20 + 12 + index, context, width),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+                StaggeredGridTile.count(
+                  crossAxisCellCount: 10,
+                  mainAxisCellCount: 2,
+                  child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 10,
+                      childAspectRatio: 441 / 248,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                    ),
+                    itemCount: 20,
+                    itemBuilder: (context, index) {
+                      return Stack(
+                        children: [
+                          buildUserTextBack(),
+                          buildUserText(names, 20 + 12 + 12 + index, context, width),
+                        ],
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
           ),
@@ -90,7 +164,7 @@ class HomeDesktopView extends ConsumerWidget {
     );
   }
 
-  Center buildUserTextBack(int index) {
+  Center buildUserTextBack() {
     return Center(child: Assets.images.nameBackground.image());
   }
 
@@ -125,11 +199,6 @@ class HomeDesktopView extends ConsumerWidget {
   }
 
   bool isHiddenIndex(int i) {
-    return i == 24 ||
-        i == 25 ||
-        i == 34 ||
-        i == 35 ||
-        i == 44 ||
-        i == 45;
+    return i == 24 || i == 25 || i == 34 || i == 35 || i == 44 || i == 45;
   }
 }
