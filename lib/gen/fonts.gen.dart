@@ -12,7 +12,4 @@ class FontFamily {
 
   /// Font family: DungGeunMo
   static const String dungGeunMo = 'DungGeunMo';
-
-  /// Font family: NotoSansKR
-  static const String notoSansKR = 'NotoSansKR';
 }
