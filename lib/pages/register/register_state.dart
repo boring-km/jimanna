@@ -77,5 +77,5 @@ class ErrorRegisterState implements RegisterState {
   String get text => '현재상태: 에러';
 
   @override
-  String get errorText => '지금은 등록할 수 없습니다.';
+  String get errorText => '등록 에러';
 }

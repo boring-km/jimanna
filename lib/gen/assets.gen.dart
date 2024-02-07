@@ -26,6 +26,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/emoji.gif
   AssetGenImage get emoji => const AssetGenImage('assets/images/emoji.gif');
 
+  /// File path: assets/images/error.jpg
+  AssetGenImage get error => const AssetGenImage('assets/images/error.jpg');
+
   /// File path: assets/images/health.gif
   AssetGenImage get health => const AssetGenImage('assets/images/health.gif');
 
@@ -65,6 +68,7 @@ class $AssetsImagesGen {
         characterImage,
         confirmButton,
         emoji,
+        error,
         health,
         heart,
         homeDesktopBackground,

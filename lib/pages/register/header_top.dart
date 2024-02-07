@@ -10,10 +10,7 @@ class _HeaderTop extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset(
-          'assets/images/star.gif',
-          width: width / 10,
-        ),
+        Assets.images.star.image(width: width / 10),
         const SizedBox(width: 10),
         Text(
           '아바드',

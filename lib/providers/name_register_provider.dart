@@ -47,7 +47,7 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
   }
 
   final screenOnly = '관리자';
-  String _adminPassword = 'adminPassword';
+  var _adminPassword = 'adminPassword';
 
   Future<void> addNameIfNotAdmin(String name) async {
     // get password from adminOptionRef
