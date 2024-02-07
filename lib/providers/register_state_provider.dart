@@ -1,7 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jimanna/models/admin_option.dart';
 import 'package:jimanna/pages/register/register_state.dart';
+import 'package:jimanna/providers/firebase/firebase_factory.dart';
 
 final registerStateProvider =
     StateNotifierProvider<RegisterStateProvider, RegisterState>((ref) {
@@ -10,19 +9,10 @@ final registerStateProvider =
 
 class RegisterStateProvider extends StateNotifier<RegisterState> {
   RegisterStateProvider() : super(EmptyRegisterState()) {
-    initializeAdminOption();
     loadOnRealTime();
   }
 
-  void initializeAdminOption() {
-    adminOptionRef =
-        FirebaseFirestore.instance.collection('admin').withConverter(
-              fromFirestore: (data, _) => AdminOption.fromJson(data.data()!),
-              toFirestore: (data, _) => data.toJson(),
-            );
-  }
-
-  late final CollectionReference<AdminOption> adminOptionRef;
+  final adminOptionRef = FireStoreFactory.adminOptionRef;
 
   void loadOnRealTime() {
     adminOptionRef.snapshots().listen((event) {

@@ -1,25 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/models/team.dart';
+import 'package:jimanna/providers/firebase/firebase_factory.dart';
 
-final teamListProvider = StateNotifierProvider<TeamListNotifier, List<Team>>((ref) {
+final teamListProvider =
+    StateNotifierProvider<TeamListNotifier, List<Team>>((ref) {
   return TeamListNotifier();
 });
 
 class TeamListNotifier extends StateNotifier<List<Team>> {
   TeamListNotifier() : super([]) {
-    initialize();
     loadOnRealTime();
   }
 
-  void initialize() {
-    teamRef = FirebaseFirestore.instance.collection('teams').withConverter(
-          fromFirestore: (sn, _) => Team.fromJson(sn.data()!),
-          toFirestore: (team, _) => team.toJson(),
-        );
-  }
-
-  late final CollectionReference<Team> teamRef;
+  final CollectionReference<Team> teamRef = FireStoreFactory.teamRef;
 
   void loadOnRealTime() {
     teamRef.snapshots().listen((event) {

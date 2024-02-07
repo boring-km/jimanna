@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jimanna/models/admin_option.dart';
 import 'package:jimanna/models/name.dart';
 import 'package:jimanna/models/result.dart';
+import 'package:jimanna/providers/firebase/firebase_factory.dart';
 import 'package:jimanna/routes.dart';
-import 'package:jimanna/utils/date_utils.dart';
 
 final nameRegisterProvider =
     StateNotifierProvider<NameRegisterNotifier, Result<String>>((ref) {
@@ -13,29 +11,12 @@ final nameRegisterProvider =
 
 class NameRegisterNotifier extends StateNotifier<Result<String>> {
   NameRegisterNotifier() : super(const Result.empty()) {
-    final yearMonth = getYearMonthOnly();
-    nameRef = FirebaseFirestore.instance.collection(yearMonth).withConverter(
-          fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
-          toFirestore: (name, _) => name.toJson(),
-        );
-
-    adminOptionRef =
-        FirebaseFirestore.instance.collection('admin').withConverter(
-              fromFirestore: (sn, _) => AdminOption.fromJson(sn.data()!),
-              toFirestore: (name, _) => name.toJson(),
-            );
-
-    nameListRef = FirebaseFirestore.instance.collection('names').withConverter(
-          fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
-          toFirestore: (name, _) => name.toJson(),
-        );
-
     getAdminPassword().then((value) => _adminPassword = value);
   }
 
-  late final CollectionReference<Name> nameRef;
-  late final CollectionReference<AdminOption> adminOptionRef;
-  late final CollectionReference<Name> nameListRef;
+  final nameRef = FireStoreFactory.namesByCurrentYearMonthRef;
+  final adminOptionRef = FireStoreFactory.adminOptionRef;
+  final nameListRef = FireStoreFactory.namesRef;
 
   void registerNameToFirestore(String name) {
     alwaysTrueIfAdmin(name);

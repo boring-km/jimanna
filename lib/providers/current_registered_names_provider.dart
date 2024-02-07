@@ -1,8 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jimanna/models/name.dart';
-import 'package:jimanna/models/team.dart';
-import 'package:jimanna/utils/date_utils.dart';
+import 'package:jimanna/providers/firebase/firebase_factory.dart';
 
 final currentRegisteredNamesProvider =
     StateNotifierProvider<CurrentRegisteredNamesNotifier, List<String>>((ref) {
@@ -11,16 +8,10 @@ final currentRegisteredNamesProvider =
 
 class CurrentRegisteredNamesNotifier extends StateNotifier<List<String>> {
   CurrentRegisteredNamesNotifier() : super([]) {
-    final yearMonth = getYearMonthOnly();
-    nameRef = FirebaseFirestore.instance.collection(yearMonth).withConverter(
-          fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
-          toFirestore: (name, _) => name.toJson(),
-        );
-
     loadOnRealTime();
   }
 
-  late final CollectionReference<Name> nameRef;
+  final nameRef = FireStoreFactory.namesByCurrentYearMonthRef;
 
   void loadOnRealTime() {
     nameRef.snapshots().listen((event) {

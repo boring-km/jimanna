@@ -1,27 +1,22 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/models/name.dart';
+import 'package:jimanna/providers/firebase/firebase_factory.dart';
 
-final adminNameListProvider = StateNotifierProvider<AdminNameListNotifier, List<String>>((ref) {
+final adminNameListProvider =
+    StateNotifierProvider<AdminNameListNotifier, List<String>>((ref) {
   return AdminNameListNotifier();
 });
 
 class AdminNameListNotifier extends StateNotifier<List<String>> {
   AdminNameListNotifier() : super([]) {
-    nameRef = FirebaseFirestore.instance
-        .collection('names')
-        .withConverter(
-        fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
-        toFirestore: (name, _) => name.toJson());
     loadOnRealTime();
   }
 
-  late final CollectionReference<Name> nameRef;
+  final nameRef = FireStoreFactory.namesRef;
 
   void loadOnRealTime() {
     nameRef.snapshots().listen((event) {
-      var list = event.docs.map((e) => e.data().name).toList();
-      list.sort();
+      final list = event.docs.map((e) => e.data().name).toList()..sort();
       state = list;
     });
   }

@@ -83,7 +83,7 @@ class AdminPage extends ConsumerWidget {
               onPressed: () {
                 Navigator.pushNamed(context, Routes.adminCurrentParticipants);
               },
-              child: Text('${getYearMonthOnly()} 참가자'),
+              child: Text('${getCurrentYearMonthOnly()} 참가자'),
             ),
           ],
         ),

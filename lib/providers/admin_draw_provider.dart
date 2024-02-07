@@ -4,6 +4,7 @@ import 'package:jimanna/models/admin_option.dart';
 import 'package:jimanna/models/name.dart';
 import 'package:jimanna/models/team.dart';
 import 'package:jimanna/models/team_draw.dart';
+import 'package:jimanna/providers/firebase/firebase_factory.dart';
 import 'package:jimanna/utils/date_utils.dart';
 
 final adminDrawProvider =
@@ -13,39 +14,12 @@ final adminDrawProvider =
 
 class AdminDrawNotifier extends StateNotifier<TeamDraw> {
   AdminDrawNotifier() : super(TeamDraw([], 0)) {
-    final yearMonth = getYearMonthOnly();
-    initializeNameRef(yearMonth);
-    initializeTeamRef();
-    initializeAdminOptionRef();
     loadOnRealTime();
   }
 
-  void initializeAdminOptionRef() {
-    adminOptionRef =
-        FirebaseFirestore.instance.collection('admin').withConverter(
-              fromFirestore: (sn, _) => AdminOption.fromJson(sn.data()!),
-              toFirestore: (adminOption, _) => adminOption.toJson(),
-            );
-  }
-
-  void initializeTeamRef() {
-    teamRef = FirebaseFirestore.instance.collection('teams').withConverter(
-          fromFirestore: (sn, _) => Team.fromJson(sn.data()!),
-          toFirestore: (team, _) => team.toJson(),
-        );
-  }
-
-  void initializeNameRef(String yearMonth) {
-    nameRef = FirebaseFirestore.instance
-        .collection(yearMonth)
-        .withConverter(
-        fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
-        toFirestore: (name, _) => name.toJson());
-  }
-
-  late final CollectionReference<Name> nameRef;
-  late final CollectionReference<Team> teamRef;
-  late final CollectionReference<AdminOption> adminOptionRef;
+  final _nameRef = FireStoreFactory.namesByCurrentYearMonthRef;
+  final _teamRef = FireStoreFactory.teamRef;
+  final _adminOptionRef = FireStoreFactory.adminOptionRef;
 
   void loadOnRealTime() {
     listenNames();
@@ -53,14 +27,14 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
   }
 
   void listenNames() {
-    nameRef.snapshots().listen((event) {
+    _nameRef.snapshots().listen((event) {
       final list = event.docs.map((e) => e.data().name).toList();
       state = TeamDraw(organizeGroupsOfFourOrThree(list), 0);
     });
   }
 
   void listenTeamDraw() {
-    adminOptionRef.snapshots().listen((event) {
+    _adminOptionRef.snapshots().listen((event) {
       groupNumber = event.docs.first.data().group_number;
       state = TeamDraw(state.teams, groupNumber);
     });
@@ -75,15 +49,15 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
 
   bool addTeam() {
     if (groupNumber + 1 > state.teams.length) return true;
-    teamRef.add(Team(state.teams[groupNumber]));
+    _teamRef.add(Team(state.teams[groupNumber]));
     groupNumber++;
     updateGroupNumberFromAdminOptionRef();
     return false;
   }
 
   void updateGroupNumberFromAdminOptionRef() {
-    adminOptionRef.get().then((value) {
-      adminOptionRef.doc(value.docs.first.id).update(
+    _adminOptionRef.get().then((value) {
+      _adminOptionRef.doc(value.docs.first.id).update(
         {'group_number': groupNumber},
       );
     });
@@ -110,9 +84,9 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
 
   void resetTeams() {
     resetGroupNumber();
-    teamRef.get().then((value) {
+    _teamRef.get().then((value) {
       for (final doc in value.docs) {
-        teamRef.doc(doc.id).delete();
+        _teamRef.doc(doc.id).delete();
       }
     });
   }

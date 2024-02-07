@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/models/black_twin.dart';
+import 'package:jimanna/providers/firebase/firebase_factory.dart';
 
 final adminBlackListProvider =
     StateNotifierProvider<AdminBlackListNotifier, List<BlackTwin>>((ref) {
@@ -9,18 +9,14 @@ final adminBlackListProvider =
 
 class AdminBlackListNotifier extends StateNotifier<List<BlackTwin>> {
   AdminBlackListNotifier() : super([]) {
-    blackRef = FirebaseFirestore.instance.collection('blacklist').withConverter(
-        fromFirestore: (sn, _) => BlackTwin.fromJson(sn.data()!),
-        toFirestore: (name, _) => name.toJson());
     loadOnRealTime();
   }
 
-  late final CollectionReference<BlackTwin> blackRef;
+  final blackRef = FireStoreFactory.blackTwinRef;
 
   void loadOnRealTime() {
     blackRef.snapshots().listen((event) {
-      var list = event.docs.map((e) => e.data()).toList();
-      state = list;
+      state = event.docs.map((e) => e.data()).toList();
     });
   }
 
