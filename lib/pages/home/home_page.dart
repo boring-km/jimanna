@@ -4,7 +4,9 @@ import 'package:jimanna/pages/home/home_desktop_view.dart';
 import 'package:jimanna/pages/home/home_mobile_view.dart';
 
 class HomePage extends ConsumerWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, this.isAdmin = false});
+
+  final bool isAdmin;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -14,7 +16,11 @@ class HomePage extends ConsumerWidget {
     final isMobile = width < 787 || height < 787;
 
     return Scaffold(
-      body: isMobile ? const HomeMobileView() : const HomeDesktopView(),
+      body: isMobile
+          ? const HomeMobileView()
+          : HomeDesktopView(
+              isAdmin: isAdmin,
+            ),
     );
   }
 }

@@ -8,7 +8,6 @@ part 'admin_option.g.dart';
 class AdminOption {
   AdminOption({
     required this.can_register,
-    required this.group_number,
     required this.password,
     required this.is_start_draw,
   });
@@ -16,7 +15,6 @@ class AdminOption {
   factory AdminOption.fromJson(Map<String, dynamic> json) =>
       _$AdminOptionFromJson(json);
   final bool can_register;
-  final int group_number;
   final String password;
   final bool is_start_draw;
 

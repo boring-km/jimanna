@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/models/name.dart';
 import 'package:jimanna/models/result.dart';
+import 'package:jimanna/providers/current_name.dart';
 import 'package:jimanna/providers/firebase/firebase_factory.dart';
 import 'package:jimanna/routes.dart';
 
@@ -39,11 +40,12 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
       if (nameListDocs.docs.any((element) => element.data().name == name)) {
         // nameRef 에 name이 없을 때만 추가
         final nameDocs = await nameRef.get();
+        CurrentName.value = name;
         if (!nameDocs.docs.any((element) => element.data().name == name)) {
           await nameRef.add(Name(name));
           state = const Result.success(Routes.home);
         } else {
-          state = const Result.error('이미 등록된 이름입니다.');
+          state = const Result.success(Routes.home);
         }
       } else {
         state = const Result.error('등록되지 않은 이름입니다.');
@@ -62,7 +64,7 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
     if (name == _adminPassword) {
       state = const Result.success(Routes.admin);
     } else if (name == screenOnly) {
-      state = const Result.success(Routes.home);
+      state = const Result.success(Routes.homeAdmin);
     }
   }
 
@@ -70,7 +72,7 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
     if (name == _adminPassword) {
       state = const Result.success(Routes.admin);
     } else if (name == screenOnly) {
-      state = const Result.success(Routes.home);
+      state = const Result.success(Routes.homeAdmin);
     }
   }
 }

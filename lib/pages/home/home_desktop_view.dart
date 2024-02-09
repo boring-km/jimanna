@@ -4,10 +4,13 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:jimanna/consts.dart';
 import 'package:jimanna/gen/assets.gen.dart';
 import 'package:jimanna/providers/current_registered_names_provider.dart';
+import 'package:jimanna/routes.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class HomeDesktopView extends ConsumerWidget {
-  const HomeDesktopView({super.key});
+  const HomeDesktopView({required this.isAdmin, super.key});
+
+  final bool isAdmin;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,12 +38,7 @@ class HomeDesktopView extends ConsumerWidget {
             width: width,
           ),
         ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Assets.images.homeDesktopBottomButton.image(
-            height: 100,
-          ),
-        ),
+        BottomAdminButton(context),
         Center(
           child: SizedBox(
             width: width * 0.95,
@@ -162,6 +160,21 @@ class HomeDesktopView extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  Widget BottomAdminButton(BuildContext context) {
+    if (isAdmin) {
+      return Align(
+        alignment: Alignment.bottomCenter,
+        child: GestureDetector(
+          onTap: () => Navigator.pushNamed(context, Routes.drawResult),
+          child: Assets.images.homeDesktopBottomButton.image(
+            height: 100,
+          ),
+        ),
+      );
+    }
+    return const SizedBox();
   }
 
   Center buildUserTextBack() {

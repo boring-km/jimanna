@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jimanna/providers/admin_draw_provider.dart';
 
-class AdminDrawResultPage extends ConsumerWidget {
-  const AdminDrawResultPage({super.key});
+class DrawResultPage extends StatelessWidget {
+  const DrawResultPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final teamDraw = ref.watch(adminDrawProvider);
-
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Column(
@@ -16,7 +12,7 @@ class AdminDrawResultPage extends ConsumerWidget {
             SizedBox(
               height: 500,
               child: ListView.builder(
-                itemCount: teamDraw.teams.length,
+                itemCount: 3,
                 itemBuilder: (context, index) {
                   return Column(
                     children: [
@@ -26,11 +22,11 @@ class AdminDrawResultPage extends ConsumerWidget {
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           shrinkWrap: true,
-                          itemCount: teamDraw.teams[index].names.length,
+                          itemCount: 5,
                           itemBuilder: (context, index2) {
                             return Padding(
                               padding: const EdgeInsets.all(8),
-                              child: Text(teamDraw.teams[index].names[index2]),
+                              child: Text('name $index2'),
                             );
                           },
                         ),
@@ -49,7 +45,7 @@ class AdminDrawResultPage extends ConsumerWidget {
             ),
           ],
         ),
-      ),
+      )
     );
   }
 }

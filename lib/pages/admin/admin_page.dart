@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/providers/admin_draw_provider.dart';
 import 'package:jimanna/providers/current_registered_names_provider.dart';
+import 'package:jimanna/providers/is_start_draw_provider.dart';
 import 'package:jimanna/providers/register_state_provider.dart';
 import 'package:jimanna/routes.dart';
 import 'package:jimanna/utils/date_utils.dart';
@@ -32,6 +33,7 @@ class AdminPage extends ConsumerWidget {
               child: ElevatedButton(
                 onPressed: () {
                   ref.read(adminDrawProvider.notifier).resetTeams();
+                  ref.read(isStartDrawProvider.notifier).resetDraw();
                   Navigator.pushNamed(context, Routes.adminDraw);
                 },
                 child: const Text('조 추첨 시작'),
