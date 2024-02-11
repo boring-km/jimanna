@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:jimanna/consts.dart';
 import 'package:jimanna/gen/assets.gen.dart';
+import 'package:jimanna/providers/admin_draw_provider.dart';
 import 'package:jimanna/providers/current_registered_names_provider.dart';
+import 'package:jimanna/providers/is_start_draw_provider.dart';
 import 'package:jimanna/routes.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -21,10 +23,19 @@ class HomeDesktopView extends ConsumerWidget {
 
     return Stack(
       children: [
-        Assets.images.homeDesktopBackground.image(
+        SizedBox(
           width: width,
           height: height,
-          fit: BoxFit.cover,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 2,
+            itemBuilder: (context, index) {
+              return Assets.images.homeDesktopBackground.image(
+                height: height,
+                fit: BoxFit.fitHeight,
+              );
+            },
+          ),
         ),
         Align(
           alignment: Alignment.topCenter,
@@ -32,13 +43,8 @@ class HomeDesktopView extends ConsumerWidget {
             height: 70,
           ),
         ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Assets.images.homeDesktopBottom.image(
-            width: width,
-          ),
-        ),
-        BottomAdminButton(context),
+        BottomGround(height, width),
+        BottomAdminButton(context, ref, height),
         Center(
           child: SizedBox(
             width: width * 0.95,
@@ -73,7 +79,8 @@ class HomeDesktopView extends ConsumerWidget {
                   crossAxisCellCount: 4,
                   mainAxisCellCount: 1.7,
                   child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 4,
                       childAspectRatio: 441 / 248,
                       mainAxisSpacing: 10,
@@ -148,7 +155,12 @@ class HomeDesktopView extends ConsumerWidget {
                       return Stack(
                         children: [
                           buildUserTextBack(),
-                          buildUserText(names, 20 + 12 + 12 + index, context, width),
+                          buildUserText(
+                            names,
+                            20 + 12 + 12 + index,
+                            context,
+                            width,
+                          ),
                         ],
                       );
                     },
@@ -162,14 +174,39 @@ class HomeDesktopView extends ConsumerWidget {
     );
   }
 
-  Widget BottomAdminButton(BuildContext context) {
+  Align BottomGround(double height, double width) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: SizedBox(
+        height: height * 0.2,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: 3,
+          itemBuilder: (BuildContext context, int index) {
+            return Assets.images.homeDesktopBottom.image(
+              width: width / 2,
+              height: height * 0.2,
+              alignment: Alignment.bottomCenter,
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget BottomAdminButton(BuildContext context, WidgetRef ref, double height) {
     if (isAdmin) {
       return Align(
         alignment: Alignment.bottomCenter,
         child: GestureDetector(
-          onTap: () => Navigator.pushNamed(context, Routes.drawResult),
+          onTap: () {
+            ref.read(adminDrawProvider.notifier).resetTeams();
+            ref.read(isStartDrawProvider.notifier).resetDraw();
+            ref.read(adminDrawProvider.notifier).makeTeams();
+            ref.read(isStartDrawProvider.notifier).startDraw();
+          },
           child: Assets.images.homeDesktopBottomButton.image(
-            height: 100,
+            height: height * 0.05,
           ),
         ),
       );
@@ -182,7 +219,11 @@ class HomeDesktopView extends ConsumerWidget {
   }
 
   Center buildUserText(
-      List<String> names, int index, BuildContext context, double width) {
+    List<String> names,
+    int index,
+    BuildContext context,
+    double width,
+  ) {
     if (names.length <= index) {
       return const Center();
     }

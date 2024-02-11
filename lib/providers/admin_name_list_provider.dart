@@ -12,7 +12,7 @@ class AdminNameListNotifier extends StateNotifier<List<String>> {
     loadOnRealTime();
   }
 
-  final nameRef = FireStoreFactory.namesRef;
+  final nameRef = FireStoreFactory.namesRef();
 
   void loadOnRealTime() {
     nameRef.snapshots().listen((event) {

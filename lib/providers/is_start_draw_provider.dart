@@ -1,6 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jimanna/models/admin_option.dart';
+import 'package:jimanna/providers/firebase/firebase_factory.dart';
 
 final isStartDrawProvider = StateNotifierProvider<IsStartDrawNotifier, bool?>(
   (ref) => IsStartDrawNotifier(),
@@ -11,10 +10,7 @@ class IsStartDrawNotifier extends StateNotifier<bool?> {
     loadOnRealTime();
   }
 
-  final adminOptionRef = FirebaseFirestore.instance.collection('admin').withConverter(
-    fromFirestore: (sn, _) => AdminOption.fromJson(sn.data()!),
-    toFirestore: (adminOption, _) => adminOption.toJson(),
-  );
+  final adminOptionRef = FireStoreFactory.adminOptionRef();
 
   void loadOnRealTime() {
     adminOptionRef.snapshots().listen((event) {

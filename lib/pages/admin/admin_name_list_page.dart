@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/providers/admin_name_list_provider.dart';
+import 'package:jimanna/ui/backward_button.dart';
 
 class AdminNameListPage extends ConsumerStatefulWidget {
   const AdminNameListPage({super.key});
@@ -21,6 +22,7 @@ class _AdminNameListPageState extends ConsumerState<AdminNameListPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            BackwardButton(context),
             const Text('명단 관리', style: TextStyle(fontSize: 30)),
             const SizedBox(height: 10),
             Text(

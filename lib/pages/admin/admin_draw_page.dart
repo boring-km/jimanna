@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/providers/admin_draw_provider.dart';
 import 'package:jimanna/providers/is_start_draw_provider.dart';
+import 'package:jimanna/ui/backward_button.dart';
 
 class AdminDrawPage extends ConsumerWidget {
   const AdminDrawPage({super.key});
@@ -21,7 +22,7 @@ class AdminDrawPage extends ConsumerWidget {
     if (isStartDraw != null && isStartDraw) {
       return ResultView(ref, context);
     } else {
-      return NotStartedView(ref);
+      return NotStartedView(ref, context);
     }
   }
 
@@ -90,10 +91,11 @@ class AdminDrawPage extends ConsumerWidget {
     );
   }
 
-  Widget NotStartedView(WidgetRef ref) {
+  Widget NotStartedView(WidgetRef ref, BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        BackwardButton(context),
         const Text('추첨을 시작해주세요.', style: TextStyle(fontSize: 30)),
         const SizedBox(height: 20),
         ElevatedButton(

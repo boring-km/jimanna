@@ -24,9 +24,9 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
     });
   }
 
-  final _nameRef = FireStoreFactory.namesByCurrentYearMonthRef;
-  final _teamRef = FireStoreFactory.teamRef;
-  final _blackTwinRef = FireStoreFactory.blackTwinRef;
+  final _nameRef = FireStoreFactory.namesByCurrentYearMonthRef();
+  final _teamRef = FireStoreFactory.teamRef();
+  final _blackTwinRef = FireStoreFactory.blackTwinRef();
 
   // 4명씩 랜덤으로 조를 짜는데 4명이 안되는 경우는 3명으로 조를 짜도록 함
   List<List<String>> organizeGroupsOfFourOrThree(List<String> names) {

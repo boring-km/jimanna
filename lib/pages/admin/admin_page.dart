@@ -5,6 +5,7 @@ import 'package:jimanna/providers/current_registered_names_provider.dart';
 import 'package:jimanna/providers/is_start_draw_provider.dart';
 import 'package:jimanna/providers/register_state_provider.dart';
 import 'package:jimanna/routes.dart';
+import 'package:jimanna/ui/backward_button.dart';
 import 'package:jimanna/utils/date_utils.dart';
 
 class AdminPage extends ConsumerWidget {
@@ -17,6 +18,7 @@ class AdminPage extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            BackwardButton(context),
             const Text('관리자 페이지', style: TextStyle(fontSize: 30)),
             Padding(
               padding: const EdgeInsets.all(20),
@@ -42,6 +44,7 @@ class AdminPage extends ConsumerWidget {
             ElevatedButton(
               onPressed: () {
                 ref.read(adminDrawProvider.notifier).resetTeams();
+                ref.read(isStartDrawProvider.notifier).resetDraw();
               },
               child: const Text(
                 '추첨 초기화\n(이름 보존됨)',
@@ -76,7 +79,7 @@ class AdminPage extends ConsumerWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, Routes.adminDrawResult);
+                Navigator.pushNamed(context, Routes.drawResult);
               },
               child: const Text('조 추첨 결과'),
             ),

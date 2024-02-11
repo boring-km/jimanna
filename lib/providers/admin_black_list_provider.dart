@@ -12,7 +12,7 @@ class AdminBlackListNotifier extends StateNotifier<List<BlackTwin>> {
     loadOnRealTime();
   }
 
-  final blackRef = FireStoreFactory.blackTwinRef;
+  final blackRef = FireStoreFactory.blackTwinRef();
 
   void loadOnRealTime() {
     blackRef.snapshots().listen((event) {

@@ -29,6 +29,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/error.jpg
   AssetGenImage get error => const AssetGenImage('assets/images/error.jpg');
 
+  /// File path: assets/images/game_controller.png
+  AssetGenImage get gameController =>
+      const AssetGenImage('assets/images/game_controller.png');
+
   /// File path: assets/images/health.gif
   AssetGenImage get health => const AssetGenImage('assets/images/health.gif');
 
@@ -59,6 +63,10 @@ class $AssetsImagesGen {
   AssetGenImage get nameBackground =>
       const AssetGenImage('assets/images/name_background.png');
 
+  /// File path: assets/images/nintendo.png
+  AssetGenImage get nintendo =>
+      const AssetGenImage('assets/images/nintendo.png');
+
   /// File path: assets/images/star.gif
   AssetGenImage get star => const AssetGenImage('assets/images/star.gif');
 
@@ -69,6 +77,7 @@ class $AssetsImagesGen {
         confirmButton,
         emoji,
         error,
+        gameController,
         health,
         heart,
         homeDesktopBackground,
@@ -77,14 +86,26 @@ class $AssetsImagesGen {
         homeDesktopTop,
         homeImage,
         nameBackground,
+        nintendo,
         star
       ];
+}
+
+class $AssetsVideosGen {
+  const $AssetsVideosGen();
+
+  /// File path: assets/videos/intro_video_5s.mp4
+  String get introVideo5s => 'assets/videos/intro_video_5s.mp4';
+
+  /// List of all assets
+  List<String> get values => [introVideo5s];
 }
 
 class Assets {
   Assets._();
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsVideosGen videos = $AssetsVideosGen();
 }
 
 class AssetGenImage {

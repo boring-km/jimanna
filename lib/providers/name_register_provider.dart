@@ -15,9 +15,9 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
     getAdminPassword().then((value) => _adminPassword = value);
   }
 
-  final nameRef = FireStoreFactory.namesByCurrentYearMonthRef;
-  final adminOptionRef = FireStoreFactory.adminOptionRef;
-  final nameListRef = FireStoreFactory.namesRef;
+  final nameRef = FireStoreFactory.namesByCurrentYearMonthRef();
+  final adminOptionRef = FireStoreFactory.adminOptionRef();
+  final nameListRef = FireStoreFactory.namesRef();
 
   void registerNameToFirestore(String name) {
     alwaysTrueIfAdmin(name);

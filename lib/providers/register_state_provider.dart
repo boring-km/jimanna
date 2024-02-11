@@ -12,7 +12,7 @@ class RegisterStateProvider extends StateNotifier<RegisterState> {
     loadOnRealTime();
   }
 
-  final adminOptionRef = FireStoreFactory.adminOptionRef;
+  final adminOptionRef = FireStoreFactory.adminOptionRef();
 
   void loadOnRealTime() {
     adminOptionRef.snapshots().listen((event) {

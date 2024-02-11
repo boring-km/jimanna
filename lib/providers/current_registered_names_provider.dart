@@ -11,7 +11,7 @@ class CurrentRegisteredNamesNotifier extends StateNotifier<List<String>> {
     loadOnRealTime();
   }
 
-  final nameRef = FireStoreFactory.namesByCurrentYearMonthRef;
+  final nameRef = FireStoreFactory.namesByCurrentYearMonthRef();
 
   void loadOnRealTime() {
     nameRef.snapshots().listen((event) {
