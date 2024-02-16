@@ -1,3 +1,3 @@
 class CurrentName {
-  static String value = '';
+  static String value = '김태준';
 }

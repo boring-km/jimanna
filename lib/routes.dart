@@ -6,6 +6,7 @@ import 'package:jimanna/pages/admin/admin_name_list_page.dart';
 import 'package:jimanna/pages/admin/admin_page.dart';
 import 'package:jimanna/pages/admin/admin_current_month_name_list_page.dart';
 import 'package:jimanna/pages/draw_result_page.dart';
+import 'package:jimanna/pages/draw_total_result_page.dart';
 import 'package:jimanna/pages/error/error_page.dart';
 import 'package:jimanna/pages/home/home_page.dart';
 import 'package:jimanna/pages/register_page.dart';
@@ -23,6 +24,10 @@ class Routes {
   static const String homeAdmin = '/homeAdmin';
 
   static const String drawResult = '/drawResult';
+
+  static const String drawTotalResultPage = '/drawTotalResultPage';
+
+  static const String drawMobileResult = '/drawMobileResult';
 }
 
 class Pages {
@@ -37,7 +42,11 @@ class Pages {
       case Routes.homeAdmin:
         return router.create(child: const HomePage(isAdmin: true));
       case Routes.drawResult:
-        return router.create(child: const DrawResultPage());
+        return router.create(child: const DrawResultPage(isMobile: false));
+      case Routes.drawMobileResult:
+        return router.create(child: const DrawResultPage(isMobile: true));
+      case Routes.drawTotalResultPage:
+        return router.create(child: const DrawTotalResultPage());
       case Routes.admin:
         return router.create(child: const AdminPage());
       case Routes.adminDraw:

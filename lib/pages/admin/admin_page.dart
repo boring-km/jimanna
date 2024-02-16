@@ -79,7 +79,7 @@ class AdminPage extends ConsumerWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, Routes.drawResult);
+                Navigator.pushNamed(context, Routes.adminDrawResult);
               },
               child: const Text('조 추첨 결과'),
             ),

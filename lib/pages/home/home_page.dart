@@ -18,13 +18,20 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
 
+  final isMobileState = ValueNotifier(false);
+
   @override
   void initState() {
     super.initState();
 
     FireStoreFactory.adminOptionRef().snapshots().listen((event) {
       if (event.docs.first.data().is_start_draw) {
-        Navigator.popAndPushNamed(context, Routes.drawResult);
+        final isDrawEnd = event.docs.first.data().is_draw_end;
+        if (isMobileState.value) {
+          Navigator.popAndPushNamed(context, Routes.drawMobileResult, arguments: isDrawEnd);
+        } else {
+          Navigator.popAndPushNamed(context, Routes.drawResult, arguments: isDrawEnd);
+        }
       }
     });
   }
@@ -35,6 +42,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     final height = MediaQuery.of(context).size.height;
 
     final isMobile = width < 787 || height < 787;
+    isMobileState.value = isMobile;
 
     return Scaffold(
       body: isMobile

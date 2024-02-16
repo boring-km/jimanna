@@ -24,7 +24,7 @@ class AdminCurrentMonthNameListPage extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.all(8),
-                    child: Text(nameList[index]),
+                    child: Text(nameList[index], textAlign: TextAlign.center,),
                   );
                 },
               ),

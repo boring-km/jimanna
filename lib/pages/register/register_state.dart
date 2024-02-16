@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jimanna/providers/current_name.dart';
 import 'package:jimanna/providers/name_register_provider.dart';
 
 abstract class RegisterState {
@@ -15,6 +16,7 @@ abstract class RegisterState {
 class CanRegisterState implements RegisterState {
   @override
   void check(WidgetRef ref, String text) {
+    CurrentName.value = text;
     ref.read(nameRegisterProvider.notifier).registerNameToFirestore(text);
   }
 
@@ -33,6 +35,7 @@ class CanRegisterState implements RegisterState {
 class CannotRegisterState implements RegisterState {
   @override
   void check(WidgetRef ref, String text) {
+    CurrentName.value = text;
     ref.read(nameRegisterProvider.notifier).checkAdmin(text);
   }
 
@@ -50,7 +53,9 @@ class CannotRegisterState implements RegisterState {
 
 class EmptyRegisterState implements RegisterState {
   @override
-  void check(WidgetRef ref, String text) {}
+  void check(WidgetRef ref, String text) {
+    CurrentName.value = text;
+  }
 
   @override
   bool getOpposite() {
@@ -69,6 +74,7 @@ class ErrorRegisterState implements RegisterState {
 
   @override
   void check(WidgetRef ref, String text) {
+    CurrentName.value = text;
     ref.read(nameRegisterProvider.notifier).registerNameToFirestore(text);
   }
 

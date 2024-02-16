@@ -40,7 +40,6 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
       if (nameListDocs.docs.any((element) => element.data().name == name)) {
         // nameRef 에 name이 없을 때만 추가
         final nameDocs = await nameRef.get();
-        CurrentName.value = name;
         if (!nameDocs.docs.any((element) => element.data().name == name)) {
           await nameRef.add(Name(name));
           state = const Result.success(Routes.home);

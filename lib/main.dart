@@ -13,6 +13,7 @@ import 'package:url_strategy/url_strategy.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setPathUrlStrategy();
+  Paint.enableDithering = true;
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseFirestore.instance.settings = const Settings(
     persistenceEnabled: true,
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           textTheme: textTheme,
         ),
-        initialRoute: Routes.admin,
+        initialRoute: Routes.register,
         onGenerateRoute: Pages.getPages,
         onUnknownRoute: (_) => MaterialPageRoute(
           builder: (_) => const ErrorPage(),

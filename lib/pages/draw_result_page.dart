@@ -3,39 +3,56 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/gen/assets.gen.dart';
+import 'package:jimanna/gen/colors.gen.dart';
+import 'package:jimanna/models/admin_option.dart';
+import 'package:jimanna/providers/admin_draw_provider.dart';
+import 'package:jimanna/providers/current_name.dart';
+import 'package:jimanna/routes.dart';
+import 'package:jimanna/ui/background_painter.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:video_player/video_player.dart';
 
 class DrawResultPage extends ConsumerStatefulWidget {
-  const DrawResultPage({super.key});
+  const DrawResultPage({required this.isMobile, super.key});
+
+  final bool isMobile;
 
   @override
   ConsumerState<DrawResultPage> createState() => _DrawResultPageState();
 }
 
 class _DrawResultPageState extends ConsumerState<DrawResultPage> {
+  late final bool isMobileState;
   final counter = ValueNotifier(10);
   final showResult = ValueNotifier(false);
 
   @override
   void initState() {
     super.initState();
+    isMobileState = widget.isMobile;
 
-    setAudioPlayer();
-    setVideoPlayer();
+    if (isMobileState) {
+      startResultTimer();
+    } else {
+      setVideoPlayer();
+    }
   }
 
   void setVideoPlayer() {
     _controller =
-        VideoPlayerController.asset('assets/videos/intro_video_5s.mp4')
-          ..initialize().then((_) {
-            setState(() {
-              _controller.play().then((value) {
-                _controller.setLooping(true);
-                startResultTimer();
-              });
-            });
+        VideoPlayerController.asset('assets/videos/intro_video_5s.mp4');
+    Future.delayed(const Duration(milliseconds: 300), () {
+      _controller.initialize().then((_) {
+        setState(() {
+          _controller.play().then((_) {
+            _controller.setLooping(true);
+            startResultTimer();
           });
+          setAudioPlayer();
+        });
+      });
+    });
   }
 
   void setAudioPlayer() {
@@ -43,7 +60,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
     audioPlayer
         .setAsset(
           'assets/music/background_music.mp3',
-          initialPosition: const Duration(seconds: 14),
+          initialPosition: const Duration(seconds: 15),
         )
         .then(
           (value) =>
@@ -56,9 +73,67 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
       counter.value--;
       if (counter.value == 0) {
         timer.cancel();
+        _controller.pause();
         showResult.value = true;
+        showNamesWithTimer();
       }
     });
+  }
+
+  final teamCount = ValueNotifier(1);
+  final leftTopName = ValueNotifier('');
+  final rightTopName = ValueNotifier('');
+  final leftBottomName = ValueNotifier('');
+  final rightBottomName = ValueNotifier('');
+
+  final myNameTeamNumber = ValueNotifier(0);
+
+  void findMyNameTeamNumber() {
+    final teamDraw = ref.read(adminDrawProvider);
+    for (var j = 0; j < teamDraw.teams.length; j++) {
+      for (var i = 0; i < teamDraw.teams[j].names.length; i++) {
+        if (teamDraw.teams[j].names[i] == CurrentName.value) {
+          myNameTeamNumber.value = j + 1;
+          return;
+        }
+      }
+    }
+  }
+
+  Future<void> showNamesWithTimer() async {
+    final teamDraw = ref.read(adminDrawProvider);
+    for (final team in teamDraw.teams) {
+      await Future.delayed(const Duration(milliseconds: 1000));
+      for (var i = 0; i < team.names.length; i++) {
+        if (team.names[i] == CurrentName.value) {
+          myNameTeamNumber.value = teamCount.value;
+        }
+        if (i == 0) {
+          leftTopName.value = team.names[i];
+          await Future.delayed(const Duration(milliseconds: 500));
+        } else if (i == 1) {
+          rightTopName.value = team.names[i];
+          await Future.delayed(const Duration(milliseconds: 500));
+        } else if (i == 2) {
+          leftBottomName.value = team.names[i];
+          await Future.delayed(const Duration(milliseconds: 500));
+        } else if (i == 3) {
+          rightBottomName.value = team.names[i];
+          await Future.delayed(const Duration(milliseconds: 500));
+        }
+      }
+      await Future.delayed(const Duration(seconds: 4));
+      teamCount.value++;
+      leftTopName.value = '';
+      rightTopName.value = '';
+      leftBottomName.value = '';
+      rightBottomName.value = '';
+    }
+    if (!isMobileState) {
+      ref.read(adminOptionsProvider.notifier).endDraw();
+      unawaited(
+          Navigator.pushReplacementNamed(context, Routes.drawTotalResultPage));
+    }
   }
 
   final audioPlayer = AudioPlayer();
@@ -67,9 +142,6 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
 
   @override
   void dispose() {
-    _controller
-      ..pause()
-      ..dispose();
     audioPlayer
       ..stop()
       ..dispose();
@@ -78,13 +150,46 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
 
   @override
   Widget build(BuildContext context) {
+    // get argument from home_page.dart
+    moveIfDrawEnd(context);
+
+    ref.read(adminDrawProvider);
+
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
+    final isMobile = width < 787 || height < 787;
 
     final nintendoHeight = getNintendoHeight();
 
+    return isMobile
+        ? MobileView(width)
+        : DesktopView(width, height, nintendoHeight);
+  }
+
+  void moveIfDrawEnd(BuildContext context) {
+    final isDrawEnd = ModalRoute.of(context)!.settings.arguments! as bool;
+    if (isDrawEnd) {
+      findMyNameTeamNumber();
+      if (!isMobileState) {
+        unawaited(Navigator.pushReplacementNamed(
+            context, Routes.drawTotalResultPage));
+      }
+    }
+  }
+
+  Scaffold DesktopView(double width, double height, double nintendoHeight) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Stack(
         children: [
+          Center(
+            child: Assets.images.drawBackground.image(
+              width: width,
+              height: height,
+              fit: BoxFit.fitHeight,
+            ),
+          ),
           Center(
             child: Assets.images.nintendo.image(
               key: nintendoKey,
@@ -110,8 +215,52 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
                   )
                 : Container(),
           ),
+          ValueListenableBuilder(
+            valueListenable: showResult,
+            builder: (context, value, child) {
+              if (value) {
+                return Center(
+                  child: SizedBox(
+                    width: nintendoHeight * (16 / 9),
+                    height: nintendoHeight,
+                    child: Stack(
+                      children: [
+                        Assets.images.resultBackground.image(),
+                        TeamDrawTitle(),
+                        LeftTopName(),
+                        RightTopName(),
+                        LeftBottomName(),
+                        RightBottomName(),
+                      ],
+                    ),
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
         ],
       ),
+    );
+  }
+
+  ValueListenableBuilder<int> TeamDrawTitle() {
+    return ValueListenableBuilder(
+      valueListenable: teamCount,
+      builder: (context, value, child) {
+        return Align(
+          alignment: Alignment.topCenter,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: GradientText(
+              '$value조',
+              gradientDirection: GradientDirection.ttb,
+              colors: const [Colors.white, Color(0xffed8629)],
+              style: const TextStyle(fontSize: 60),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -120,5 +269,148 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
         nintendoKey.currentContext?.findRenderObject() as RenderBox?;
     final nintendoHeight = nintendoRenderBox?.size.height ?? 0;
     return nintendoHeight;
+  }
+
+  Widget LeftTopName() {
+    return ValueListenableBuilder(
+      valueListenable: leftTopName,
+      builder: (context, value, child) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 100, top: 120),
+            child: GradientText(
+              value,
+              gradientDirection: GradientDirection.ttb,
+              colors: const [Colors.white, Colors.green],
+              style: const TextStyle(fontSize: 60),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget RightTopName() {
+    return ValueListenableBuilder(
+      valueListenable: rightTopName,
+      builder: (context, value, child) {
+        return Align(
+          alignment: Alignment.topRight,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 100, top: 120),
+            child: GradientText(
+              value,
+              gradientDirection: GradientDirection.ttb,
+              colors: const [Colors.white, Colors.green],
+              style: const TextStyle(fontSize: 60),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget LeftBottomName() {
+    return ValueListenableBuilder(
+      valueListenable: leftBottomName,
+      builder: (context, value, child) {
+        return Align(
+          alignment: Alignment.bottomLeft,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 100, bottom: 100),
+            child: GradientText(
+              value,
+              gradientDirection: GradientDirection.ttb,
+              colors: const [Colors.white, Colors.green],
+              style: const TextStyle(fontSize: 60),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget RightBottomName() {
+    return ValueListenableBuilder(
+      valueListenable: rightBottomName,
+      builder: (context, value, child) {
+        return Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 100, bottom: 100),
+            child: GradientText(
+              value,
+              gradientDirection: GradientDirection.ttb,
+              colors: const [Colors.white, Colors.green],
+              style: const TextStyle(fontSize: 60),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget MobileView(double width) {
+    final teamDraw = ref.watch(adminDrawProvider);
+
+    return Scaffold(
+      backgroundColor: ColorName.blueDark,
+      body: CustomPaint(
+        painter: BackgroundPainter(),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('내가 뽑힌 조는?',
+                  style: TextStyle(fontSize: 30, color: Colors.white)),
+              const SizedBox(height: 20),
+              ValueListenableBuilder(
+                valueListenable: myNameTeamNumber,
+                builder: (context, value, child) {
+                  if (value == 0) return const SizedBox.shrink();
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        value != 0 ? '$value조' : '',
+                        style:
+                            const TextStyle(fontSize: 60, color: Colors.white),
+                      ),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        height: 200,
+                        child: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Text(
+                                teamDraw.teams[value - 1].names[index],
+                                style: const TextStyle(
+                                    fontSize: 20, color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            );
+                          },
+                          itemCount: teamDraw.teams[value - 1].names.length,
+                          shrinkWrap: true,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('돌아가기'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

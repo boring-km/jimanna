@@ -30,7 +30,7 @@ class IsStartDrawNotifier extends StateNotifier<bool?> {
   void resetDraw() {
     adminOptionRef.get().then((value) {
       adminOptionRef.doc(value.docs.first.id).update(
-        {'is_start_draw': false},
+        {'is_start_draw': false, 'is_draw_end': false},
       );
       state = false;
     });

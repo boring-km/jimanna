@@ -10,6 +10,7 @@ AdminOption _$AdminOptionFromJson(Map<String, dynamic> json) => AdminOption(
       can_register: json['can_register'] as bool,
       password: json['password'] as String,
       is_start_draw: json['is_start_draw'] as bool,
+      is_draw_end: json['is_draw_end'] as bool,
     );
 
 Map<String, dynamic> _$AdminOptionToJson(AdminOption instance) =>
@@ -17,6 +18,7 @@ Map<String, dynamic> _$AdminOptionToJson(AdminOption instance) =>
       'can_register': instance.can_register,
       'password': instance.password,
       'is_start_draw': instance.is_start_draw,
+      'is_draw_end': instance.is_draw_end,
     };
 
 // **************************************************************************
