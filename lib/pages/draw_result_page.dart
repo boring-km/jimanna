@@ -9,6 +9,8 @@ import 'package:jimanna/providers/admin_draw_provider.dart';
 import 'package:jimanna/providers/current_name.dart';
 import 'package:jimanna/routes.dart';
 import 'package:jimanna/ui/background_painter.dart';
+import 'package:jimanna/ui/ongmezim_text.dart';
+import 'package:jimanna/utils/background_audio_player.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:video_player/video_player.dart';
@@ -31,17 +33,20 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
   void initState() {
     super.initState();
     isMobileState = widget.isMobile;
+    _controller = VideoPlayerController.asset('assets/videos/intro_video_5s.mp4');
 
     if (isMobileState) {
       startResultTimer();
     } else {
       setVideoPlayer();
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      moveIfDrawEnd(context);
+    });
   }
 
   void setVideoPlayer() {
-    _controller =
-        VideoPlayerController.asset('assets/videos/intro_video_5s.mp4');
     Future.delayed(const Duration(milliseconds: 300), () {
       _controller.initialize().then((_) {
         setState(() {
@@ -71,6 +76,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
   void startResultTimer() {
     Timer.periodic(const Duration(seconds: 1), (timer) {
       counter.value--;
+      print(counter.value);
       if (counter.value == 0) {
         timer.cancel();
         _controller.pause();
@@ -88,16 +94,16 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
 
   final myNameTeamNumber = ValueNotifier(0);
 
-  void findMyNameTeamNumber() {
+  int findMyNameTeamNumber() {
     final teamDraw = ref.read(adminDrawProvider);
     for (var j = 0; j < teamDraw.teams.length; j++) {
       for (var i = 0; i < teamDraw.teams[j].names.length; i++) {
         if (teamDraw.teams[j].names[i] == CurrentName.value) {
-          myNameTeamNumber.value = j + 1;
-          return;
+          return j + 1;
         }
       }
     }
+    return 0;
   }
 
   Future<void> showNamesWithTimer() async {
@@ -105,8 +111,9 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
     for (final team in teamDraw.teams) {
       await Future.delayed(const Duration(milliseconds: 1000));
       for (var i = 0; i < team.names.length; i++) {
-        if (team.names[i] == CurrentName.value) {
-          myNameTeamNumber.value = teamCount.value;
+        print('이름: ${team.names[i]}');
+        if (team.names[i] == CurrentName.value && isMobileState) {
+          myNameTeamNumber.value = findMyNameTeamNumber();
         }
         if (i == 0) {
           leftTopName.value = team.names[i];
@@ -131,29 +138,18 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
     }
     if (!isMobileState) {
       ref.read(adminOptionsProvider.notifier).endDraw();
-      unawaited(
-          Navigator.pushReplacementNamed(context, Routes.drawTotalResultPage));
+      unawaited(Navigator.popAndPushNamed(context, Routes.drawTotalResultPage));
     }
   }
 
-  final audioPlayer = AudioPlayer();
   late VideoPlayerController _controller;
   final nintendoKey = GlobalKey();
 
   @override
-  void dispose() {
-    audioPlayer
-      ..stop()
-      ..dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // get argument from home_page.dart
-    moveIfDrawEnd(context);
-
-    ref.read(adminDrawProvider);
+    ref
+      ..read(adminOptionsProvider.notifier)
+      ..read(adminDrawProvider);
 
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
@@ -170,10 +166,14 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
   void moveIfDrawEnd(BuildContext context) {
     final isDrawEnd = ModalRoute.of(context)!.settings.arguments! as bool;
     if (isDrawEnd) {
-      findMyNameTeamNumber();
+      myNameTeamNumber.value = findMyNameTeamNumber();
       if (!isMobileState) {
-        unawaited(Navigator.pushReplacementNamed(
-            context, Routes.drawTotalResultPage));
+        unawaited(
+          Navigator.pushReplacementNamed(
+            context,
+            Routes.drawTotalResultPage,
+          ),
+        );
       }
     }
   }
@@ -190,10 +190,14 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
               fit: BoxFit.fitHeight,
             ),
           ),
-          Center(
-            child: Assets.images.nintendo.image(
-              key: nintendoKey,
-              width: width * 0.5,
+          BottomText(context, width * (3/4), height),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 40),
+            child: Center(
+              child: Assets.images.nintendo.image(
+                key: nintendoKey,
+                width: width * 0.5,
+              ),
             ),
           ),
           Align(
@@ -203,35 +207,41 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
               alignment: Alignment.bottomCenter,
             ),
           ),
-          Center(
-            child: _controller.value.isInitialized
-                ? SizedBox(
-                    width: nintendoHeight * (16 / 9),
-                    height: nintendoHeight,
-                    child: AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio,
-                      child: VideoPlayer(_controller),
-                    ),
-                  )
-                : Container(),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 40),
+            child: Center(
+              child: _controller.value.isInitialized
+                  ? SizedBox(
+                      width: nintendoHeight * (16 / 9),
+                      height: nintendoHeight,
+                      child: AspectRatio(
+                        aspectRatio: _controller.value.aspectRatio,
+                        child: VideoPlayer(_controller),
+                      ),
+                    )
+                  : Container(),
+            ),
           ),
           ValueListenableBuilder(
             valueListenable: showResult,
             builder: (context, value, child) {
               if (value) {
-                return Center(
-                  child: SizedBox(
-                    width: nintendoHeight * (16 / 9),
-                    height: nintendoHeight,
-                    child: Stack(
-                      children: [
-                        Assets.images.resultBackground.image(),
-                        TeamDrawTitle(),
-                        LeftTopName(),
-                        RightTopName(),
-                        LeftBottomName(),
-                        RightBottomName(),
-                      ],
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 40),
+                  child: Center(
+                    child: SizedBox(
+                      width: nintendoHeight * (16 / 9),
+                      height: nintendoHeight,
+                      child: Stack(
+                        children: [
+                          Assets.images.resultBackground.image(),
+                          TeamDrawTitle(),
+                          LeftTopName(),
+                          RightTopName(),
+                          LeftBottomName(),
+                          RightBottomName(),
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -278,7 +288,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
         return Align(
           alignment: Alignment.topLeft,
           child: Padding(
-            padding: const EdgeInsets.only(left: 100, top: 120),
+            padding: const EdgeInsets.only(left: 90, top: 110),
             child: GradientText(
               value,
               gradientDirection: GradientDirection.ttb,
@@ -298,7 +308,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
         return Align(
           alignment: Alignment.topRight,
           child: Padding(
-            padding: const EdgeInsets.only(right: 100, top: 120),
+            padding: const EdgeInsets.only(right: 90, top: 110),
             child: GradientText(
               value,
               gradientDirection: GradientDirection.ttb,
@@ -318,7 +328,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
         return Align(
           alignment: Alignment.bottomLeft,
           child: Padding(
-            padding: const EdgeInsets.only(left: 100, bottom: 100),
+            padding: const EdgeInsets.only(left: 90, bottom: 80),
             child: GradientText(
               value,
               gradientDirection: GradientDirection.ttb,
@@ -338,7 +348,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
         return Align(
           alignment: Alignment.bottomRight,
           child: Padding(
-            padding: const EdgeInsets.only(right: 100, bottom: 100),
+            padding: const EdgeInsets.only(right: 90, bottom: 80),
             child: GradientText(
               value,
               gradientDirection: GradientDirection.ttb,
@@ -409,6 +419,19 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget BottomText(BuildContext context, double width, double height) {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: SizedBox(
+        height: height * 0.05,
+        child: Padding(
+          padding: const EdgeInsets.only(right: 16),
+          child: ongmezimText(context, width / 2),
         ),
       ),
     );

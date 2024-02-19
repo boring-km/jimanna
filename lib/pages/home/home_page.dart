@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/pages/home/home_desktop_view.dart';
 import 'package:jimanna/pages/home/home_mobile_view.dart';
-import 'package:jimanna/providers/admin_draw_provider.dart';
 import 'package:jimanna/providers/firebase/firebase_factory.dart';
-import 'package:jimanna/providers/is_start_draw_provider.dart';
 import 'package:jimanna/routes.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -17,7 +15,6 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-
   final isMobileState = ValueNotifier(false);
 
   @override
@@ -28,9 +25,17 @@ class _HomePageState extends ConsumerState<HomePage> {
       if (event.docs.first.data().is_start_draw) {
         final isDrawEnd = event.docs.first.data().is_draw_end;
         if (isMobileState.value) {
-          Navigator.popAndPushNamed(context, Routes.drawMobileResult, arguments: isDrawEnd);
+          Navigator.popAndPushNamed(
+            context,
+            Routes.drawMobileResult,
+            arguments: isDrawEnd,
+          );
         } else {
-          Navigator.popAndPushNamed(context, Routes.drawResult, arguments: isDrawEnd);
+          Navigator.popAndPushNamed(
+            context,
+            Routes.drawResult,
+            arguments: isDrawEnd,
+          );
         }
       }
     });

@@ -53,6 +53,19 @@ class _CharacterImageView extends StatelessWidget {
             ),
           ),
         ),
+        Center(
+          child: SizedBox(
+            width: width * 6 / 7,
+            height: (width * 6 / 7) * (228 / 400),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: height / 70, right: width / 24),
+                child: ongmezimText(context, width),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

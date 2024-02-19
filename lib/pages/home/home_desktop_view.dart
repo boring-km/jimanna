@@ -6,7 +6,7 @@ import 'package:jimanna/gen/assets.gen.dart';
 import 'package:jimanna/providers/admin_draw_provider.dart';
 import 'package:jimanna/providers/current_registered_names_provider.dart';
 import 'package:jimanna/providers/is_start_draw_provider.dart';
-import 'package:jimanna/routes.dart';
+import 'package:jimanna/ui/ongmezim_text.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class HomeDesktopView extends ConsumerWidget {
@@ -44,6 +44,7 @@ class HomeDesktopView extends ConsumerWidget {
           ),
         ),
         BottomGround(height, width),
+        BottomText(context, width, height),
         BottomAdminButton(context, ref, height),
         Center(
           child: SizedBox(
@@ -194,14 +195,25 @@ class HomeDesktopView extends ConsumerWidget {
     );
   }
 
+  Widget BottomText(BuildContext context, double width, double height) {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: SizedBox(
+        height: height * 0.05,
+        child: Padding(
+          padding: const EdgeInsets.only(right: 16),
+          child: ongmezimText(context, width / 2),
+        ),
+      ),
+    );
+  }
+
   Widget BottomAdminButton(BuildContext context, WidgetRef ref, double height) {
     if (isAdmin) {
       return Align(
         alignment: Alignment.bottomCenter,
         child: GestureDetector(
           onTap: () {
-            ref.read(adminDrawProvider.notifier).resetTeams();
-            ref.read(isStartDrawProvider.notifier).resetDraw();
             ref.read(adminDrawProvider.notifier).makeTeams();
             ref.read(isStartDrawProvider.notifier).startDraw();
           },

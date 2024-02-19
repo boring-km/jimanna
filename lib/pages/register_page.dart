@@ -8,6 +8,7 @@ import 'package:jimanna/providers/register_state_provider.dart';
 import 'package:jimanna/ui/background_painter.dart';
 import 'package:jimanna/ui/bottom_text.dart';
 import 'package:jimanna/ui/frame_painter.dart';
+import 'package:jimanna/ui/ongmezim_text.dart';
 import 'package:jimanna/utils/context_utils.dart';
 
 part 'register/character_image_view.dart';

@@ -41,4 +41,15 @@ class AdminOptions extends _$AdminOptions {
       });
     });
   }
+
+  void setTeamOpened(int teamNumber) {
+    FireStoreFactory.adminOptionRef().get().then((value) {
+      FirebaseFirestore.instance
+          .collection('admin')
+          .doc(value.docs.first.id)
+          .update({
+        'opened_team_number': teamNumber,
+      });
+    });
+  }
 }
