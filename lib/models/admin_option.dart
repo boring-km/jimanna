@@ -52,4 +52,15 @@ class AdminOptions extends _$AdminOptions {
       });
     });
   }
+
+  void changePassword(String text) {
+    FireStoreFactory.adminOptionRef().get().then((value) {
+      FirebaseFirestore.instance
+          .collection('admin')
+          .doc(value.docs.first.id)
+          .update({
+        'password': text,
+      });
+    });
+  }
 }
