@@ -23,11 +23,19 @@ class $AssetsImagesGen {
   AssetGenImage get confirmButton =>
       const AssetGenImage('assets/images/confirm_button.png');
 
+  /// File path: assets/images/draw_background.png
+  AssetGenImage get drawBackground =>
+      const AssetGenImage('assets/images/draw_background.png');
+
   /// File path: assets/images/emoji.gif
   AssetGenImage get emoji => const AssetGenImage('assets/images/emoji.gif');
 
   /// File path: assets/images/error.jpg
   AssetGenImage get error => const AssetGenImage('assets/images/error.jpg');
+
+  /// File path: assets/images/game_controller.png
+  AssetGenImage get gameController =>
+      const AssetGenImage('assets/images/game_controller.png');
 
   /// File path: assets/images/health.gif
   AssetGenImage get health => const AssetGenImage('assets/images/health.gif');
@@ -59,6 +67,14 @@ class $AssetsImagesGen {
   AssetGenImage get nameBackground =>
       const AssetGenImage('assets/images/name_background.png');
 
+  /// File path: assets/images/nintendo.png
+  AssetGenImage get nintendo =>
+      const AssetGenImage('assets/images/nintendo.png');
+
+  /// File path: assets/images/result_background.png
+  AssetGenImage get resultBackground =>
+      const AssetGenImage('assets/images/result_background.png');
+
   /// File path: assets/images/star.gif
   AssetGenImage get star => const AssetGenImage('assets/images/star.gif');
 
@@ -67,8 +83,10 @@ class $AssetsImagesGen {
         abad,
         characterImage,
         confirmButton,
+        drawBackground,
         emoji,
         error,
+        gameController,
         health,
         heart,
         homeDesktopBackground,
@@ -77,14 +95,38 @@ class $AssetsImagesGen {
         homeDesktopTop,
         homeImage,
         nameBackground,
+        nintendo,
+        resultBackground,
         star
       ];
+}
+
+class $AssetsMusicGen {
+  const $AssetsMusicGen();
+
+  /// File path: assets/music/background_music.mp3
+  String get backgroundMusic => 'assets/music/background_music.mp3';
+
+  /// List of all assets
+  List<String> get values => [backgroundMusic];
+}
+
+class $AssetsVideosGen {
+  const $AssetsVideosGen();
+
+  /// File path: assets/videos/intro_video_5s.mp4
+  String get introVideo5s => 'assets/videos/intro_video_5s.mp4';
+
+  /// List of all assets
+  List<String> get values => [introVideo5s];
 }
 
 class Assets {
   Assets._();
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsMusicGen music = $AssetsMusicGen();
+  static const $AssetsVideosGen videos = $AssetsVideosGen();
 }
 
 class AssetGenImage {

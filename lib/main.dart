@@ -6,7 +6,6 @@ import 'package:jimanna/firebase_options.dart';
 import 'package:jimanna/gen/colors.gen.dart';
 import 'package:jimanna/gen/fonts.gen.dart';
 import 'package:jimanna/pages/error/error_page.dart';
-import 'package:jimanna/pages/home/home_page.dart';
 import 'package:jimanna/routes.dart';
 import 'package:jimanna/ui/themes.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -14,6 +13,7 @@ import 'package:url_strategy/url_strategy.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setPathUrlStrategy();
+  Paint.enableDithering = true;
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseFirestore.instance.settings = const Settings(
     persistenceEnabled: true,
@@ -41,7 +41,6 @@ class MyApp extends StatelessWidget {
         onUnknownRoute: (_) => MaterialPageRoute(
           builder: (_) => const ErrorPage(),
         ),
-        home: const HomePage(),
       ),
     );
   }

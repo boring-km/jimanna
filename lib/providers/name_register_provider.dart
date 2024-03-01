@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/models/name.dart';
 import 'package:jimanna/models/result.dart';
+import 'package:jimanna/providers/current_name.dart';
 import 'package:jimanna/providers/firebase/firebase_factory.dart';
 import 'package:jimanna/routes.dart';
 
@@ -14,9 +15,9 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
     getAdminPassword().then((value) => _adminPassword = value);
   }
 
-  final nameRef = FireStoreFactory.namesByCurrentYearMonthRef;
-  final adminOptionRef = FireStoreFactory.adminOptionRef;
-  final nameListRef = FireStoreFactory.namesRef;
+  final nameRef = FireStoreFactory.namesByCurrentYearMonthRef();
+  final adminOptionRef = FireStoreFactory.adminOptionRef();
+  final nameListRef = FireStoreFactory.namesRef();
 
   void registerNameToFirestore(String name) {
     alwaysTrueIfAdmin(name);
@@ -43,7 +44,7 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
           await nameRef.add(Name(name));
           state = const Result.success(Routes.home);
         } else {
-          state = const Result.error('이미 등록된 이름입니다.');
+          state = const Result.success(Routes.home);
         }
       } else {
         state = const Result.error('등록되지 않은 이름입니다.');
@@ -62,7 +63,7 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
     if (name == _adminPassword) {
       state = const Result.success(Routes.admin);
     } else if (name == screenOnly) {
-      state = const Result.success(Routes.home);
+      state = const Result.success(Routes.homeAdmin);
     }
   }
 
@@ -70,7 +71,7 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
     if (name == _adminPassword) {
       state = const Result.success(Routes.admin);
     } else if (name == screenOnly) {
-      state = const Result.success(Routes.home);
+      state = const Result.success(Routes.homeAdmin);
     }
   }
 }

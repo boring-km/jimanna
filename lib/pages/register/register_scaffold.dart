@@ -79,7 +79,7 @@ class _Scaffold extends ConsumerWidget {
       .listen(nameRegisterProvider, (previous, result) {
         result.whenOrNull(
           error: (e) {
-            ref.read(registerStateProvider.notifier).setError();
+            ref.read(registerStateProvider.notifier).setError(e);
           },
           success: (page) {
             Navigator.pushNamed(context, page);

@@ -3,11 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:jimanna/consts.dart';
 import 'package:jimanna/gen/assets.gen.dart';
+import 'package:jimanna/providers/admin_draw_provider.dart';
 import 'package:jimanna/providers/current_registered_names_provider.dart';
+import 'package:jimanna/providers/is_start_draw_provider.dart';
+import 'package:jimanna/ui/ongmezim_text.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class HomeDesktopView extends ConsumerWidget {
-  const HomeDesktopView({super.key});
+  const HomeDesktopView({required this.isAdmin, super.key});
+
+  final bool isAdmin;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,10 +23,19 @@ class HomeDesktopView extends ConsumerWidget {
 
     return Stack(
       children: [
-        Assets.images.homeDesktopBackground.image(
+        SizedBox(
           width: width,
           height: height,
-          fit: BoxFit.cover,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 2,
+            itemBuilder: (context, index) {
+              return Assets.images.homeDesktopBackground.image(
+                height: height,
+                fit: BoxFit.fitHeight,
+              );
+            },
+          ),
         ),
         Align(
           alignment: Alignment.topCenter,
@@ -29,18 +43,9 @@ class HomeDesktopView extends ConsumerWidget {
             height: 70,
           ),
         ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Assets.images.homeDesktopBottom.image(
-            width: width,
-          ),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Assets.images.homeDesktopBottomButton.image(
-            height: 100,
-          ),
-        ),
+        BottomGround(height, width),
+        BottomText(context, width, height),
+        BottomAdminButton(context, ref, height),
         Center(
           child: SizedBox(
             width: width * 0.95,
@@ -75,7 +80,8 @@ class HomeDesktopView extends ConsumerWidget {
                   crossAxisCellCount: 4,
                   mainAxisCellCount: 1.7,
                   child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 4,
                       childAspectRatio: 441 / 248,
                       mainAxisSpacing: 10,
@@ -150,7 +156,12 @@ class HomeDesktopView extends ConsumerWidget {
                       return Stack(
                         children: [
                           buildUserTextBack(),
-                          buildUserText(names, 20 + 12 + 12 + index, context, width),
+                          buildUserText(
+                            names,
+                            20 + 12 + 12 + index,
+                            context,
+                            width,
+                          ),
                         ],
                       );
                     },
@@ -164,12 +175,67 @@ class HomeDesktopView extends ConsumerWidget {
     );
   }
 
+  Align BottomGround(double height, double width) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: SizedBox(
+        height: height * 0.2,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: 3,
+          itemBuilder: (BuildContext context, int index) {
+            return Assets.images.homeDesktopBottom.image(
+              width: width / 2,
+              height: height * 0.2,
+              alignment: Alignment.bottomCenter,
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget BottomText(BuildContext context, double width, double height) {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: SizedBox(
+        height: height * 0.05,
+        child: Padding(
+          padding: const EdgeInsets.only(right: 16),
+          child: ongmezimText(context, width / 2),
+        ),
+      ),
+    );
+  }
+
+  Widget BottomAdminButton(BuildContext context, WidgetRef ref, double height) {
+    if (isAdmin) {
+      return Align(
+        alignment: Alignment.bottomCenter,
+        child: GestureDetector(
+          onTap: () {
+            ref.read(adminDrawProvider.notifier).makeTeams();
+            ref.read(isStartDrawProvider.notifier).startDraw();
+          },
+          child: Assets.images.homeDesktopBottomButton.image(
+            height: height * 0.05,
+          ),
+        ),
+      );
+    }
+    return const SizedBox();
+  }
+
   Center buildUserTextBack() {
     return Center(child: Assets.images.nameBackground.image());
   }
 
   Center buildUserText(
-      List<String> names, int index, BuildContext context, double width) {
+    List<String> names,
+    int index,
+    BuildContext context,
+    double width,
+  ) {
     if (names.length <= index) {
       return const Center();
     }

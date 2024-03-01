@@ -8,24 +8,24 @@ part of 'admin_option.dart';
 
 AdminOption _$AdminOptionFromJson(Map<String, dynamic> json) => AdminOption(
       can_register: json['can_register'] as bool,
-      group_number: json['group_number'] as int,
       password: json['password'] as String,
       is_start_draw: json['is_start_draw'] as bool,
+      is_draw_end: json['is_draw_end'] as bool,
     );
 
 Map<String, dynamic> _$AdminOptionToJson(AdminOption instance) =>
     <String, dynamic>{
       'can_register': instance.can_register,
-      'group_number': instance.group_number,
       'password': instance.password,
       'is_start_draw': instance.is_start_draw,
+      'is_draw_end': instance.is_draw_end,
     };
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$adminOptionsHash() => r'4ecfc11b1152da93d846f64e177723814f671c49';
+String _$adminOptionsHash() => r'd7c7ded3a8493f223834b215ce5ded81cbc25170';
 
 /// See also [AdminOptions].
 @ProviderFor(AdminOptions)

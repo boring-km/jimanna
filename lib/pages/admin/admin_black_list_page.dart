@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/providers/admin_black_list_provider.dart';
+import 'package:jimanna/ui/backward_button.dart';
 
 class AdminBlackListPage extends ConsumerStatefulWidget {
   const AdminBlackListPage({super.key});
@@ -21,6 +22,7 @@ class _AdminBlackListPageState extends ConsumerState<AdminBlackListPage> {
       body: Center(
         child: Column(
           children: [
+            BackwardButton(context),
             const Text('만나면 안되는...', style: TextStyle(fontSize: 30)),
             const SizedBox(height: 20),
             TextField(

@@ -12,7 +12,7 @@ class RegisterStateProvider extends StateNotifier<RegisterState> {
     loadOnRealTime();
   }
 
-  final adminOptionRef = FireStoreFactory.adminOptionRef;
+  final adminOptionRef = FireStoreFactory.adminOptionRef();
 
   void loadOnRealTime() {
     adminOptionRef.snapshots().listen((event) {
@@ -23,7 +23,7 @@ class RegisterStateProvider extends StateNotifier<RegisterState> {
           state = CannotRegisterState();
         }
       } else {
-        state = ErrorRegisterState();
+        state = ErrorRegisterState('시스템 오류');
       }
     });
   }
@@ -36,7 +36,7 @@ class RegisterStateProvider extends StateNotifier<RegisterState> {
     });
   }
 
-  void setError() {
-    state = ErrorRegisterState();
+  void setError(String message) {
+    state = ErrorRegisterState(message);
   }
 }

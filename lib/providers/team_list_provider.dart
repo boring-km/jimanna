@@ -13,7 +13,7 @@ class TeamListNotifier extends StateNotifier<List<Team>> {
     loadOnRealTime();
   }
 
-  final CollectionReference<Team> teamRef = FireStoreFactory.teamRef;
+  final teamRef = FireStoreFactory.teamRef();
 
   void loadOnRealTime() {
     teamRef.snapshots().listen((event) {

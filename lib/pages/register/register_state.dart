@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jimanna/providers/current_name.dart';
 import 'package:jimanna/providers/name_register_provider.dart';
 
 abstract class RegisterState {
@@ -15,6 +16,7 @@ abstract class RegisterState {
 class CanRegisterState implements RegisterState {
   @override
   void check(WidgetRef ref, String text) {
+    CurrentName.value = text;
     ref.read(nameRegisterProvider.notifier).registerNameToFirestore(text);
   }
 
@@ -33,6 +35,7 @@ class CanRegisterState implements RegisterState {
 class CannotRegisterState implements RegisterState {
   @override
   void check(WidgetRef ref, String text) {
+    CurrentName.value = text;
     ref.read(nameRegisterProvider.notifier).checkAdmin(text);
   }
 
@@ -50,7 +53,9 @@ class CannotRegisterState implements RegisterState {
 
 class EmptyRegisterState implements RegisterState {
   @override
-  void check(WidgetRef ref, String text) {}
+  void check(WidgetRef ref, String text) {
+    CurrentName.value = text;
+  }
 
   @override
   bool getOpposite() {
@@ -65,8 +70,13 @@ class EmptyRegisterState implements RegisterState {
 }
 
 class ErrorRegisterState implements RegisterState {
+  ErrorRegisterState(this.errorText);
+
   @override
-  void check(WidgetRef ref, String text) {}
+  void check(WidgetRef ref, String text) {
+    CurrentName.value = text;
+    ref.read(nameRegisterProvider.notifier).registerNameToFirestore(text);
+  }
 
   @override
   bool getOpposite() {
@@ -77,5 +87,6 @@ class ErrorRegisterState implements RegisterState {
   String get text => '현재상태: 에러';
 
   @override
-  String get errorText => '등록 에러';
+  final String errorText;
+
 }

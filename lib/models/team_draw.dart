@@ -1,6 +1,9 @@
-class TeamDraw {
-  TeamDraw(this.teams, this.groupNumber);
+import 'package:jimanna/models/black_twin.dart';
+import 'package:jimanna/models/team.dart';
 
-  final List<List<String>> teams;
-  final int groupNumber;
+class TeamDraw {
+  TeamDraw(this.teams, this.blackTwins);
+
+  final List<Team> teams;
+  final List<BlackTwin> blackTwins;
 }

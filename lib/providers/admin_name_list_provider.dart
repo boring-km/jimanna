@@ -12,7 +12,7 @@ class AdminNameListNotifier extends StateNotifier<List<String>> {
     loadOnRealTime();
   }
 
-  final nameRef = FireStoreFactory.namesRef;
+  final nameRef = FireStoreFactory.namesRef();
 
   void loadOnRealTime() {
     nameRef.snapshots().listen((event) {
@@ -27,7 +27,13 @@ class AdminNameListNotifier extends StateNotifier<List<String>> {
     });
   }
 
-  void register(String name) {
-    nameRef.add(Name(name));
+  void register(String name, {void Function()? onError}) {
+    nameRef.where('name', isEqualTo: name).get().then((value) {
+      if (value.docs.isEmpty) {
+        nameRef.add(Name(name));
+      } else {
+        onError?.call();
+      }
+    });
   }
 }
