@@ -25,7 +25,7 @@ Map<String, dynamic> _$AdminOptionToJson(AdminOption instance) =>
 // RiverpodGenerator
 // **************************************************************************
 
-String _$adminOptionsHash() => r'd7c7ded3a8493f223834b215ce5ded81cbc25170';
+String _$adminOptionsHash() => r'a55e9fb7a24c9e33adb17a5d0ea8ec0035899159';
 
 /// See also [AdminOptions].
 @ProviderFor(AdminOptions)

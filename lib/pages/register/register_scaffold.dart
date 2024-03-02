@@ -10,6 +10,7 @@ class _Scaffold extends ConsumerWidget {
     required this.errorTextView,
     required this.inputButtonView,
     required this.contactTextView,
+    required this.feedbackButtonView,
     required this.bottomText,
   });
 
@@ -22,6 +23,7 @@ class _Scaffold extends ConsumerWidget {
   final Widget errorTextView;
   final Widget inputButtonView;
   final Widget contactTextView;
+  final Widget feedbackButtonView;
 
   final Widget bottomText;
 
@@ -58,6 +60,8 @@ class _Scaffold extends ConsumerWidget {
                         inputButtonView,
                         SizedBox(height: height / 80),
                         contactTextView,
+                        SizedBox(height: height / 120),
+                        feedbackButtonView,
                       ],
                     ),
                   ),

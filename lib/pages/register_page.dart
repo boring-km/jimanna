@@ -5,6 +5,7 @@ import 'package:jimanna/gen/colors.gen.dart';
 import 'package:jimanna/pages/register/register_state.dart';
 import 'package:jimanna/providers/name_register_provider.dart';
 import 'package:jimanna/providers/register_state_provider.dart';
+import 'package:jimanna/routes.dart';
 import 'package:jimanna/ui/background_painter.dart';
 import 'package:jimanna/ui/bottom_text.dart';
 import 'package:jimanna/ui/frame_painter.dart';
@@ -12,14 +13,24 @@ import 'package:jimanna/ui/ongmezim_text.dart';
 import 'package:jimanna/utils/context_utils.dart';
 
 part 'register/character_image_view.dart';
+
 part 'register/contact_text_view.dart';
+
 part 'register/error_text_view.dart';
+
 part 'register/header_bottom.dart';
+
 part 'register/header_middle.dart';
+
 part 'register/header_top.dart';
+
 part 'register/input_button_view.dart';
+
 part 'register/name_input_view.dart';
+
 part 'register/register_scaffold.dart';
+
+part 'register/feedback_button_view.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
@@ -52,6 +63,18 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
             registerState.check(ref, _nameController.text),
       ),
       contactTextView: const _ContactTextView(),
+      feedbackButtonView: _FeedbackButtonView(
+        onPressFeedbackButton: () {
+          Navigator.pushNamed(context, Routes.feedback).then((value) {
+            if (value == true) {
+              const snackBar = SnackBar(
+                content: Text('피드백이 전송되었습니다!'),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            }
+          });
+        },
+      ),
       bottomText: const BottomText(),
     );
   }

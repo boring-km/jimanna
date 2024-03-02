@@ -101,6 +101,13 @@ class _AdminPageState extends ConsumerState<AdminPage> {
                 child: Text('${getCurrentYearMonthOnly()} 참가자'),
               ),
               const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, Routes.adminFeedback);
+                },
+                child: const Text('피드백 결과보기'),
+              ),
+              const SizedBox(height: 20),
               SizedBox(
                 width: 200,
                 child: TextField(

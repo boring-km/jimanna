@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:jimanna/models/admin_option.dart';
 import 'package:jimanna/models/black_twin.dart';
+import 'package:jimanna/models/text_feedback.dart';
 import 'package:jimanna/models/name.dart';
 import 'package:jimanna/models/team.dart';
 import 'package:jimanna/utils/date_utils.dart';
@@ -50,5 +51,11 @@ class FireStoreFactory {
       FirebaseFirestore.instance.collection('special').withConverter(
             fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
             toFirestore: (name, _) => name.toJson(),
+          );
+
+  static CollectionReference<TextFeedback> feedbackRef() =>
+      FirebaseFirestore.instance.collection('feedback').withConverter(
+            fromFirestore: (sn, _) => TextFeedback.fromJson(sn.data()!),
+            toFirestore: (feedback, _) => feedback.toJson(),
           );
 }
