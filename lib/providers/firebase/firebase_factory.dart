@@ -39,4 +39,16 @@ class FireStoreFactory {
             fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
             toFirestore: (name, _) => name.toJson(),
           );
+
+  static CollectionReference<Name> leadersRef() =>
+      FirebaseFirestore.instance.collection('leaders').withConverter(
+            fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
+            toFirestore: (name, _) => name.toJson(),
+          );
+
+  static CollectionReference<Name> specialNamesRef() =>
+      FirebaseFirestore.instance.collection('special').withConverter(
+            fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
+            toFirestore: (name, _) => name.toJson(),
+          );
 }

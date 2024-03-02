@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,33 +25,112 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
     });
   }
 
+  final _specialRef = FireStoreFactory.specialNamesRef();
+  final _leaderRef = FireStoreFactory.leadersRef();
   final _nameRef = FireStoreFactory.namesByCurrentYearMonthRef();
   final _teamRef = FireStoreFactory.teamRef();
   final _blackTwinRef = FireStoreFactory.blackTwinRef();
 
   // 4명씩 랜덤으로 조를 짜는데 4명이 안되는 경우는 3명으로 조를 짜도록 함
-  List<List<String>> organizeGroupsOfFourOrThree(List<String> names) {
-    final teams = <List<String>>[];
-    final shuffledNames = List<String>.from(names)..shuffle(Random());
-    addShuffledNamesToTeams(shuffledNames, teams);
-    if (hasBlackTwin(teams)) {
-      return organizeGroupsOfFourOrThree(names);
-    }
-    return teams;
-  }
-
-  void addShuffledNamesToTeams(
-    List<String> shuffledNames,
-    List<List<String>> teams,
+  List<List<String>> organizeGroupsOfFourOrThree(
+    List<String> leaders,
+    List<String> namesWithoutLeaders,
+    String specialName,
   ) {
-    if (shuffledNames.isEmpty) return;
-    final teamSize = chooseTeamSize(shuffledNames);
-    teams.add(shuffledNames.sublist(0, teamSize));
-    addShuffledNamesToTeams(shuffledNames.sublist(teamSize), teams);
-  }
+    final tempLeaders = List<String>.from(leaders)..shuffle(Random());
+    final tempNamesWithoutLeaders = List<String>.from(namesWithoutLeaders)
+      ..shuffle(Random());
 
-  int chooseTeamSize(List<String> shuffledNames) {
-    return (shuffledNames.length % 3 == 0 && shuffledNames.length <= 9) ? 3 : 4;
+    final total = leaders.length + namesWithoutLeaders.length;
+    print(total);
+    final left = total % 4;
+    final teams = <List<String>>[];
+    final threeTeamIndexes = <int>[];
+    tempLeaders..remove(specialName)..add(specialName);
+
+    try {
+      for (var i = 0; i < (total ~/ 4) - (4 - left) + 1; i++) {
+        final leader = tempLeaders.removeLast();
+        final team = [leader];
+        var hasTwoLeader = false;
+        if (leader == specialName) {
+          team.add(tempLeaders.removeLast());
+          hasTwoLeader = true;
+        }
+
+        if (tempNamesWithoutLeaders.length < 3) {
+          for (var j = 0; j < tempNamesWithoutLeaders.length; j++) {
+            team.add(tempNamesWithoutLeaders.removeLast());
+          }
+          if (!hasTwoLeader) {
+            team.add(tempLeaders.removeLast());
+          }
+        } else {
+          var count = 3;
+          if (hasTwoLeader) count = 2;
+          for (var j = 0; j < count; j++) {
+            team.add(tempNamesWithoutLeaders.removeLast());
+          }
+        }
+        if (team.length == 3) threeTeamIndexes.add(teams.length);
+        teams.add(team);
+      }
+
+      for (var i = 0; i < 4 - left; i++) {
+        final leader = tempLeaders.removeLast();
+        final team = [leader];
+        final c = tempNamesWithoutLeaders.length;
+        if (c < 2) {
+          for (var j = 0; j < c; j++) {
+            team.add(tempNamesWithoutLeaders.removeLast());
+          }
+          for (var j = 0; j < 2 - c; j++) {
+            team.add(tempLeaders.removeLast());
+          }
+        } else {
+          for (var j = 0; j < 2; j++) {
+            team.add(tempNamesWithoutLeaders.removeLast());
+          }
+        }
+        if (team.length == 3) threeTeamIndexes.add(teams.length);
+        teams.add(team);
+      }
+
+      if (tempLeaders.isNotEmpty) {
+        // 리더가 너무 많아 여유가 생긴 경우
+
+        // 팀 리더가 모두 3명 팀으로 들어갈 수 있는 경우
+        if (tempLeaders.length <= threeTeamIndexes.length) {
+          final c = tempLeaders.length;
+          for (var i = 0; i < c; i++) {
+            teams[threeTeamIndexes[i]].add(tempLeaders.removeLast());
+          }
+        } else {
+          // 팀 리더가 모두 3명 팀으로 들어갈 수 없는 경우
+          final extra = tempLeaders.length - threeTeamIndexes.length;
+          for (var i = 0; i < threeTeamIndexes.length; i++) {
+            teams[threeTeamIndexes[i]].add(tempLeaders.removeLast());
+          }
+          if (2 < extra && extra < 5) {
+            final team = <String>[];
+            final c = tempLeaders.length;
+            for (var i = 0; i < c; i++) {
+              team.add(tempLeaders.removeLast());
+            }
+            teams.add(team);
+          }
+        }
+      }
+      print('left leaders: ${tempLeaders.length}');
+      print('left names: ${tempNamesWithoutLeaders.length}');
+    } on RangeError catch (e) {
+      print('left leaders: ${tempLeaders.length}');
+      print('left names: ${tempNamesWithoutLeaders.length}');
+      print(e);
+      print('${e.stackTrace}');
+    }
+
+    return teams;
   }
 
   void resetTeams() {
@@ -62,25 +142,20 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
     });
   }
 
-  void makeTeams() {
-    _nameRef.get().then((value) {
-      final names = value.docs.map((e) => e.data().name).toList();
-      final teams = organizeGroupsOfFourOrThree(names);
-      for (final team in teams) {
-        _teamRef.add(Team(team));
-      }
-    });
-  }
-
-  bool hasBlackTwin(List<List<String>> teams) {
-    for (final team in teams) {
-      for (final blackTwin in state.blackTwins) {
-        if (team.contains(blackTwin.name_first) &&
-            team.contains(blackTwin.name_second)) {
-          return true;
-        }
-      }
+  Future<void> makeTeams() async {
+    final leaders =
+        (await _leaderRef.get()).docs.map((e) => e.data().name).toList();
+    final names =
+        (await _nameRef.get()).docs.map((e) => e.data().name).toList();
+    for (final leader in leaders) {
+      names.remove(leader);
     }
-    return false;
+    final specialName =
+        (await _specialRef.get()).docs.map((e) => e.data().name).toList()[0];
+
+    final teams = organizeGroupsOfFourOrThree(leaders, names, specialName);
+    for (final team in teams) {
+      unawaited(_teamRef.add(Team(team)));
+    }
   }
 }
