@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/models/team.dart';
 import 'package:jimanna/models/team_draw.dart';
 import 'package:jimanna/providers/firebase/firebase_factory.dart';
+import 'package:jimanna/providers/has_black_twin.dart';
 
 final adminDrawProvider =
     StateNotifierProvider<AdminDrawNotifier, TeamDraw>((ref) {
@@ -32,7 +33,7 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
   final _blackTwinRef = FireStoreFactory.blackTwinRef();
 
   // 4명씩 랜덤으로 조를 짜는데 4명이 안되는 경우는 3명으로 조를 짜도록 함
-  List<List<String>> organizeGroupsOfFourOrThree(
+  void organizeTeams(
     List<String> leaders,
     List<String> namesWithoutLeaders,
     String specialName,
@@ -42,11 +43,12 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
       ..shuffle(Random());
 
     final total = leaders.length + namesWithoutLeaders.length;
-    print(total);
     final left = total % 4;
     final teams = <List<String>>[];
     final threeTeamIndexes = <int>[];
-    tempLeaders..remove(specialName)..add(specialName);
+    tempLeaders
+      ..remove(specialName)
+      ..add(specialName);
 
     try {
       for (var i = 0; i < (total ~/ 4) - (4 - left) + 1; i++) {
@@ -121,16 +123,15 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
           }
         }
       }
-      print('left leaders: ${tempLeaders.length}');
-      print('left names: ${tempNamesWithoutLeaders.length}');
-    } on RangeError catch (e) {
-      print('left leaders: ${tempLeaders.length}');
-      print('left names: ${tempNamesWithoutLeaders.length}');
+    } catch (e) {
       print(e);
-      print('${e.stackTrace}');
     }
 
-    return teams;
+    if (hasBlackTwin(teams, state.blackTwins)) {
+      organizeTeams(leaders, namesWithoutLeaders, specialName);
+    } else {
+      uploadAllTeams(teams);
+    }
   }
 
   void resetTeams() {
@@ -143,19 +144,36 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
   }
 
   Future<void> makeTeams() async {
-    final leaders =
-        (await _leaderRef.get()).docs.map((e) => e.data().name).toList();
-    final names =
-        (await _nameRef.get()).docs.map((e) => e.data().name).toList();
-    for (final leader in leaders) {
-      names.remove(leader);
-    }
-    final specialName =
-        (await _specialRef.get()).docs.map((e) => e.data().name).toList()[0];
+    final names = await getTotalNames();
+    final attendedLeaders = await getAttendedLeaders(names);
+    final specialName = await getSpecialOne();
 
-    final teams = organizeGroupsOfFourOrThree(leaders, names, specialName);
+    organizeTeams(attendedLeaders, names, specialName);
+  }
+
+  void uploadAllTeams(List<List<String>> teams) {
     for (final team in teams) {
       unawaited(_teamRef.add(Team(team)));
     }
   }
+
+  Future<List<String>> getAttendedLeaders(List<String> names) async {
+    final leaders = await getTotalLeaders();
+    final attendedLeaders = <String>[];
+    for (final leader in leaders) {
+      if (names.remove(leader)) {
+        attendedLeaders.add(leader);
+      }
+    }
+    return attendedLeaders;
+  }
+
+  Future<String> getSpecialOne() async =>
+      (await _specialRef.get()).docs.map((e) => e.data().name).toList()[0];
+
+  Future<List<String>> getTotalNames() async =>
+      (await _nameRef.get()).docs.map((e) => e.data().name).toList();
+
+  Future<List<String>> getTotalLeaders() async =>
+      (await _leaderRef.get()).docs.map((e) => e.data().name).toList();
 }

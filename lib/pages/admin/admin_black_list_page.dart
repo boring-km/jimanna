@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/providers/admin_black_list_provider.dart';
@@ -56,8 +58,8 @@ class _AdminBlackListPageState extends ConsumerState<AdminBlackListPage> {
                 itemBuilder: (context, index) {
                   return ListTile(
                     title: Text(
-                      '${blackList[index].name_first}'
-                          ' - ${blackList[index].name_second}',
+                      '${encodeBase64(blackList[index].name_first)}'
+                          ' - ${encodeBase64(blackList[index].name_second)}',
                     ),
                     trailing: IconButton(
                       onPressed: () {
@@ -75,5 +77,9 @@ class _AdminBlackListPageState extends ConsumerState<AdminBlackListPage> {
         ),
       ),
     );
+  }
+
+  String encodeBase64(String str) {
+    return base64.encode(utf8.encode(str));
   }
 }
