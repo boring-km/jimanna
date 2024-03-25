@@ -12,6 +12,7 @@ class AdminOption {
     required this.password,
     required this.is_start_draw,
     required this.is_draw_end,
+    required this.current_showed_team_number,
   });
 
   factory AdminOption.fromJson(Map<String, dynamic> json) =>
@@ -20,6 +21,7 @@ class AdminOption {
   final String password;
   final bool is_start_draw;
   final bool is_draw_end;
+  final int current_showed_team_number;
 
   Map<String, dynamic> toJson() => _$AdminOptionToJson(this);
 }
@@ -60,6 +62,17 @@ class AdminOptions extends _$AdminOptions {
           .doc(value.docs.first.id)
           .update({
         'password': text,
+      });
+    });
+  }
+
+  void updateTeamNumber(int teamNumber) {
+    FireStoreFactory.adminOptionRef().get().then((value) {
+      FirebaseFirestore.instance
+          .collection('admin')
+          .doc(value.docs.first.id)
+          .update({
+        'current_showed_team_number': teamNumber,
       });
     });
   }

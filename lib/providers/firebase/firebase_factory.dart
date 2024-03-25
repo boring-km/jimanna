@@ -47,12 +47,6 @@ class FireStoreFactory {
             toFirestore: (name, _) => name.toJson(),
           );
 
-  static CollectionReference<Name> specialNamesRef() =>
-      FirebaseFirestore.instance.collection('special').withConverter(
-            fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
-            toFirestore: (name, _) => name.toJson(),
-          );
-
   static CollectionReference<TextFeedback> feedbackRef() =>
       FirebaseFirestore.instance.collection('feedback').withConverter(
             fromFirestore: (sn, _) => TextFeedback.fromJson(sn.data()!),

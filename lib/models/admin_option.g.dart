@@ -11,6 +11,7 @@ AdminOption _$AdminOptionFromJson(Map<String, dynamic> json) => AdminOption(
       password: json['password'] as String,
       is_start_draw: json['is_start_draw'] as bool,
       is_draw_end: json['is_draw_end'] as bool,
+      current_showed_team_number: json['current_showed_team_number'] as int,
     );
 
 Map<String, dynamic> _$AdminOptionToJson(AdminOption instance) =>
@@ -19,13 +20,14 @@ Map<String, dynamic> _$AdminOptionToJson(AdminOption instance) =>
       'password': instance.password,
       'is_start_draw': instance.is_start_draw,
       'is_draw_end': instance.is_draw_end,
+      'current_showed_team_number': instance.current_showed_team_number,
     };
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$adminOptionsHash() => r'a55e9fb7a24c9e33adb17a5d0ea8ec0035899159';
+String _$adminOptionsHash() => r'66b26b80d537ee9406a5012fcf84c38e7181ed05';
 
 /// See also [AdminOptions].
 @ProviderFor(AdminOptions)

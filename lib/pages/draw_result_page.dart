@@ -7,6 +7,7 @@ import 'package:jimanna/gen/colors.gen.dart';
 import 'package:jimanna/models/admin_option.dart';
 import 'package:jimanna/providers/admin_draw_provider.dart';
 import 'package:jimanna/providers/current_name.dart';
+import 'package:jimanna/providers/firebase/firebase_factory.dart';
 import 'package:jimanna/routes.dart';
 import 'package:jimanna/ui/background_painter.dart';
 import 'package:jimanna/ui/ongmezim_text.dart';
@@ -36,7 +37,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
     _controller = VideoPlayerController.asset('assets/videos/intro_video_5s.mp4');
 
     if (isMobileState) {
-      startResultTimer();
+      setMobileViewData();
     } else {
       setVideoPlayer();
     }
@@ -76,7 +77,6 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
   void startResultTimer() {
     Timer.periodic(const Duration(seconds: 1), (timer) {
       counter.value--;
-      print(counter.value);
       if (counter.value == 0) {
         timer.cancel();
         _controller.pause();
@@ -108,13 +108,10 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
 
   Future<void> showNamesWithTimer() async {
     final teamDraw = ref.read(adminDrawProvider);
-    for (final team in teamDraw.teams) {
+    for (var teamIndex = 0; teamIndex < teamDraw.teams.length; teamIndex++) {
+      final team = teamDraw.teams[teamIndex];
       await Future.delayed(const Duration(milliseconds: 1000));
       for (var i = 0; i < team.names.length; i++) {
-        print('이름: ${team.names[i]}');
-        if (team.names[i] == CurrentName.value && isMobileState) {
-          myNameTeamNumber.value = findMyNameTeamNumber();
-        }
         if (i == 0) {
           leftTopName.value = team.names[i];
           await Future.delayed(const Duration(milliseconds: 500));
@@ -129,17 +126,18 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
           await Future.delayed(const Duration(milliseconds: 500));
         }
       }
+      ref.read(adminOptionsProvider.notifier).updateTeamNumber(teamIndex + 1);
       await Future.delayed(const Duration(seconds: 4));
-      teamCount.value++;
+      if (teamIndex < teamDraw.teams.length - 1) {
+        teamCount.value++;
+      }
       leftTopName.value = '';
       rightTopName.value = '';
       leftBottomName.value = '';
       rightBottomName.value = '';
     }
-    if (!isMobileState) {
-      ref.read(adminOptionsProvider.notifier).endDraw();
-      unawaited(Navigator.popAndPushNamed(context, Routes.drawTotalResultPage));
-    }
+    ref.read(adminOptionsProvider.notifier).endDraw();
+    unawaited(Navigator.popAndPushNamed(context, Routes.drawTotalResultPage));
   }
 
   late VideoPlayerController _controller;
@@ -435,5 +433,17 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
         ),
       ),
     );
+  }
+
+  void setMobileViewData() {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      final myTeamNumber = findMyNameTeamNumber();
+      FireStoreFactory.adminOptionRef().snapshots().listen((event) {
+        if (event.docs.first.data().current_showed_team_number == myTeamNumber) {
+          timer.cancel();
+          myNameTeamNumber.value = myTeamNumber;
+        }
+      });
+    });
   }
 }
