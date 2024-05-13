@@ -1,12 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jimanna/models/name.dart';
 import 'package:jimanna/providers/firebase/firebase_factory.dart';
 
 final currentRegisteredNamesProvider =
-    StateNotifierProvider<CurrentRegisteredNamesNotifier, List<String>>((ref) {
+    StateNotifierProvider<CurrentRegisteredNamesNotifier, List<Name>>((ref) {
   return CurrentRegisteredNamesNotifier();
 });
 
-class CurrentRegisteredNamesNotifier extends StateNotifier<List<String>> {
+class CurrentRegisteredNamesNotifier extends StateNotifier<List<Name>> {
   CurrentRegisteredNamesNotifier() : super([]) {
     loadOnRealTime();
   }
@@ -15,7 +16,7 @@ class CurrentRegisteredNamesNotifier extends StateNotifier<List<String>> {
 
   void loadOnRealTime() {
     nameRef.snapshots().listen((event) {
-      state = event.docs.map((e) => e.data().name).toList().reversed.toList();
+      state = event.docs.map((e) => e.data()).toList().reversed.toList();
     });
   }
 

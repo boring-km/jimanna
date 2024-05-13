@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/models/name.dart';
 import 'package:jimanna/models/result.dart';
@@ -14,15 +15,17 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
     getAdminPassword().then((value) => _adminPassword = value);
   }
 
-  final nameRef = FireStoreFactory.namesByCurrentYearMonthRef();
+  final currentParticipantRef = FireStoreFactory.namesByCurrentYearMonthRef();
   final adminOptionRef = FireStoreFactory.adminOptionRef();
+
   final nameListRef = FireStoreFactory.abadNamesRef();
+  final secondNameListRef = FireStoreFactory.secondNamesRef();
 
   void registerNameToFirestore(String name) {
     alwaysTrueIfAdmin(name);
     addNameIfNotAdmin(name);
     Future.delayed(
-      const Duration(milliseconds: 500),
+      const Duration(milliseconds: 1000),
       () => state = const Result.empty(),
     );
   }
@@ -35,21 +38,37 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
 
     if (name != _adminPassword && name != screenOnly && name.isNotEmpty) {
       // nameListRef 에 모든 doc 중에 name이 있을 때만 추가
-      final nameListDocs = await nameListRef.get();
-      if (nameListDocs.docs.any((element) => element.data().name == name)) {
-        // nameRef 에 name이 없을 때만 추가
-        final nameDocs = await nameRef.get();
-        if (!nameDocs.docs.any((element) => element.data().name == name)) {
-          await nameRef.add(Name(name));
-          state = const Result.success(Routes.home);
-        } else {
-          state = const Result.success(Routes.home);
-        }
+      final abadNameList = await nameListRef.get();
+      final secondNameList = await secondNameListRef.get();
+
+      final isAbad = abadNameList.docs.any((e) => e.data().name == name);
+      final isPaqad = secondNameList.docs.any((e) => e.data().name == name);
+      if (isAbad) {
+        print('abad');
+        await addParticipant(Name(name, type: 'abad'));
+        state = const Result.success(Routes.home);
+      } else if (isPaqad) {
+        print('paqad');
+        await addParticipant(Name(name, type: 'paqad'));
+        state = const Result.success(Routes.home);
       } else {
         state = const Result.error('등록되지 않은 이름입니다.');
       }
     }
   }
+
+  Future<void> addParticipant(Name name) async {
+    final nameDocs = await currentParticipantRef.get();
+    if (!hasNamesInParticipantList(nameDocs, name)) {
+      await currentParticipantRef.add(name);
+    }
+  }
+
+  bool hasNamesInPaqad(QuerySnapshot<Name> secondNameList, String name) => secondNameList.docs.any((e) => e.data().name == name);
+
+  bool hasNamesInAbad(QuerySnapshot<Name> abadNameList, String name) => abadNameList.docs.any((element) => element.data().name == name);
+
+  bool hasNamesInParticipantList(QuerySnapshot<Name> nameDocs, Name name) => nameDocs.docs.any((element) => element.data().name == name.name);
 
   Future<String> getAdminPassword() async {
     final adminOptionDocs = await adminOptionRef.get();

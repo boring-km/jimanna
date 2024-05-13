@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:jimanna/consts.dart';
 import 'package:jimanna/gen/assets.gen.dart';
+import 'package:jimanna/models/name.dart';
 import 'package:jimanna/providers/admin_draw_provider.dart';
 import 'package:jimanna/providers/current_registered_names_provider.dart';
 import 'package:jimanna/providers/is_start_draw_provider.dart';
@@ -231,7 +232,7 @@ class HomeDesktopView extends ConsumerWidget {
   }
 
   Center buildUserText(
-    List<String> names,
+    List<Name> names,
     int index,
     BuildContext context,
     double width,
@@ -241,7 +242,7 @@ class HomeDesktopView extends ConsumerWidget {
     }
     return Center(
       child: Text(
-        names[index],
+        '${names[index].type}: ${names[index].name}',
         style: Theme.of(context).textTheme.displaySmall?.copyWith(
               color: Colors.white,
               fontSize: width / 70,

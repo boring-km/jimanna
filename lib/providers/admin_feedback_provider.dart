@@ -2,7 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/models/text_feedback.dart';
 import 'package:jimanna/providers/firebase/firebase_factory.dart';
 
-final adminFeedbackProvider = StateNotifierProvider<AdminFeedbackNotifier, List<TextFeedback>>(
+final adminFeedbackProvider =
+    StateNotifierProvider<AdminFeedbackNotifier, List<TextFeedback>>(
   (ref) => AdminFeedbackNotifier(),
 );
 

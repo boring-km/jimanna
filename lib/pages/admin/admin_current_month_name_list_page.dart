@@ -22,9 +22,13 @@ class AdminCurrentMonthNameListPage extends ConsumerWidget {
               child: ListView.builder(
                 itemCount: nameList.length,
                 itemBuilder: (context, index) {
+                  final name = nameList[index];
                   return Padding(
                     padding: const EdgeInsets.all(8),
-                    child: Text(nameList[index], textAlign: TextAlign.center,),
+                    child: Text(
+                      '${name.type}: ${name.name}',
+                      textAlign: TextAlign.center,
+                    ),
                   );
                 },
               ),
