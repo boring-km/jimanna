@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/models/name.dart';
 import 'package:jimanna/models/result.dart';
-import 'package:jimanna/providers/current_name.dart';
 import 'package:jimanna/providers/firebase/firebase_factory.dart';
 import 'package:jimanna/routes.dart';
 
@@ -17,7 +16,7 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
 
   final nameRef = FireStoreFactory.namesByCurrentYearMonthRef();
   final adminOptionRef = FireStoreFactory.adminOptionRef();
-  final nameListRef = FireStoreFactory.namesRef();
+  final nameListRef = FireStoreFactory.abadNamesRef();
 
   void registerNameToFirestore(String name) {
     alwaysTrueIfAdmin(name);
@@ -73,5 +72,9 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
     } else if (name == screenOnly) {
       state = const Result.success(Routes.homeAdmin);
     }
+  }
+
+  void initialize() {
+    state = const Result.empty();
   }
 }

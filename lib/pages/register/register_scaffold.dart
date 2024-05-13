@@ -86,6 +86,9 @@ class _Scaffold extends ConsumerWidget {
             ref.read(registerStateProvider.notifier).setError(e);
           },
           success: (page) {
+            if (page == Routes.admin) {
+              ref.read(nameRegisterProvider.notifier).initialize();
+            }
             Navigator.pushNamed(context, page);
           },
         );

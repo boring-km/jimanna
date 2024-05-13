@@ -35,11 +35,17 @@ class FireStoreFactory {
             toFirestore: (name, _) => name.toJson(),
           );
 
-  static CollectionReference<Name> namesRef() =>
+  static CollectionReference<Name> abadNamesRef() =>
       FirebaseFirestore.instance.collection('names').withConverter(
             fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
             toFirestore: (name, _) => name.toJson(),
           );
+
+  static CollectionReference<Name> secondNamesRef() =>
+      FirebaseFirestore.instance.collection('second_names').withConverter(
+        fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
+        toFirestore: (name, _) => name.toJson(),
+      );
 
   static CollectionReference<Name> leadersRef() =>
       FirebaseFirestore.instance.collection('leaders').withConverter(
