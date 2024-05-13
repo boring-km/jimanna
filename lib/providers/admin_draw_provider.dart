@@ -60,6 +60,14 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
           }
           teams.add(team);
         }
+      } else {
+        if (total % 4 == 3) {
+          final team = <String>[];
+          for (var i = 0; i < 3; i++) {
+            team.add(tempNames.removeLast());
+          }
+          teams.add(team);
+        }
       }
     } catch (_) {}
 
