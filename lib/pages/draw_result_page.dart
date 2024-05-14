@@ -113,16 +113,17 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
       await Future.delayed(const Duration(milliseconds: 1000));
       for (var i = 0; i < team.names.length; i++) {
         if (i == 0) {
-          leftTopName.value = team.names[i];
+          // TODO type 넣기
+          leftTopName.value = team.names[i].name;
           await Future.delayed(const Duration(milliseconds: 500));
         } else if (i == 1) {
-          rightTopName.value = team.names[i];
+          rightTopName.value = team.names[i].name;
           await Future.delayed(const Duration(milliseconds: 500));
         } else if (i == 2) {
-          leftBottomName.value = team.names[i];
+          leftBottomName.value = team.names[i].name;
           await Future.delayed(const Duration(milliseconds: 500));
         } else if (i == 3) {
-          rightBottomName.value = team.names[i];
+          rightBottomName.value = team.names[i].name;
           await Future.delayed(const Duration(milliseconds: 500));
         }
       }
@@ -395,7 +396,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
                             return Padding(
                               padding: const EdgeInsets.all(8),
                               child: Text(
-                                teamDraw.teams[value - 1].names[index],
+                                teamDraw.teams[value - 1].names[index].name,
                                 style: const TextStyle(
                                     fontSize: 20, color: Colors.white),
                                 textAlign: TextAlign.center,

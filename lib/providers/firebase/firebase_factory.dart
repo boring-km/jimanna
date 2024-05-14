@@ -28,7 +28,6 @@ class FireStoreFactory {
   static CollectionReference<Name> namesByCurrentYearMonthRef() =>
       FirebaseFirestore.instance
           .collection(getCurrentYearMonthOnly())
-          // .collection('names')
           .withConverter(
             fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
             toFirestore: (name, _) => name.toJson(),
