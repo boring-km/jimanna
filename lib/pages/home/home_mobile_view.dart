@@ -44,18 +44,18 @@ class HomeMobileView extends ConsumerWidget {
                             Center(
                               child: Assets.images.homeImage.image(
                                 width: imageWidth,
-                                height: imageWidth * (640 / 1067),
+                                height: imageWidth * (1486 / 2306),
                               ),
                             ),
                             Center(
                               child: SizedBox(
                                 width: imageWidth,
-                                height: imageWidth * (640 / 1067),
+                                height: imageWidth * (1486 / 2306),
                                 child: Align(
                                   alignment: Alignment.bottomRight,
                                   child: Padding(
                                     padding: const EdgeInsets.only(
-                                      bottom: 16,
+                                      bottom: 24,
                                       right: 36,
                                     ),
                                     child: ongmezimText(context, width),
@@ -109,7 +109,8 @@ class HomeMobileView extends ConsumerWidget {
                 ? const TextStyle(
                     color: Colors.black,
                     fontSize: 20,
-                    fontWeight: FontWeight.bold)
+                    fontWeight: FontWeight.bold,
+                  )
                 : Theme.of(context).textTheme.displaySmall?.copyWith(
                       color: Colors.white,
                     ),

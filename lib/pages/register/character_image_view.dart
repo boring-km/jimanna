@@ -17,14 +17,14 @@ class _CharacterImageView extends StatelessWidget {
           child: Image.asset(
             'assets/images/character_image.png',
             width: width * 6 / 7,
-            height: (width * 6 / 7) * (228 / 400),
+            height: (width * 6 / 7) * (232 / 400),
             fit: BoxFit.cover,
           ),
         ),
         Center(
           child: SizedBox(
             width: width * 6 / 7,
-            height: (width * 6 / 7) * (228 / 400),
+            height: (width * 6 / 7) * (232 / 400),
             child: Align(
               alignment: Alignment.topLeft,
               child: Padding(
@@ -40,7 +40,7 @@ class _CharacterImageView extends StatelessWidget {
         Center(
           child: SizedBox(
             width: width * 6 / 7,
-            height: (width * 6 / 7) * (228 / 400),
+            height: (width * 6 / 7) * (232 / 400),
             child: Align(
               alignment: Alignment.topRight,
               child: Padding(
@@ -56,11 +56,14 @@ class _CharacterImageView extends StatelessWidget {
         Center(
           child: SizedBox(
             width: width * 6 / 7,
-            height: (width * 6 / 7) * (228 / 400),
+            height: (width * 6 / 7) * (232 / 400),
             child: Align(
               alignment: Alignment.bottomRight,
               child: Padding(
-                padding: EdgeInsets.only(bottom: height / 70, right: width / 24),
+                padding: EdgeInsets.only(
+                  bottom: height / 70,
+                  right: width / 24,
+                ),
                 child: ongmezimText(context, width),
               ),
             ),

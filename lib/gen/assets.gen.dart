@@ -78,6 +78,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/star.gif
   AssetGenImage get star => const AssetGenImage('assets/images/star.gif');
 
+  /// File path: assets/images/young_peace.png
+  AssetGenImage get youngPeace =>
+      const AssetGenImage('assets/images/young_peace.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
         abad,
@@ -97,28 +101,32 @@ class $AssetsImagesGen {
         nameBackground,
         nintendo,
         resultBackground,
-        star
+        star,
+        youngPeace
       ];
 }
 
 class $AssetsMusicGen {
   const $AssetsMusicGen();
 
+  /// File path: assets/music/background2.mp3
+  String get background2 => 'assets/music/background2.mp3';
+
   /// File path: assets/music/background_music.mp3
   String get backgroundMusic => 'assets/music/background_music.mp3';
 
   /// List of all assets
-  List<String> get values => [backgroundMusic];
+  List<String> get values => [background2, backgroundMusic];
 }
 
 class $AssetsVideosGen {
   const $AssetsVideosGen();
 
-  /// File path: assets/videos/intro_video_5s.mp4
-  String get introVideo5s => 'assets/videos/intro_video_5s.mp4';
+  /// File path: assets/videos/intro_video_10s.mp4
+  String get introVideo10s => 'assets/videos/intro_video_10s.mp4';
 
   /// List of all assets
-  List<String> get values => [introVideo5s];
+  List<String> get values => [introVideo10s];
 }
 
 class Assets {

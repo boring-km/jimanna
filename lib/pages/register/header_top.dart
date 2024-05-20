@@ -13,7 +13,7 @@ class _HeaderTop extends StatelessWidget {
         Assets.images.star.image(width: width / 10),
         const SizedBox(width: 10),
         Text(
-          '아바드',
+          '영피스',
           style: Theme.of(context).textTheme.displayLarge?.copyWith(
                 color: Colors.white,
                 fontSize: width / 8,

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -8,19 +10,46 @@ import 'package:jimanna/providers/admin_draw_provider.dart';
 import 'package:jimanna/providers/current_registered_names_provider.dart';
 import 'package:jimanna/providers/is_start_draw_provider.dart';
 import 'package:jimanna/ui/ongmezim_text.dart';
+import 'package:jimanna/utils/background_audio_player.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class HomeDesktopView extends ConsumerWidget {
+class HomeDesktopView extends ConsumerStatefulWidget {
   const HomeDesktopView({required this.isAdmin, super.key});
 
   final bool isAdmin;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeDesktopView> createState() => _HomeDesktopViewState();
+}
+
+class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
+
+  @override
+  void initState() {
+    setAudioPlayer();
+    super.initState();
+  }
+
+  void setAudioPlayer() {
+    audioPlayer.setLoopMode(LoopMode.all);
+    audioPlayer
+        .setAsset(
+      'assets/music/background_music.mp3',
+      initialPosition: const Duration(seconds: 15),
+    )
+        .then(
+          (value) =>
+          Future.delayed(const Duration(seconds: 1), audioPlayer.play),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
-    final names = ref.watch(currentRegisteredNamesProvider);
+    final names = ref.watch(currentRegisteredNamesProvider)..shuffle(Random());
 
     return Stack(
       children: [
@@ -44,9 +73,7 @@ class HomeDesktopView extends ConsumerWidget {
             height: 70,
           ),
         ),
-        BottomGround(height, width),
         BottomText(context, width, height),
-        BottomAdminButton(context, ref, height),
         Center(
           child: SizedBox(
             width: width * 0.95,
@@ -57,7 +84,7 @@ class HomeDesktopView extends ConsumerWidget {
               children: [
                 StaggeredGridTile.count(
                   crossAxisCellCount: 10,
-                  mainAxisCellCount: 1.2,
+                  mainAxisCellCount: 1.8,
                   child: GridView.builder(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
@@ -66,7 +93,7 @@ class HomeDesktopView extends ConsumerWidget {
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10,
                     ),
-                    itemCount: 20,
+                    itemCount: 30,
                     itemBuilder: (context, index) {
                       return Stack(
                         children: [
@@ -88,7 +115,7 @@ class HomeDesktopView extends ConsumerWidget {
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10,
                     ),
-                    itemCount: 12,
+                    itemCount: 16,
                     itemBuilder: (context, index) {
                       return Stack(
                         children: [
@@ -130,7 +157,7 @@ class HomeDesktopView extends ConsumerWidget {
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10,
                     ),
-                    itemCount: 12,
+                    itemCount: 16,
                     itemBuilder: (context, index) {
                       return Stack(
                         children: [
@@ -152,7 +179,7 @@ class HomeDesktopView extends ConsumerWidget {
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10,
                     ),
-                    itemCount: 20,
+                    itemCount: 30,
                     itemBuilder: (context, index) {
                       return Stack(
                         children: [
@@ -210,7 +237,7 @@ class HomeDesktopView extends ConsumerWidget {
   }
 
   Widget BottomAdminButton(BuildContext context, WidgetRef ref, double height) {
-    if (isAdmin) {
+    if (widget.isAdmin) {
       return Align(
         alignment: Alignment.bottomCenter,
         child: GestureDetector(

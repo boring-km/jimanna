@@ -34,7 +34,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
   void initState() {
     super.initState();
     isMobileState = widget.isMobile;
-    _controller = VideoPlayerController.asset('assets/videos/intro_video_5s.mp4');
+    _controller = VideoPlayerController.asset(Assets.videos.introVideo10s);
 
     if (isMobileState) {
       setMobileViewData();
@@ -62,7 +62,9 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
   }
 
   void setAudioPlayer() {
-    audioPlayer.setLoopMode(LoopMode.all);
+    audioPlayer
+      ..stop()
+      ..setLoopMode(LoopMode.all);
     audioPlayer
         .setAsset(
           'assets/music/background_music.mp3',
@@ -189,7 +191,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
               fit: BoxFit.fitHeight,
             ),
           ),
-          BottomText(context, width * (3/4), height),
+          BottomText(context, width * (3 / 4), height),
           Padding(
             padding: const EdgeInsets.only(bottom: 40),
             child: Center(
@@ -440,7 +442,8 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
     Timer.periodic(const Duration(seconds: 1), (timer) {
       final myTeamNumber = findMyNameTeamNumber();
       FireStoreFactory.adminOptionRef().snapshots().listen((event) {
-        if (event.docs.first.data().current_showed_team_number == myTeamNumber) {
+        if (event.docs.first.data().current_showed_team_number ==
+            myTeamNumber) {
           timer.cancel();
           myNameTeamNumber.value = myTeamNumber;
         }
