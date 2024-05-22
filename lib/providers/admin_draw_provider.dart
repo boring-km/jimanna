@@ -46,7 +46,7 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
     final teams = organizeTeams(totalNames);
 
     if (hasBlackTwin(teams, state.blackTwins)) {
-      organizeTeams(totalNames);
+      unawaited(makeTeams());
     } else {
       uploadAllTeams(teams);
     }

@@ -15,6 +15,7 @@ List<List<Name>> organizeTeams(List<Name> names) {
       group2.add(allNames[i]);
     }
   }
+  print('group1: ${group1.length}, group2: ${group2.length}');
 
   final totalTeams = <List<Name>>[];
 

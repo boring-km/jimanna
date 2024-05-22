@@ -12,7 +12,6 @@ import 'package:jimanna/routes.dart';
 import 'package:jimanna/ui/background_painter.dart';
 import 'package:jimanna/ui/ongmezim_text.dart';
 import 'package:jimanna/utils/background_audio_player.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:video_player/video_player.dart';
 
@@ -62,18 +61,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
   }
 
   void setAudioPlayer() {
-    audioPlayer
-      ..stop()
-      ..setLoopMode(LoopMode.all);
-    audioPlayer
-        .setAsset(
-          'assets/music/background_music.mp3',
-          initialPosition: const Duration(seconds: 15),
-        )
-        .then(
-          (value) =>
-              Future.delayed(const Duration(seconds: 1), audioPlayer.play),
-        );
+    audioPlayer.stop().then((_) => audioPlayer.play());
   }
 
   void startResultTimer() {
