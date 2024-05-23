@@ -9,6 +9,7 @@ class AdminCurrentMonthNameListPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final nameList = ref.watch(currentRegisteredNamesProvider);
+    final countText = ref.read(currentRegisteredNamesProvider.notifier).countText();
 
     return Scaffold(
       body: Center(
@@ -17,7 +18,7 @@ class AdminCurrentMonthNameListPage extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             BackwardButton(context),
-            const Text('이번달 등록자 명단'),
+            Text('이번달 등록자 명단\n$countText'),
             Expanded(
               child: ListView.builder(
                 itemCount: nameList.length,
@@ -25,9 +26,21 @@ class AdminCurrentMonthNameListPage extends ConsumerWidget {
                   final name = nameList[index];
                   return Padding(
                     padding: const EdgeInsets.all(8),
-                    child: Text(
-                      '${name.type}: ${name.name}',
-                      textAlign: TextAlign.center,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          '${name.type}: ${name.name}',
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(width: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            ref.read(currentRegisteredNamesProvider.notifier).removeByName(name.name);
+                          },
+                          child: const Text('삭제'),
+                        ),
+                      ],
                     ),
                   );
                 },

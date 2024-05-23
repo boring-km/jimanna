@@ -10,6 +10,7 @@ import 'package:jimanna/providers/admin_draw_provider.dart';
 import 'package:jimanna/providers/current_registered_names_provider.dart';
 import 'package:jimanna/providers/is_start_draw_provider.dart';
 import 'package:jimanna/ui/ongmezim_text.dart';
+import 'package:jimanna/ui/themes.dart';
 import 'package:jimanna/utils/background_audio_player.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -24,7 +25,6 @@ class HomeDesktopView extends ConsumerStatefulWidget {
 }
 
 class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
-
   @override
   void initState() {
     setAudioPlayer();
@@ -35,13 +35,13 @@ class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
     audioPlayer.setLoopMode(LoopMode.all);
     audioPlayer
         .setAsset(
-      'assets/music/background_music.mp3',
-      initialPosition: const Duration(seconds: 15),
-    )
+          'assets/music/background_music.mp3',
+          initialPosition: const Duration(seconds: 15),
+        )
         .then(
           (value) =>
-          Future.delayed(const Duration(seconds: 1), audioPlayer.play),
-    );
+              Future.delayed(const Duration(seconds: 1), audioPlayer.play),
+        );
   }
 
   @override
@@ -65,6 +65,12 @@ class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
                 fit: BoxFit.fitHeight,
               );
             },
+          ),
+        ),
+        Center(
+          child: Assets.images.bigLogo.image(
+            width: width / 3,
+            fit: BoxFit.fitWidth,
           ),
         ),
         Align(
@@ -95,12 +101,7 @@ class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
                     ),
                     itemCount: 30,
                     itemBuilder: (context, index) {
-                      return Stack(
-                        children: [
-                          buildUserTextBack(),
-                          buildUserText(names, index, context, width),
-                        ],
-                      );
+                      return buildUserText(names, index, context, width);
                     },
                   ),
                 ),
@@ -117,12 +118,7 @@ class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
                     ),
                     itemCount: 16,
                     itemBuilder: (context, index) {
-                      return Stack(
-                        children: [
-                          buildUserTextBack(),
-                          buildUserText(names, 20 + index, context, width),
-                        ],
-                      );
+                      return buildUserText(names, 30 + index, context, width);
                     },
                   ),
                 ),
@@ -159,11 +155,11 @@ class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
                     ),
                     itemCount: 16,
                     itemBuilder: (context, index) {
-                      return Stack(
-                        children: [
-                          buildUserTextBack(),
-                          buildUserText(names, 20 + 12 + index, context, width),
-                        ],
+                      return buildUserText(
+                        names,
+                        30 + 16 + index,
+                        context,
+                        width,
                       );
                     },
                   ),
@@ -181,16 +177,11 @@ class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
                     ),
                     itemCount: 30,
                     itemBuilder: (context, index) {
-                      return Stack(
-                        children: [
-                          buildUserTextBack(),
-                          buildUserText(
-                            names,
-                            20 + 12 + 12 + index,
-                            context,
-                            width,
-                          ),
-                        ],
+                      return buildUserText(
+                        names,
+                        30 + 16 + 16 + index,
+                        context,
+                        width,
                       );
                     },
                   ),
@@ -254,11 +245,15 @@ class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
     return const SizedBox();
   }
 
-  Center buildUserTextBack() {
-    return Center(child: Assets.images.nameBackground.image());
+  Center buildUserTextBack(String? type) {
+    if (type == 'abad') {
+      return Center(child: Assets.images.nameBackground1.image());
+    } else {
+      return Center(child: Assets.images.nameBackground2.image());
+    }
   }
 
-  Center buildUserText(
+  Widget buildUserText(
     List<Name> names,
     int index,
     BuildContext context,
@@ -267,14 +262,20 @@ class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
     if (names.length <= index) {
       return const Center();
     }
-    return Center(
-      child: Text(
-        '${names[index].type}: ${names[index].name}',
-        style: Theme.of(context).textTheme.displaySmall?.copyWith(
-              color: Colors.white,
-              fontSize: width / 70,
-            ),
-      ),
+    return Stack(
+      children: [
+        buildUserTextBack(names[index].type),
+        Center(
+          child: Text(
+            names[index].name,
+            style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                  color: Colors.white,
+                  fontSize: width / 50,
+                  shadows: shadows(),
+                ),
+          ),
+        ),
+      ],
     );
   }
 

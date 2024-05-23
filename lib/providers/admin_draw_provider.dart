@@ -22,6 +22,7 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
   final _nameRef = FireStoreFactory.namesByCurrentYearMonthRef();
   final _teamRef = FireStoreFactory.teamRef();
   final _blackTwinRef = FireStoreFactory.blackTwinRef();
+  final _leadersRef = FireStoreFactory.leadersRef();
 
   void loadOnRealTime() {
     _teamRef.snapshots().listen((teamEvent) {
@@ -43,7 +44,11 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
 
   Future<void> makeTeams() async {
     final totalNames = await getTotalNames();
-    final teams = organizeTeams(totalNames);
+    final leaders = (await _leadersRef.get()).docs.map((e) => e.data()).toList();
+    final abadLeaders = leaders.where((element) => element.type == 'abad').toList();
+    final paqadLeaders = leaders.where((element) => element.type == 'paqad').toList();
+
+    final teams = organizeTeams(totalNames, abadLeaders, paqadLeaders);
 
     if (hasBlackTwin(teams, state.blackTwins)) {
       unawaited(makeTeams());

@@ -28,4 +28,16 @@ class CurrentRegisteredNamesNotifier extends StateNotifier<List<Name>> {
     });
     state = [];
   }
+
+  void removeByName(String name) {
+    nameRef.where('name', isEqualTo: name).get().then((value) {
+      nameRef.doc(value.docs.first.id).delete();
+    });
+  }
+
+  String countText() {
+    final abadCount = state.where((element) => element.type == 'abad').length;
+    final secondCount = state.where((element) => element.type == 'paqad').length;
+    return 'abad: $abadCount, paqad: $secondCount';
+  }
 }

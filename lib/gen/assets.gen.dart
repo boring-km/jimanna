@@ -15,6 +15,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/abad.png
   AssetGenImage get abad => const AssetGenImage('assets/images/abad.png');
 
+  /// File path: assets/images/big_logo.png
+  AssetGenImage get bigLogo =>
+      const AssetGenImage('assets/images/big_logo.png');
+
   /// File path: assets/images/character_image.png
   AssetGenImage get characterImage =>
       const AssetGenImage('assets/images/character_image.png');
@@ -63,9 +67,13 @@ class $AssetsImagesGen {
   AssetGenImage get homeImage =>
       const AssetGenImage('assets/images/home_image.png');
 
-  /// File path: assets/images/name_background.png
-  AssetGenImage get nameBackground =>
-      const AssetGenImage('assets/images/name_background.png');
+  /// File path: assets/images/name_background1.png
+  AssetGenImage get nameBackground1 =>
+      const AssetGenImage('assets/images/name_background1.png');
+
+  /// File path: assets/images/name_background2.png
+  AssetGenImage get nameBackground2 =>
+      const AssetGenImage('assets/images/name_background2.png');
 
   /// File path: assets/images/nintendo.png
   AssetGenImage get nintendo =>
@@ -85,6 +93,7 @@ class $AssetsImagesGen {
   /// List of all assets
   List<AssetGenImage> get values => [
         abad,
+        bigLogo,
         characterImage,
         confirmButton,
         drawBackground,
@@ -98,7 +107,8 @@ class $AssetsImagesGen {
         homeDesktopBottomButton,
         homeDesktopTop,
         homeImage,
-        nameBackground,
+        nameBackground1,
+        nameBackground2,
         nintendo,
         resultBackground,
         star,
