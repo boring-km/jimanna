@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:jimanna/models/name.dart';
 
 List<List<Name>> organizeTeams(
-    List<Name> names, List<Name> abadLeaders, List<Name> paqadLeaders) {
+    List<Name> names, List<Name> abadLeaders, List<Name> paqadLeaders, List<String> rookies) {
   final totalTeams = <List<Name>>[];
   try {
     final allNames = List<Name>.from(names);
@@ -22,47 +22,64 @@ List<List<Name>> organizeTeams(
       }
     }
 
-    if (group2.length % 3 != 0) {
-      for (var i = 0; i < (group2.length % 3); i++) {
+    if ((group2.length + rookies.length) % 3 != 0) {
+      for (var i = 0; i < ((group2.length + rookies.length) % 3); i++) {
         group2.add(paqadLeaders.removeLast());
       }
     }
+    final expected = ((group2.length + rookies.length) / 3).floor();
+    if (expected < rookies.length) {
+      final overCount = rookies.length - expected;
+      for (var i = 0; i < overCount; i++) {
+        group2.add(Name(rookies.removeLast(), type: 'paqad'));
+      }
+    }
+    print('group1: ${group1.length}, group2: ${group2.length}, rookies: ${rookies.length}');
 
     // 7명 조짜기를 하면서 특정 그룹 인원이 그 이상으로 많을 때
-    if ((group1.length / 4).ceil() > (group2.length / 3).ceil()) {
-      final left = (group1.length - (group2.length * (4 / 3))).ceil();
+    if ((group1.length / 4).ceil() > ((group2.length + rookies.length) / 3).ceil()) {
+      final left = (group1.length - ((group2.length + rookies.length) * (4 / 3))).ceil();
       for (var i = 0; i < left; i++) {
-        specialGroup.add(group1.removeLast());
+        specialGroup.add(group1.removeAt(0));
       }
       final specialTeam = makeTeamBy4(specialGroup);
       for (var i = 0; i < specialTeam.length; i++) {
         totalTeams.add(specialTeam[i]);
       }
 
-    } else if ((group1.length / 4).ceil() < (group2.length / 3).ceil()) {
-      final left = (((group2.length * (4 / 3)) - group1.length) * (3 / 4)).ceil();
-      for (var i = 0; i < left; i++) {
-        specialGroup.add(group2.removeLast());
+    } else if ((group1.length / 4).ceil() < ((group2.length + rookies.length) / 3).ceil()) {
+      final left = ((((group2.length + rookies.length) * (4 / 3)) - group1.length) * (3 / 4)).ceil();
+      print('left: ${left}');
+      for (var i = 0; i < left-1; i++) {
+        specialGroup.add(group2.removeAt(0));
       }
       if (left < 4) {
         for (var i = 0; i < 7 - left; i++) {
           if (abadLeaders.isNotEmpty) {
-            specialGroup.add(group1.removeLast());
+            specialGroup.add(group1.removeAt(0));
+            print('group1 added');
             group1.add(abadLeaders.removeLast());
           }
         }
+        if (rookies.isNotEmpty) {
+          specialGroup.add(Name(rookies.removeLast(), type: 'paqad'));
+        } else {
+          specialGroup.add(group2.removeAt(0));
+        }
         totalTeams.add(specialGroup);
       } else {
-        final specialTeam = makeTeamBy3(specialGroup);
+        final specialTeam = makeTeamBy3(specialGroup, rookies);
         for (var i = 0; i < specialTeam.length; i++) {
           totalTeams.add(specialTeam[i]);
         }
       }
     }
+    print('group1: ${group1.length}, group2: ${group2.length}, rookies: ${rookies.length}');
 
     final team1 = makeTeamBy4(group1);
-    final team2 = makeTeamBy3(group2);
+    final team2 = makeTeamBy3(group2, rookies);
 
+    print('team1: ${team1.length}, team2: ${team2.length}');
     if (team1.length < team2.length) {
       for (var i = 0; i < team1.length; i++) {
         totalTeams.add(team1[i] + team2[i]);
@@ -134,14 +151,20 @@ List<List<Name>> makeTeamBy4(List<Name> group1) {
 
 // TODO 팀원이 3명이 아닌 조는 leader를 추가해야 함
 // TODO 팀원이 3명이 아닌 조는 list의 맨 뒤로 가야함
-List<List<Name>> makeTeamBy3(List<Name> group2) {
+List<List<Name>> makeTeamBy3(List<Name> group2, List<String> rookies) {
   group2.shuffle(Random());
-  final total = group2.length;
+  final total = group2.length + rookies.length;
   final left = getLeftValue(total, 3);
+  print('total: $total, makeTeamBy3 left: ${left}');
   final teams = <List<Name>>[];
   for (var i = 0; i < total ~/ 3 - (2 - left); i++) {
     final team = <Name>[];
-    for (var j = 0; j < 3; j++) {
+    for (var j = 0; j < 2; j++) {
+      team.add(group2.removeLast());
+    }
+    if (rookies.isNotEmpty) {
+      team.add(Name(rookies.removeLast(), type: 'paqad'));
+    } else {
       team.add(group2.removeLast());
     }
     teams.add(team);
@@ -149,16 +172,20 @@ List<List<Name>> makeTeamBy3(List<Name> group2) {
 
   if (left != 2) {
     for (var i = 0; i < 3 - left; i++) {
-      final team = <Name>[];
-      for (var j = 0; j < 2; j++) {
+      final team = <Name>[group2.removeLast()];
+      if (rookies.isNotEmpty) {
+        team.add(Name(rookies.removeLast(), type: 'paqad'));
+      } else {
         team.add(group2.removeLast());
       }
       teams.add(team);
     }
   } else {
     if (total % 3 == 2) {
-      final team = <Name>[];
-      for (var i = 0; i < 2; i++) {
+      final team = <Name>[group2.removeLast()];
+      if (rookies.isNotEmpty) {
+        team.add(Name(rookies.removeLast(), type: 'paqad'));
+      } else {
         team.add(group2.removeLast());
       }
       teams.add(team);

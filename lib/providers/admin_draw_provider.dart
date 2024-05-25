@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/data/organize_teams.dart';
@@ -22,6 +23,8 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
   final _teamRef = FireStoreFactory.teamRef();
   final _blackTwinRef = FireStoreFactory.blackTwinRef();
   final _leadersRef = FireStoreFactory.leadersRef();
+  final _rookieRef = FireStoreFactory.rookieRef();
+  final rookies = <String>[];
 
   void loadOnRealTime() {
     _teamRef.snapshots().listen((teamEvent) {
@@ -29,6 +32,12 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
       _blackTwinRef.get().then((blackEvent) {
         state = TeamDraw(teams, blackEvent.docs.map((e) => e.data()).toList());
       });
+    });
+    _rookieRef.snapshots().listen((rookieEvent) {
+      rookies.clear();
+      for (final doc in rookieEvent.docs) {
+        rookies.add(doc.data().name);
+      }
     });
   }
 
@@ -50,11 +59,16 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
     final paqadLeaders =
         leaders.where((element) => element.type == 'paqad').toList()..shuffle();
 
-    final teams = organizeTeams(totalNames, abadLeaders, paqadLeaders);
+    final totalNamesWithoutRookies = totalNames.where((element) => !rookies.contains(element.name)).toList()..shuffle(Random());
+    final namesWithRookies = totalNames.where((element) => rookies.contains(element.name)).map((e) => e.name).toList()..shuffle(Random());
+
+    final teams = organizeTeams(totalNamesWithoutRookies, abadLeaders, paqadLeaders, namesWithRookies);
 
     if (hasBlackTwin(teams, state.blackTwins)) {
+      print('has black twin');
       unawaited(makeTeams());
     } else {
+      print('no black twin');
       uploadAllTeams(teams);
     }
   }
