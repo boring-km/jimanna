@@ -15,9 +15,42 @@ class $AssetsImagesGen {
   /// File path: assets/images/abad.png
   AssetGenImage get abad => const AssetGenImage('assets/images/abad.png');
 
+  /// File path: assets/images/big_logo.png
+  AssetGenImage get bigLogo =>
+      const AssetGenImage('assets/images/big_logo.png');
+
+  /// File path: assets/images/char1.png
+  AssetGenImage get char1 => const AssetGenImage('assets/images/char1.png');
+
+  /// File path: assets/images/char2.png
+  AssetGenImage get char2 => const AssetGenImage('assets/images/char2.png');
+
+  /// File path: assets/images/char3.png
+  AssetGenImage get char3 => const AssetGenImage('assets/images/char3.png');
+
+  /// File path: assets/images/char4.png
+  AssetGenImage get char4 => const AssetGenImage('assets/images/char4.png');
+
+  /// File path: assets/images/char5.png
+  AssetGenImage get char5 => const AssetGenImage('assets/images/char5.png');
+
+  /// File path: assets/images/char6.png
+  AssetGenImage get char6 => const AssetGenImage('assets/images/char6.png');
+
+  /// File path: assets/images/char7.png
+  AssetGenImage get char7 => const AssetGenImage('assets/images/char7.png');
+
   /// File path: assets/images/character_image.png
   AssetGenImage get characterImage =>
       const AssetGenImage('assets/images/character_image.png');
+
+  /// File path: assets/images/chat_bubble1.png
+  AssetGenImage get chatBubble1 =>
+      const AssetGenImage('assets/images/chat_bubble1.png');
+
+  /// File path: assets/images/chat_bubble2.png
+  AssetGenImage get chatBubble2 =>
+      const AssetGenImage('assets/images/chat_bubble2.png');
 
   /// File path: assets/images/confirm_button.png
   AssetGenImage get confirmButton =>
@@ -63,9 +96,13 @@ class $AssetsImagesGen {
   AssetGenImage get homeImage =>
       const AssetGenImage('assets/images/home_image.png');
 
-  /// File path: assets/images/name_background.png
-  AssetGenImage get nameBackground =>
-      const AssetGenImage('assets/images/name_background.png');
+  /// File path: assets/images/name_background1.png
+  AssetGenImage get nameBackground1 =>
+      const AssetGenImage('assets/images/name_background1.png');
+
+  /// File path: assets/images/name_background2.png
+  AssetGenImage get nameBackground2 =>
+      const AssetGenImage('assets/images/name_background2.png');
 
   /// File path: assets/images/nintendo.png
   AssetGenImage get nintendo =>
@@ -78,10 +115,24 @@ class $AssetsImagesGen {
   /// File path: assets/images/star.gif
   AssetGenImage get star => const AssetGenImage('assets/images/star.gif');
 
+  /// File path: assets/images/young_peace.png
+  AssetGenImage get youngPeace =>
+      const AssetGenImage('assets/images/young_peace.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
         abad,
+        bigLogo,
+        char1,
+        char2,
+        char3,
+        char4,
+        char5,
+        char6,
+        char7,
         characterImage,
+        chatBubble1,
+        chatBubble2,
         confirmButton,
         drawBackground,
         emoji,
@@ -94,21 +145,26 @@ class $AssetsImagesGen {
         homeDesktopBottomButton,
         homeDesktopTop,
         homeImage,
-        nameBackground,
+        nameBackground1,
+        nameBackground2,
         nintendo,
         resultBackground,
-        star
+        star,
+        youngPeace
       ];
 }
 
 class $AssetsMusicGen {
   const $AssetsMusicGen();
 
+  /// File path: assets/music/background2.mp3
+  String get background2 => 'assets/music/background2.mp3';
+
   /// File path: assets/music/background_music.mp3
   String get backgroundMusic => 'assets/music/background_music.mp3';
 
   /// List of all assets
-  List<String> get values => [backgroundMusic];
+  List<String> get values => [background2, backgroundMusic];
 }
 
 class $AssetsVideosGen {

@@ -1,12 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jimanna/models/name.dart';
 import 'package:jimanna/providers/firebase/firebase_factory.dart';
 
 final currentRegisteredNamesProvider =
-    StateNotifierProvider<CurrentRegisteredNamesNotifier, List<String>>((ref) {
+    StateNotifierProvider<CurrentRegisteredNamesNotifier, List<Name>>((ref) {
   return CurrentRegisteredNamesNotifier();
 });
 
-class CurrentRegisteredNamesNotifier extends StateNotifier<List<String>> {
+class CurrentRegisteredNamesNotifier extends StateNotifier<List<Name>> {
   CurrentRegisteredNamesNotifier() : super([]) {
     loadOnRealTime();
   }
@@ -15,7 +16,7 @@ class CurrentRegisteredNamesNotifier extends StateNotifier<List<String>> {
 
   void loadOnRealTime() {
     nameRef.snapshots().listen((event) {
-      state = event.docs.map((e) => e.data().name).toList().reversed.toList();
+      state = event.docs.map((e) => e.data()).toList().reversed.toList();
     });
   }
 
@@ -26,5 +27,17 @@ class CurrentRegisteredNamesNotifier extends StateNotifier<List<String>> {
       }
     });
     state = [];
+  }
+
+  void removeByName(String name) {
+    nameRef.where('name', isEqualTo: name).get().then((value) {
+      nameRef.doc(value.docs.first.id).delete();
+    });
+  }
+
+  String countText() {
+    final abadCount = state.where((element) => element.type == 'abad').length;
+    final secondCount = state.where((element) => element.type == 'paqad').length;
+    return 'abad: $abadCount, paqad: $secondCount';
   }
 }

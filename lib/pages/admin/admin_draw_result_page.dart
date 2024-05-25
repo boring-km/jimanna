@@ -12,7 +12,6 @@ class AdminDrawResultPage extends ConsumerStatefulWidget {
 }
 
 class _AdminDrawResultPageState extends ConsumerState<AdminDrawResultPage> {
-
   @override
   Widget build(BuildContext context) {
     final teamDraw = ref.watch(adminDrawProvider);
@@ -20,45 +19,47 @@ class _AdminDrawResultPageState extends ConsumerState<AdminDrawResultPage> {
 
     return Scaffold(
       body: Center(
-      child: Column(
-        children: [
-          SizedBox(
-            height: height * 0.8,
-            child: ListView.builder(
-              itemCount: teamDraw.teams.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    Text('조 ${index + 1}'),
-                    SizedBox(
-                      height: 50,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: teamDraw.teams[index].names.length,
-                        itemBuilder: (context, index2) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Text(teamDraw.teams[index].names[index2]),
-                          );
-                        },
+        child: Column(
+          children: [
+            SizedBox(
+              height: height * 0.8,
+              child: ListView.builder(
+                itemCount: teamDraw.teams.length,
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      Text('조 ${index + 1}'),
+                      SizedBox(
+                        height: 50,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemCount: teamDraw.teams[index].names.length,
+                          itemBuilder: (context, index2) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Text(
+                                teamDraw.teams[index].names[index2].name,
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  ],
-                );
-              },
+                    ],
+                  );
+                },
+              ),
             ),
-          ),
-          const SizedBox(height: 50),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('처음으로'),
-          ),
-        ],
+            const SizedBox(height: 50),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('처음으로'),
+            ),
+          ],
+        ),
       ),
-    ),
     );
   }
 
@@ -83,7 +84,9 @@ class _AdminDrawResultPageState extends ConsumerState<AdminDrawResultPage> {
                         itemBuilder: (context, index2) {
                           return Padding(
                             padding: const EdgeInsets.all(8),
-                            child: Text(teamDraw.teams[index].names[index2]),
+                            child: Text(
+                              teamDraw.teams[index].names[index2].name,
+                            ),
                           );
                         },
                       ),

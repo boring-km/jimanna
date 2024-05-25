@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ProviderScope(
       child: MaterialApp(
-        title: '평화교회 아바드 지만나',
+        title: '평화교회 영피스 지만나',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: ColorName.blueDark),
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           textTheme: textTheme,
         ),
-        initialRoute: Routes.register,
+        initialRoute: Routes.drawResult,
         onGenerateRoute: Pages.getPages,
         onUnknownRoute: (_) => MaterialPageRoute(
           builder: (_) => const ErrorPage(),

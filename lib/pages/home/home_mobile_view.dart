@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/gen/assets.gen.dart';
 import 'package:jimanna/gen/colors.gen.dart';
+import 'package:jimanna/models/name.dart';
 import 'package:jimanna/providers/current_name.dart';
 import 'package:jimanna/providers/current_registered_names_provider.dart';
 import 'package:jimanna/ui/background_painter.dart';
@@ -43,18 +44,18 @@ class HomeMobileView extends ConsumerWidget {
                             Center(
                               child: Assets.images.homeImage.image(
                                 width: imageWidth,
-                                height: imageWidth * (640 / 1067),
+                                height: imageWidth * (1486 / 2306),
                               ),
                             ),
                             Center(
                               child: SizedBox(
                                 width: imageWidth,
-                                height: imageWidth * (640 / 1067),
+                                height: imageWidth * (1486 / 2306),
                                 child: Align(
                                   alignment: Alignment.bottomRight,
                                   child: Padding(
                                     padding: const EdgeInsets.only(
-                                      bottom: 16,
+                                      bottom: 24,
                                       right: 36,
                                     ),
                                     child: ongmezimText(context, width),
@@ -91,8 +92,8 @@ class HomeMobileView extends ConsumerWidget {
     );
   }
 
-  Padding NameCard(String name, BuildContext context) {
-    final isMyName = name == CurrentName.value;
+  Padding NameCard(Name name, BuildContext context) {
+    final isMyName = name.name == CurrentName.value;
 
     return Padding(
       padding: const EdgeInsets.all(10),
@@ -103,12 +104,13 @@ class HomeMobileView extends ConsumerWidget {
         ),
         child: Center(
           child: Text(
-            name,
+            name.name,
             style: isMyName
                 ? const TextStyle(
                     color: Colors.black,
                     fontSize: 20,
-                    fontWeight: FontWeight.bold)
+                    fontWeight: FontWeight.bold,
+                  )
                 : Theme.of(context).textTheme.displaySmall?.copyWith(
                       color: Colors.white,
                     ),

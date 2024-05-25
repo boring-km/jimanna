@@ -1,25 +1,55 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:jimanna/consts.dart';
 import 'package:jimanna/gen/assets.gen.dart';
+import 'package:jimanna/models/name.dart';
 import 'package:jimanna/providers/admin_draw_provider.dart';
 import 'package:jimanna/providers/current_registered_names_provider.dart';
 import 'package:jimanna/providers/is_start_draw_provider.dart';
 import 'package:jimanna/ui/ongmezim_text.dart';
+import 'package:jimanna/ui/themes.dart';
+import 'package:jimanna/utils/background_audio_player.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class HomeDesktopView extends ConsumerWidget {
+class HomeDesktopView extends ConsumerStatefulWidget {
   const HomeDesktopView({required this.isAdmin, super.key});
 
   final bool isAdmin;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeDesktopView> createState() => _HomeDesktopViewState();
+}
+
+class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
+  @override
+  void initState() {
+    setAudioPlayer();
+    super.initState();
+  }
+
+  void setAudioPlayer() {
+    audioPlayer.setLoopMode(LoopMode.all);
+    audioPlayer
+        .setAsset(
+          'assets/music/background_music.mp3',
+          initialPosition: const Duration(seconds: 15),
+        )
+        .then(
+          (value) =>
+              Future.delayed(const Duration(seconds: 1), audioPlayer.play),
+        );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
-    final names = ref.watch(currentRegisteredNamesProvider);
+    final names = ref.watch(currentRegisteredNamesProvider)..shuffle(Random());
 
     return Stack(
       children: [
@@ -37,15 +67,19 @@ class HomeDesktopView extends ConsumerWidget {
             },
           ),
         ),
+        Center(
+          child: Assets.images.bigLogo.image(
+            width: width / 3,
+            fit: BoxFit.fitWidth,
+          ),
+        ),
         Align(
           alignment: Alignment.topCenter,
           child: Assets.images.homeDesktopTop.image(
             height: 70,
           ),
         ),
-        BottomGround(height, width),
         BottomText(context, width, height),
-        BottomAdminButton(context, ref, height),
         Center(
           child: SizedBox(
             width: width * 0.95,
@@ -56,7 +90,7 @@ class HomeDesktopView extends ConsumerWidget {
               children: [
                 StaggeredGridTile.count(
                   crossAxisCellCount: 10,
-                  mainAxisCellCount: 1.2,
+                  mainAxisCellCount: 1.8,
                   child: GridView.builder(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
@@ -65,14 +99,9 @@ class HomeDesktopView extends ConsumerWidget {
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10,
                     ),
-                    itemCount: 20,
+                    itemCount: 30,
                     itemBuilder: (context, index) {
-                      return Stack(
-                        children: [
-                          buildUserTextBack(),
-                          buildUserText(names, index, context, width),
-                        ],
-                      );
+                      return buildUserText(names, index, context, width);
                     },
                   ),
                 ),
@@ -87,14 +116,9 @@ class HomeDesktopView extends ConsumerWidget {
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10,
                     ),
-                    itemCount: 12,
+                    itemCount: 16,
                     itemBuilder: (context, index) {
-                      return Stack(
-                        children: [
-                          buildUserTextBack(),
-                          buildUserText(names, 20 + index, context, width),
-                        ],
-                      );
+                      return buildUserText(names, 30 + index, context, width);
                     },
                   ),
                 ),
@@ -129,13 +153,13 @@ class HomeDesktopView extends ConsumerWidget {
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10,
                     ),
-                    itemCount: 12,
+                    itemCount: 16,
                     itemBuilder: (context, index) {
-                      return Stack(
-                        children: [
-                          buildUserTextBack(),
-                          buildUserText(names, 20 + 12 + index, context, width),
-                        ],
+                      return buildUserText(
+                        names,
+                        30 + 16 + index,
+                        context,
+                        width,
                       );
                     },
                   ),
@@ -151,18 +175,13 @@ class HomeDesktopView extends ConsumerWidget {
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10,
                     ),
-                    itemCount: 20,
+                    itemCount: 30,
                     itemBuilder: (context, index) {
-                      return Stack(
-                        children: [
-                          buildUserTextBack(),
-                          buildUserText(
-                            names,
-                            20 + 12 + 12 + index,
-                            context,
-                            width,
-                          ),
-                        ],
+                      return buildUserText(
+                        names,
+                        30 + 16 + 16 + index,
+                        context,
+                        width,
                       );
                     },
                   ),
@@ -209,7 +228,7 @@ class HomeDesktopView extends ConsumerWidget {
   }
 
   Widget BottomAdminButton(BuildContext context, WidgetRef ref, double height) {
-    if (isAdmin) {
+    if (widget.isAdmin) {
       return Align(
         alignment: Alignment.bottomCenter,
         child: GestureDetector(
@@ -226,12 +245,16 @@ class HomeDesktopView extends ConsumerWidget {
     return const SizedBox();
   }
 
-  Center buildUserTextBack() {
-    return Center(child: Assets.images.nameBackground.image());
+  Center buildUserTextBack(String? type) {
+    if (type == 'abad') {
+      return Center(child: Assets.images.nameBackground1.image());
+    } else {
+      return Center(child: Assets.images.nameBackground2.image());
+    }
   }
 
-  Center buildUserText(
-    List<String> names,
+  Widget buildUserText(
+    List<Name> names,
     int index,
     BuildContext context,
     double width,
@@ -239,14 +262,20 @@ class HomeDesktopView extends ConsumerWidget {
     if (names.length <= index) {
       return const Center();
     }
-    return Center(
-      child: Text(
-        names[index],
-        style: Theme.of(context).textTheme.displaySmall?.copyWith(
-              color: Colors.white,
-              fontSize: width / 70,
-            ),
-      ),
+    return Stack(
+      children: [
+        buildUserTextBack(names[index].type),
+        Center(
+          child: Text(
+            names[index].name,
+            style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                  color: Colors.white,
+                  fontSize: width / 50,
+                  shadows: shadows(),
+                ),
+          ),
+        ),
+      ],
     );
   }
 

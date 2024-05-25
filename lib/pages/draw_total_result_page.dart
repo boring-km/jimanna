@@ -15,7 +15,7 @@ class DrawTotalResultPage extends ConsumerWidget {
 
     final teamDraw = ref.watch(adminDrawProvider);
 
-    final nintendoHeight = ((width * 0.4) / 2330)*973;
+    final nintendoHeight = ((width * 0.4) / 2330) * 973;
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -41,77 +41,104 @@ class DrawTotalResultPage extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.all(10),
-                    child: Stack(children: [
-                      Center(
-                        child: Assets.images.nintendo.image(
-                          width: width * 0.4,
-                        ),
-                      ),
-                      Center(
-                        child: SizedBox(
-                          width: nintendoHeight * (16 / 9),
-                          height: nintendoHeight,
-                          child: Stack(
-                            children: [
-                              Assets.images.resultBackground.image(),
-                              TeamNumberText(index),
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 60, top: 80),
-                                  child: GradientText(
-                                    teamDraw.teams[index].names[0],
-                                    gradientDirection: GradientDirection.ttb,
-                                    colors: const [Colors.white, Colors.green],
-                                    style: const TextStyle(fontSize: 60),
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.only(right: 60, top: 80),
-                                  child: GradientText(
-                                    teamDraw.teams[index].names[1],
-                                    gradientDirection: GradientDirection.ttb,
-                                    colors: const [Colors.white, Colors.green],
-                                    style: const TextStyle(fontSize: 60),
-                                  ),
-                                ),
-                              ),
-                              if (teamDraw.teams[index].names.length > 2) Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 60, bottom: 60),
-                                  child: GradientText(
-                                    teamDraw.teams[index].names[2],
-                                    gradientDirection: GradientDirection.ttb,
-                                    colors: const [Colors.white, Colors.green],
-                                    style: const TextStyle(fontSize: 60),
-                                  ),
-                                ),
-                              ) else Container(),
-                              if (teamDraw.teams[index].names.length > 3) Align(
-                                alignment: Alignment.bottomRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 60, bottom: 60),
-                                  child: GradientText(
-                                    teamDraw.teams[index].names[3],
-                                    gradientDirection: GradientDirection.ttb,
-                                    colors: const [Colors.white, Colors.green],
-                                    style: const TextStyle(fontSize: 60),
-                                  ),
-                                ),
-                              ) else Container(),
-                            ],
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: Assets.images.nintendo.image(
+                            width: width * 0.4,
                           ),
                         ),
-                      ),
-                    ]),
+                        Center(
+                          child: SizedBox(
+                            width: nintendoHeight * (16 / 9),
+                            height: nintendoHeight,
+                            child: Stack(
+                              children: [
+                                Assets.images.resultBackground.image(),
+                                TeamNumberText(index),
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 60,
+                                      top: 80,
+                                    ),
+                                    child: GradientText(
+                                      teamDraw.teams[index].names[0].name,
+                                      // TODO type 넣기
+                                      gradientDirection: GradientDirection.ttb,
+                                      colors: const [
+                                        Colors.white,
+                                        Colors.green
+                                      ],
+                                      style: const TextStyle(fontSize: 60),
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        right: 60, top: 80),
+                                    child: GradientText(
+                                      teamDraw.teams[index].names[1].name,
+                                      gradientDirection: GradientDirection.ttb,
+                                      colors: const [
+                                        Colors.white,
+                                        Colors.green
+                                      ],
+                                      style: const TextStyle(fontSize: 60),
+                                    ),
+                                  ),
+                                ),
+                                if (teamDraw.teams[index].names.length > 2)
+                                  Align(
+                                    alignment: Alignment.bottomLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 60, bottom: 60),
+                                      child: GradientText(
+                                        teamDraw.teams[index].names[2].name,
+                                        // TODO type 넣기
+                                        gradientDirection:
+                                            GradientDirection.ttb,
+                                        colors: const [
+                                          Colors.white,
+                                          Colors.green
+                                        ],
+                                        style: const TextStyle(fontSize: 60),
+                                      ),
+                                    ),
+                                  )
+                                else
+                                  Container(),
+                                if (teamDraw.teams[index].names.length > 3)
+                                  Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          right: 60, bottom: 60),
+                                      child: GradientText(
+                                        teamDraw.teams[index].names[3].name,
+                                        // TODO type 넣기
+                                        gradientDirection:
+                                            GradientDirection.ttb,
+                                        colors: const [
+                                          Colors.white,
+                                          Colors.green
+                                        ],
+                                        style: const TextStyle(fontSize: 60),
+                                      ),
+                                    ),
+                                  )
+                                else
+                                  Container(),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   );
                 },
               ),

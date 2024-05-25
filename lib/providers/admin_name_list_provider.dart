@@ -30,7 +30,7 @@ class FirstNameListNotifier extends StateNotifier<List<String>> {
   void register(String name, {void Function()? onError}) {
     nameRef.where('name', isEqualTo: name).get().then((value) {
       if (value.docs.isEmpty) {
-        nameRef.add(Name(name));
+        nameRef.add(Name(name, type: 'abad'));
       } else {
         onError?.call();
       }
@@ -65,7 +65,7 @@ class SecondNameListNotifier extends StateNotifier<List<String>> {
   void register(String name, {void Function()? onError}) {
     nameRef.where('name', isEqualTo: name).get().then((value) {
       if (value.docs.isEmpty) {
-        nameRef.add(Name(name));
+        nameRef.add(Name(name, type: 'paqad'));
       } else {
         onError?.call();
       }

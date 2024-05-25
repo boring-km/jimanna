@@ -8,8 +8,10 @@ part of 'name.dart';
 
 Name _$NameFromJson(Map<String, dynamic> json) => Name(
       json['name'] as String,
+      type: json['type'] as String?,
     );
 
 Map<String, dynamic> _$NameToJson(Name instance) => <String, dynamic>{
       'name': instance.name,
+      'type': instance.type,
     };

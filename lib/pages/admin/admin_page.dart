@@ -108,6 +108,13 @@ class _AdminPageState extends ConsumerState<AdminPage> {
                 child: const Text('피드백 결과보기'),
               ),
               const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, Routes.adminSpecial);
+                },
+                child: const Text('임원 명단'),
+              ),
+              const SizedBox(height: 20),
               SizedBox(
                 width: 200,
                 child: TextField(

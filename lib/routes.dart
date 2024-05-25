@@ -6,6 +6,7 @@ import 'package:jimanna/pages/admin/admin_feedback_result_page.dart';
 import 'package:jimanna/pages/admin/admin_name_list_page.dart';
 import 'package:jimanna/pages/admin/admin_page.dart';
 import 'package:jimanna/pages/admin/admin_current_month_name_list_page.dart';
+import 'package:jimanna/pages/admin/admin_special_page.dart';
 import 'package:jimanna/pages/draw_result_page.dart';
 import 'package:jimanna/pages/draw_total_result_page.dart';
 import 'package:jimanna/pages/error/error_page.dart';
@@ -33,6 +34,7 @@ class Routes {
 
   static const String feedback = '/feedback';
   static const String adminFeedback = '/qlalftmfjdnsghkaus/feedback';
+  static const String adminSpecial = '/qlalftmfjdnsghkaus/special';
 }
 
 class Pages {
@@ -68,6 +70,8 @@ class Pages {
         return router.create(child: const FeedbackPage());
       case Routes.adminFeedback:
         return router.create(child: const AdminFeedbackResultPage());
+      case Routes.adminSpecial:
+        return router.create(child: const AdminSpecialPage());
       default:
         return router.create(child: const ErrorPage());
     }

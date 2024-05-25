@@ -60,7 +60,7 @@ class AdminDrawPage extends ConsumerWidget {
                         return Padding(
                           padding: const EdgeInsets.all(8),
                           child: Text(
-                            teamDraw.teams[index].names[index2],
+                            teamDraw.teams[index].names[index2].name,
                             style: const TextStyle(fontSize: 20),
                           ),
                         );

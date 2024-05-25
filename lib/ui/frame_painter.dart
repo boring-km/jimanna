@@ -21,32 +21,35 @@ class FramePainter extends CustomPainter {
         Rect.fromLTWH(30, 20, size.width - 60, size.height - 30);
     final shadowPath1 = Path()
       ..addRRect(
-          RRect.fromRectAndRadius(shadowRect1, const Radius.circular(20)));
+        RRect.fromRectAndRadius(shadowRect1, const Radius.circular(20)),
+      );
 
     final shadowRect2 =
         Rect.fromLTWH(33, 23, size.width - 60, size.height - 30);
     final shadowPath2 = Path()
       ..addRRect(
-          RRect.fromRectAndRadius(shadowRect2, const Radius.circular(20)));
+        RRect.fromRectAndRadius(shadowRect2, const Radius.circular(20)),
+      );
 
     final shadowRect3 =
         Rect.fromLTWH(33, 20, size.width - 60, size.height - 30);
     final shadowPath3 = Path()
       ..addRRect(
-          RRect.fromRectAndRadius(shadowRect3, const Radius.circular(20)));
+        RRect.fromRectAndRadius(shadowRect3, const Radius.circular(20)),
+      );
 
     final shadowRect4 =
         Rect.fromLTWH(30, 23, size.width - 60, size.height - 30);
     final shadowPath4 = Path()
       ..addRRect(
-          RRect.fromRectAndRadius(shadowRect4, const Radius.circular(20)));
+        RRect.fromRectAndRadius(shadowRect4, const Radius.circular(20)),
+      );
 
-    canvas.drawPath(shadowPath1, rectShadowPaint);
-    canvas.drawPath(shadowPath2, rectShadowPaint);
-    canvas.drawPath(shadowPath3, rectShadowPaint);
-    canvas.drawPath(shadowPath4, rectShadowPaint);
-
-    canvas.drawPath(rectPath, rectPaint);
+    canvas..drawPath(shadowPath1, rectShadowPaint)
+    ..drawPath(shadowPath2, rectShadowPaint)
+    ..drawPath(shadowPath3, rectShadowPaint)
+    ..drawPath(shadowPath4, rectShadowPaint)
+    ..drawPath(rectPath, rectPaint);
   }
 
   @override

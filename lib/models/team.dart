@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:jimanna/models/name.dart';
 
 part 'team.g.dart';
 
@@ -8,7 +9,7 @@ class Team {
 
   factory Team.fromJson(Map<String, dynamic> json) => _$TeamFromJson(json);
 
-  final List<String> names;
+  final List<Name> names;
 
   Map<String, dynamic> toJson() => _$TeamToJson(this);
 }
