@@ -5,12 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/gen/assets.gen.dart';
 import 'package:jimanna/gen/colors.gen.dart';
 import 'package:jimanna/models/admin_option.dart';
+import 'package:jimanna/models/team.dart';
 import 'package:jimanna/providers/admin_draw_provider.dart';
 import 'package:jimanna/providers/current_name.dart';
 import 'package:jimanna/providers/firebase/firebase_factory.dart';
 import 'package:jimanna/routes.dart';
 import 'package:jimanna/ui/background_painter.dart';
 import 'package:jimanna/ui/ongmezim_text.dart';
+import 'package:jimanna/ui/themes.dart';
 import 'package:jimanna/utils/background_audio_player.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:video_player/video_player.dart';
@@ -27,23 +29,23 @@ class DrawResultPage extends ConsumerStatefulWidget {
 class _DrawResultPageState extends ConsumerState<DrawResultPage> {
   late final bool isMobileState;
   final counter = ValueNotifier(10);
-  final showResult = ValueNotifier(false);
+  final showResult = ValueNotifier(true);
 
   @override
   void initState() {
     super.initState();
     isMobileState = widget.isMobile;
-    _controller = VideoPlayerController.asset(Assets.videos.introVideo10s);
+    _controller = VideoPlayerController.asset(Assets.videos.introVideo5s);
 
     if (isMobileState) {
       setMobileViewData();
     } else {
       setVideoPlayer();
     }
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      moveIfDrawEnd(context);
-    });
+    //
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   moveIfDrawEnd(context);
+    // });
   }
 
   void setVideoPlayer() {
@@ -54,7 +56,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
             _controller.setLooping(true);
             startResultTimer();
           });
-          setAudioPlayer();
+          // setAudioPlayer();
         });
       });
     });
@@ -71,16 +73,19 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
         timer.cancel();
         _controller.pause();
         showResult.value = true;
-        showNamesWithTimer();
+        // TODO showNamesWithTimer();
       }
     });
   }
 
   final teamCount = ValueNotifier(1);
-  final leftTopName = ValueNotifier('');
-  final rightTopName = ValueNotifier('');
-  final leftBottomName = ValueNotifier('');
-  final rightBottomName = ValueNotifier('');
+  final firstName = ValueNotifier('');
+  final secondName = ValueNotifier('');
+  final thirdName = ValueNotifier('');
+  final fourthName = ValueNotifier('');
+  final fifthName = ValueNotifier('');
+  final sixthName = ValueNotifier('');
+  final seventhName = ValueNotifier('');
 
   final myNameTeamNumber = ValueNotifier(0);
 
@@ -101,34 +106,53 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
     for (var teamIndex = 0; teamIndex < teamDraw.teams.length; teamIndex++) {
       final team = teamDraw.teams[teamIndex];
       await Future.delayed(const Duration(milliseconds: 1000));
-      for (var i = 0; i < team.names.length; i++) {
-        if (i == 0) {
-          // TODO type 넣기
-          leftTopName.value = team.names[i].name;
-          await Future.delayed(const Duration(milliseconds: 500));
-        } else if (i == 1) {
-          rightTopName.value = team.names[i].name;
-          await Future.delayed(const Duration(milliseconds: 500));
-        } else if (i == 2) {
-          leftBottomName.value = team.names[i].name;
-          await Future.delayed(const Duration(milliseconds: 500));
-        } else if (i == 3) {
-          rightBottomName.value = team.names[i].name;
-          await Future.delayed(const Duration(milliseconds: 500));
-        }
-      }
+      await showNames(team);
       ref.read(adminOptionsProvider.notifier).updateTeamNumber(teamIndex + 1);
       await Future.delayed(const Duration(seconds: 4));
       if (teamIndex < teamDraw.teams.length - 1) {
         teamCount.value++;
       }
-      leftTopName.value = '';
-      rightTopName.value = '';
-      leftBottomName.value = '';
-      rightBottomName.value = '';
+      clearNames();
     }
     ref.read(adminOptionsProvider.notifier).endDraw();
     unawaited(Navigator.popAndPushNamed(context, Routes.drawTotalResultPage));
+  }
+
+  Future<void> showNames(Team team) async {
+    for (var i = 0; i < team.names.length; i++) {
+      if (i == 0) {
+        firstName.value = team.names[i].name;
+        await Future.delayed(const Duration(milliseconds: 300));
+      } else if (i == 1) {
+        secondName.value = team.names[i].name;
+        await Future.delayed(const Duration(milliseconds: 300));
+      } else if (i == 2) {
+        thirdName.value = team.names[i].name;
+        await Future.delayed(const Duration(milliseconds: 300));
+      } else if (i == 3) {
+        fourthName.value = team.names[i].name;
+        await Future.delayed(const Duration(milliseconds: 300));
+      } else if (i == 4) {
+        fifthName.value = team.names[i].name;
+        await Future.delayed(const Duration(milliseconds: 300));
+      } else if (i == 5) {
+        sixthName.value = team.names[i].name;
+        await Future.delayed(const Duration(milliseconds: 300));
+      } else if (i == 6) {
+        seventhName.value = team.names[i].name;
+        await Future.delayed(const Duration(milliseconds: 300));
+      }
+    }
+  }
+
+  void clearNames() {
+    firstName.value = '';
+    secondName.value = '';
+    thirdName.value = '';
+    fourthName.value = '';
+    fifthName.value = '';
+    sixthName.value = '';
+    seventhName.value = '';
   }
 
   late VideoPlayerController _controller;
@@ -136,9 +160,9 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
 
   @override
   Widget build(BuildContext context) {
-    ref
-      ..read(adminOptionsProvider.notifier)
-      ..read(adminDrawProvider);
+    // ref
+    //   ..read(adminOptionsProvider.notifier)
+    //   ..read(adminDrawProvider);
 
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
@@ -167,7 +191,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
     }
   }
 
-  Scaffold DesktopView(double width, double height, double nintendoHeight) {
+  Widget DesktopView(double width, double height, double nintendoHeight) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
@@ -180,65 +204,198 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
             ),
           ),
           BottomText(context, width * (3 / 4), height),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 40),
-            child: Center(
-              child: Assets.images.nintendo.image(
-                key: nintendoKey,
-                width: width * 0.5,
+          ReadyVideoView(width, nintendoHeight),
+          MainView(height),
+        ],
+      ),
+    );
+  }
+
+  ValueListenableBuilder<bool> ReadyVideoView(
+      double width, double nintendoHeight) {
+    return ValueListenableBuilder(
+      valueListenable: showResult,
+      builder: (context, value, child) {
+        if (value) return const SizedBox.shrink();
+        return Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 40),
+              child: Center(
+                child: Assets.images.nintendo.image(
+                  key: nintendoKey,
+                  width: width * 0.5,
+                ),
               ),
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Assets.images.gameController.image(
-              width: width * 0.25,
-              alignment: Alignment.bottomCenter,
+            Padding(
+              padding: const EdgeInsets.only(bottom: 40),
+              child: Center(
+                child: _controller.value.isInitialized
+                    ? SizedBox(
+                        width: nintendoHeight * (16 / 9),
+                        height: nintendoHeight,
+                        child: AspectRatio(
+                          aspectRatio: _controller.value.aspectRatio,
+                          child: VideoPlayer(_controller),
+                        ),
+                      )
+                    : Container(),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  final wr = 1920 / 3527;
+  final hr = 1080 / 1984;
+
+  ValueListenableBuilder<bool> MainView(double height) {
+    return ValueListenableBuilder(
+      valueListenable: showResult,
+      builder: (context, value, child) {
+        if (!value) return const SizedBox.shrink();
+        return Stack(
+          children: [
+            TopTextView(height, context),
+            Characters(),
+            Bubbles(),
+          ],
+        );
+      },
+    );
+  }
+
+  Stack Bubbles() {
+    return Stack(
+      children: [
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: Padding(
+            padding: EdgeInsets.only(left: 30 * wr, bottom: 892 * hr),
+            child: Assets.images.chatBubble1.image(
+              width: 300 * wr,
+              fit: BoxFit.fitWidth,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 40),
-            child: Center(
-              child: _controller.value.isInitialized
-                  ? SizedBox(
-                      width: nintendoHeight * (16 / 9),
-                      height: nintendoHeight,
-                      child: AspectRatio(
-                        aspectRatio: _controller.value.aspectRatio,
-                        child: VideoPlayer(_controller),
-                      ),
-                    )
-                  : Container(),
+        ),
+      ],
+    );
+  }
+
+  Stack Characters() {
+    return Stack(
+      children: [
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 367 * hr),
+            child: Assets.images.char1.image(
+              width: 525 * wr,
+              fit: BoxFit.fitWidth,
             ),
           ),
-          ValueListenableBuilder(
-            valueListenable: showResult,
-            builder: (context, value, child) {
-              if (value) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 40),
-                  child: Center(
-                    child: SizedBox(
-                      width: nintendoHeight * (16 / 9),
-                      height: nintendoHeight,
-                      child: Stack(
-                        children: [
-                          Assets.images.resultBackground.image(),
-                          TeamDrawTitle(),
-                          LeftTopName(),
-                          RightTopName(),
-                          LeftBottomName(),
-                          RightBottomName(),
-                        ],
-                      ),
+        ),
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: Padding(
+            padding: EdgeInsets.only(left: 498 * wr, bottom: 344 * hr),
+            child: Assets.images.char2.image(
+              width: 597 * wr,
+              fit: BoxFit.fitWidth,
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: Padding(
+            padding: EdgeInsets.only(left: 1002 * wr, bottom: 400 * hr),
+            child: Assets.images.char3.image(
+              width: 510 * wr,
+              fit: BoxFit.fitWidth,
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: EdgeInsets.only(right: 1491 * wr, bottom: 416 * hr),
+            child: Assets.images.char4.image(
+              width: 495 * wr,
+              fit: BoxFit.fitWidth,
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: EdgeInsets.only(right: 975 * wr, bottom: 326 * hr),
+            child: Assets.images.char5.image(
+              width: 467 * wr,
+              fit: BoxFit.fitWidth,
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: EdgeInsets.only(right: 489 * wr, bottom: 380 * hr),
+            child: Assets.images.char6.image(
+              width: 556 * wr,
+              fit: BoxFit.fitWidth,
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 287 * hr),
+            child: Assets.images.char7.image(
+              width: 694 * wr,
+              fit: BoxFit.fitWidth,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Align TopTextView(double height, BuildContext context) {
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Padding(
+        padding: EdgeInsets.only(top: height * 0.04),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text(
+                '영피스',
+                style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                      color: const Color(0xFF27E04E),
+                      fontSize: 60,
+                      shadows: shadows(),
                     ),
-                  ),
-                );
-              }
-              return const SizedBox.shrink();
-            },
-          ),
-        ],
+              ),
+            ),
+            const SizedBox(width: 30),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text(
+                '${teamCount.value}조',
+                style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                      color: const Color(0xFFFFDE00),
+                      fontSize: 60,
+                      shadows: shadows(),
+                    ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -268,86 +425,6 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
         nintendoKey.currentContext?.findRenderObject() as RenderBox?;
     final nintendoHeight = nintendoRenderBox?.size.height ?? 0;
     return nintendoHeight;
-  }
-
-  Widget LeftTopName() {
-    return ValueListenableBuilder(
-      valueListenable: leftTopName,
-      builder: (context, value, child) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 90, top: 110),
-            child: GradientText(
-              value,
-              gradientDirection: GradientDirection.ttb,
-              colors: const [Colors.white, Colors.green],
-              style: const TextStyle(fontSize: 60),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget RightTopName() {
-    return ValueListenableBuilder(
-      valueListenable: rightTopName,
-      builder: (context, value, child) {
-        return Align(
-          alignment: Alignment.topRight,
-          child: Padding(
-            padding: const EdgeInsets.only(right: 90, top: 110),
-            child: GradientText(
-              value,
-              gradientDirection: GradientDirection.ttb,
-              colors: const [Colors.white, Colors.green],
-              style: const TextStyle(fontSize: 60),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget LeftBottomName() {
-    return ValueListenableBuilder(
-      valueListenable: leftBottomName,
-      builder: (context, value, child) {
-        return Align(
-          alignment: Alignment.bottomLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 90, bottom: 80),
-            child: GradientText(
-              value,
-              gradientDirection: GradientDirection.ttb,
-              colors: const [Colors.white, Colors.green],
-              style: const TextStyle(fontSize: 60),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget RightBottomName() {
-    return ValueListenableBuilder(
-      valueListenable: rightBottomName,
-      builder: (context, value, child) {
-        return Align(
-          alignment: Alignment.bottomRight,
-          child: Padding(
-            padding: const EdgeInsets.only(right: 90, bottom: 80),
-            child: GradientText(
-              value,
-              gradientDirection: GradientDirection.ttb,
-              colors: const [Colors.white, Colors.green],
-              style: const TextStyle(fontSize: 60),
-            ),
-          ),
-        );
-      },
-    );
   }
 
   Widget MobileView(double width) {

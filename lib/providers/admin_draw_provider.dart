@@ -8,7 +8,6 @@ import 'package:jimanna/models/team_draw.dart';
 import 'package:jimanna/providers/firebase/firebase_factory.dart';
 import 'package:jimanna/providers/has_black_twin.dart';
 
-
 final adminDrawProvider =
     StateNotifierProvider<AdminDrawNotifier, TeamDraw>((ref) {
   return AdminDrawNotifier();
@@ -44,9 +43,12 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
 
   Future<void> makeTeams() async {
     final totalNames = await getTotalNames();
-    final leaders = (await _leadersRef.get()).docs.map((e) => e.data()).toList();
-    final abadLeaders = leaders.where((element) => element.type == 'abad').toList();
-    final paqadLeaders = leaders.where((element) => element.type == 'paqad').toList();
+    final leaders = (await _leadersRef.get()).docs.map((e) => e.data()).toList()
+      ..shuffle();
+    final abadLeaders =
+        leaders.where((element) => element.type == 'abad').toList()..shuffle();
+    final paqadLeaders =
+        leaders.where((element) => element.type == 'paqad').toList()..shuffle();
 
     final teams = organizeTeams(totalNames, abadLeaders, paqadLeaders);
 
@@ -65,5 +67,4 @@ class AdminDrawNotifier extends StateNotifier<TeamDraw> {
 
   Future<List<Name>> getTotalNames() async =>
       (await _nameRef.get()).docs.map((e) => e.data()).toList();
-
 }

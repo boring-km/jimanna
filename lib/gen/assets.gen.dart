@@ -19,9 +19,38 @@ class $AssetsImagesGen {
   AssetGenImage get bigLogo =>
       const AssetGenImage('assets/images/big_logo.png');
 
+  /// File path: assets/images/char1.png
+  AssetGenImage get char1 => const AssetGenImage('assets/images/char1.png');
+
+  /// File path: assets/images/char2.png
+  AssetGenImage get char2 => const AssetGenImage('assets/images/char2.png');
+
+  /// File path: assets/images/char3.png
+  AssetGenImage get char3 => const AssetGenImage('assets/images/char3.png');
+
+  /// File path: assets/images/char4.png
+  AssetGenImage get char4 => const AssetGenImage('assets/images/char4.png');
+
+  /// File path: assets/images/char5.png
+  AssetGenImage get char5 => const AssetGenImage('assets/images/char5.png');
+
+  /// File path: assets/images/char6.png
+  AssetGenImage get char6 => const AssetGenImage('assets/images/char6.png');
+
+  /// File path: assets/images/char7.png
+  AssetGenImage get char7 => const AssetGenImage('assets/images/char7.png');
+
   /// File path: assets/images/character_image.png
   AssetGenImage get characterImage =>
       const AssetGenImage('assets/images/character_image.png');
+
+  /// File path: assets/images/chat_bubble1.png
+  AssetGenImage get chatBubble1 =>
+      const AssetGenImage('assets/images/chat_bubble1.png');
+
+  /// File path: assets/images/chat_bubble2.png
+  AssetGenImage get chatBubble2 =>
+      const AssetGenImage('assets/images/chat_bubble2.png');
 
   /// File path: assets/images/confirm_button.png
   AssetGenImage get confirmButton =>
@@ -94,7 +123,16 @@ class $AssetsImagesGen {
   List<AssetGenImage> get values => [
         abad,
         bigLogo,
+        char1,
+        char2,
+        char3,
+        char4,
+        char5,
+        char6,
+        char7,
         characterImage,
+        chatBubble1,
+        chatBubble2,
         confirmButton,
         drawBackground,
         emoji,
@@ -132,11 +170,11 @@ class $AssetsMusicGen {
 class $AssetsVideosGen {
   const $AssetsVideosGen();
 
-  /// File path: assets/videos/intro_video_10s.mp4
-  String get introVideo10s => 'assets/videos/intro_video_10s.mp4';
+  /// File path: assets/videos/intro_video_5s.mp4
+  String get introVideo5s => 'assets/videos/intro_video_5s.mp4';
 
   /// List of all assets
-  List<String> get values => [introVideo10s];
+  List<String> get values => [introVideo5s];
 }
 
 class Assets {

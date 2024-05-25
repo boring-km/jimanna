@@ -11,74 +11,57 @@ List<List<Name>> organizeTeams(
     final allNames = List<Name>.from(names);
     final group1 = <Name>[];
     final group2 = <Name>[];
-    for (var i = 0; i < allNames.length; i++) {
-      if (allNames[i].type == 'abad') {
-        group1.add(allNames[i]);
-      } else {
-        group2.add(allNames[i]);
-      }
-    }
-    var abadLength = group1.length;
-    var paqadLength = group2.length;
+    addAllNames(allNames, group1, group2);
 
     // 4인조 조짜기를 위한 특별한 그룹
     final specialGroup = <Name>[];
 
-    // 7명 조짜기를 하면서 특정 그룹 인원이 그 이상으로 많을 때
-    // 임원을 일정하게 추가해줘야 함
-    if ((abadLength / 4).ceil() > (paqadLength / 3).ceil()) {
-      final left = (abadLength - (paqadLength * (4 / 3))).ceil();
-
-      if (left % 4 != 0) {
-        for (var i = 0; i < 4 - (left % 4); i++) {
-          specialGroup.add(group1.removeLast());
-        }
+    if (group1.length % 4 != 0) {
+      for (var i = 0; i < (group1.length % 4); i++) {
+        group1.add(abadLeaders.removeLast());
       }
+    }
+
+    if (group2.length % 3 != 0) {
+      for (var i = 0; i < (group2.length % 3); i++) {
+        group2.add(paqadLeaders.removeLast());
+      }
+    }
+
+    // 7명 조짜기를 하면서 특정 그룹 인원이 그 이상으로 많을 때
+    if ((group1.length / 4).ceil() > (group2.length / 3).ceil()) {
+      final left = (group1.length - (group2.length * (4 / 3))).ceil();
       for (var i = 0; i < left; i++) {
         specialGroup.add(group1.removeLast());
       }
-
-      for (var i = 0; i < 4 - (left % 4); i++) {
-        group1.add(abadLeaders.removeLast());
+      final specialTeam = makeTeamBy4(specialGroup);
+      for (var i = 0; i < specialTeam.length; i++) {
+        totalTeams.add(specialTeam[i]);
       }
 
-      abadLength = group1.length;
-    } else if ((abadLength / 4).ceil() < (paqadLength / 3).ceil()) {
-      final left = (((paqadLength * (4 / 3)) - abadLength) * (3 / 4)).ceil();
-
-      if (left % 3 != 0) {
-        for (var i = 0; i < 3 - (left % 3); i++) {
-          specialGroup.add(group2.removeLast());
-        }
-      }
-
+    } else if ((group1.length / 4).ceil() < (group2.length / 3).ceil()) {
+      final left = (((group2.length * (4 / 3)) - group1.length) * (3 / 4)).ceil();
       for (var i = 0; i < left; i++) {
         specialGroup.add(group2.removeLast());
       }
-
-      for (var i = 0; i < 3 - (left % 3); i++) {
-        group2.add(paqadLeaders.removeLast());
-      }
-      specialGroup.add(abadLeaders.removeLast());
-
-      paqadLength = group2.length;
-    }
-
-    if (abadLength % 4 != 0) {
-      for (var i = 0; i < (abadLength % 4); i++) {
-        group2.add(abadLeaders.removeLast());
-      }
-    }
-
-    if (paqadLength % 3 != 0) {
-      for (var i = 0; i < (paqadLength % 3); i++) {
-        group2.add(paqadLeaders.removeLast());
+      if (left < 4) {
+        for (var i = 0; i < 7 - left; i++) {
+          if (abadLeaders.isNotEmpty) {
+            specialGroup.add(group1.removeLast());
+            group1.add(abadLeaders.removeLast());
+          }
+        }
+        totalTeams.add(specialGroup);
+      } else {
+        final specialTeam = makeTeamBy3(specialGroup);
+        for (var i = 0; i < specialTeam.length; i++) {
+          totalTeams.add(specialTeam[i]);
+        }
       }
     }
 
     final team1 = makeTeamBy4(group1);
     final team2 = makeTeamBy3(group2);
-    final specialTeam = makeTeamBy4(specialGroup);
 
     if (team1.length < team2.length) {
       for (var i = 0; i < team1.length; i++) {
@@ -94,14 +77,21 @@ List<List<Name>> organizeTeams(
       }
     }
 
-    for (var i = 0; i < specialTeam.length; i++) {
-      totalTeams.add(specialTeam[i]);
-    }
   } catch (e, stacktrace) {
     print(e);
     print(stacktrace);
   }
   return totalTeams;
+}
+
+void addAllNames(List<Name> allNames, List<Name> group1, List<Name> group2) {
+  for (var i = 0; i < allNames.length; i++) {
+    if (allNames[i].type == 'abad') {
+      group1.add(allNames[i]);
+    } else {
+      group2.add(allNames[i]);
+    }
+  }
 }
 
 // TODO 팀원이 4명이 아닌 조는 leader를 추가해야 함
