@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           textTheme: textTheme,
         ),
-        initialRoute: Routes.drawResult,
+        initialRoute: Routes.register,
         onGenerateRoute: Pages.getPages,
         onUnknownRoute: (_) => MaterialPageRoute(
           builder: (_) => const ErrorPage(),

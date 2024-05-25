@@ -60,6 +60,10 @@ class $AssetsImagesGen {
   AssetGenImage get drawBackground =>
       const AssetGenImage('assets/images/draw_background.png');
 
+  /// File path: assets/images/draw_result_background.png
+  AssetGenImage get drawResultBackground =>
+      const AssetGenImage('assets/images/draw_result_background.png');
+
   /// File path: assets/images/emoji.gif
   AssetGenImage get emoji => const AssetGenImage('assets/images/emoji.gif');
 
@@ -135,6 +139,7 @@ class $AssetsImagesGen {
         chatBubble2,
         confirmButton,
         drawBackground,
+        drawResultBackground,
         emoji,
         error,
         gameController,

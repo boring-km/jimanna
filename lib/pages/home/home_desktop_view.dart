@@ -32,7 +32,6 @@ class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
   }
 
   void setAudioPlayer() {
-    audioPlayer.setLoopMode(LoopMode.all);
     audioPlayer
         .setAsset(
           'assets/music/background_music.mp3',
@@ -60,7 +59,7 @@ class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
             scrollDirection: Axis.horizontal,
             itemCount: 2,
             itemBuilder: (context, index) {
-              return Assets.images.homeDesktopBackground.image(
+              return Assets.images.drawResultBackground.image(
                 height: height,
                 fit: BoxFit.fitHeight,
               );

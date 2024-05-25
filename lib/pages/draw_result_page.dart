@@ -31,7 +31,7 @@ class DrawResultPage extends ConsumerStatefulWidget {
 class _DrawResultPageState extends ConsumerState<DrawResultPage> {
   late final bool isMobileState;
   final counter = ValueNotifier(10);
-  final showResult = ValueNotifier(true);
+  final showResult = ValueNotifier(false);
 
   @override
   void initState() {
@@ -44,10 +44,10 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
     } else {
       setVideoPlayer();
     }
-    //
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   moveIfDrawEnd(context);
-    // });
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      moveIfDrawEnd(context);
+    });
   }
 
   void setVideoPlayer() {
@@ -58,14 +58,14 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
             _controller.setLooping(true);
             startResultTimer();
           });
-          // setAudioPlayer();
+          setAudioPlayer();
         });
       });
     });
   }
 
   void setAudioPlayer() {
-    audioPlayer.stop().then((_) => audioPlayer.play());
+    audioPlayer.seek(const Duration(seconds: 15));
   }
 
   void startResultTimer() {
@@ -75,19 +75,19 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
         timer.cancel();
         _controller.pause();
         showResult.value = true;
-        // TODO showNamesWithTimer();
+        showNamesWithTimer();
       }
     });
   }
 
   final teamCount = ValueNotifier(1);
-  final firstName = ValueNotifier(Name('테스트', type: 'abad'));
-  final secondName = ValueNotifier(Name('테스트', type: 'paqad'));
-  final thirdName = ValueNotifier(Name('테스트', type: 'paqad'));
-  final fourthName = ValueNotifier(Name('테스트', type: 'paqad'));
-  final fifthName = ValueNotifier(Name('테스트', type: 'abad'));
-  final sixthName = ValueNotifier(Name('테스트', type: 'abad'));
-  final seventhName = ValueNotifier(Name('진강민', type: 'abad'));
+  final firstName = ValueNotifier(Name(''));
+  final secondName = ValueNotifier(Name(''));
+  final thirdName = ValueNotifier(Name(''));
+  final fourthName = ValueNotifier(Name(''));
+  final fifthName = ValueNotifier(Name(''));
+  final sixthName = ValueNotifier(Name(''));
+  final seventhName = ValueNotifier(Name(''));
 
   final myNameTeamNumber = ValueNotifier(0);
 
@@ -124,25 +124,25 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
     for (var i = 0; i < team.names.length; i++) {
       if (i == 0) {
         firstName.value = team.names[i];
-        await Future.delayed(const Duration(milliseconds: 300));
+        await Future.delayed(const Duration(milliseconds: 500));
       } else if (i == 1) {
         secondName.value = team.names[i];
-        await Future.delayed(const Duration(milliseconds: 300));
+        await Future.delayed(const Duration(milliseconds: 500));
       } else if (i == 2) {
         thirdName.value = team.names[i];
-        await Future.delayed(const Duration(milliseconds: 300));
+        await Future.delayed(const Duration(milliseconds: 500));
       } else if (i == 3) {
         fourthName.value = team.names[i];
-        await Future.delayed(const Duration(milliseconds: 300));
+        await Future.delayed(const Duration(milliseconds: 500));
       } else if (i == 4) {
         fifthName.value = team.names[i];
-        await Future.delayed(const Duration(milliseconds: 300));
+        await Future.delayed(const Duration(milliseconds: 500));
       } else if (i == 5) {
         sixthName.value = team.names[i];
-        await Future.delayed(const Duration(milliseconds: 300));
+        await Future.delayed(const Duration(milliseconds: 500));
       } else if (i == 6) {
         seventhName.value = team.names[i];
-        await Future.delayed(const Duration(milliseconds: 300));
+        await Future.delayed(const Duration(milliseconds: 500));
       }
     }
   }
@@ -162,9 +162,9 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
 
   @override
   Widget build(BuildContext context) {
-    // ref
-    //   ..read(adminOptionsProvider.notifier)
-    //   ..read(adminDrawProvider);
+    ref
+      ..read(adminOptionsProvider.notifier)
+      ..read(adminDrawProvider);
 
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
@@ -207,45 +207,44 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
           ),
           BottomText(context, width * (3 / 4), height),
           ReadyVideoView(width, nintendoHeight),
-          MainView(height),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 40),
+            child: Center(
+              child: _controller.value.isInitialized
+                  ? SizedBox(
+                width: nintendoHeight * (16 / 9),
+                height: nintendoHeight,
+                child: AspectRatio(
+                  aspectRatio: _controller.value.aspectRatio,
+                  child: VideoPlayer(_controller),
+                ),
+              )
+                  : Container(),
+            ),
+          ),
+          MainView(width, height),
         ],
       ),
     );
   }
 
   ValueListenableBuilder<bool> ReadyVideoView(
-      double width, double nintendoHeight) {
+    double width,
+    double nintendoHeight,
+  ) {
     return ValueListenableBuilder(
       valueListenable: showResult,
       builder: (context, value, child) {
+        print('value: ${value}');
         if (value) return const SizedBox.shrink();
-        return Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 40),
-              child: Center(
-                child: Assets.images.nintendo.image(
-                  key: nintendoKey,
-                  width: width * 0.5,
-                ),
-              ),
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 40),
+          child: Center(
+            child: Assets.images.nintendo.image(
+              key: nintendoKey,
+              width: width * 0.5,
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 40),
-              child: Center(
-                child: _controller.value.isInitialized
-                    ? SizedBox(
-                        width: nintendoHeight * (16 / 9),
-                        height: nintendoHeight,
-                        child: AspectRatio(
-                          aspectRatio: _controller.value.aspectRatio,
-                          child: VideoPlayer(_controller),
-                        ),
-                      )
-                    : Container(),
-              ),
-            ),
-          ],
+          ),
         );
       },
     );
@@ -254,13 +253,20 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
   final wr = 1920 / 3527;
   final hr = 1080 / 1984;
 
-  ValueListenableBuilder<bool> MainView(double height) {
+  ValueListenableBuilder<bool> MainView(double width, double height) {
     return ValueListenableBuilder(
       valueListenable: showResult,
       builder: (context, value, child) {
         if (!value) return const SizedBox.shrink();
         return Stack(
           children: [
+            Center(
+              child: Assets.images.drawBackground.image(
+                width: width,
+                height: height,
+                fit: BoxFit.fitHeight,
+              ),
+            ),
             TopTextView(height, context),
             Characters(),
             Bubbles(),
@@ -284,7 +290,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
     return Stack(
       children: [
         ValueListenableBuilder(
-          valueListenable: firstName,
+          valueListenable: sixthName,
           builder: (context, name, _) {
             return NameBubble1(
               name,
@@ -295,7 +301,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
           },
         ),
         ValueListenableBuilder(
-          valueListenable: secondName,
+          valueListenable: seventhName,
           builder: (context, name, _) {
             return NameBubble1(
               name,
@@ -335,7 +341,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
           },
         ),
         ValueListenableBuilder(
-          valueListenable: sixthName,
+          valueListenable: firstName,
           builder: (context, name, _) {
             return NameBubble2(
               name,
@@ -346,7 +352,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
           },
         ),
         ValueListenableBuilder(
-          valueListenable: seventhName,
+          valueListenable: secondName,
           builder: (context, name, _) {
             return NameBubble1(
               name,
@@ -360,12 +366,13 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
     );
   }
 
-  Align NameBubble1(
+  Widget NameBubble1(
     Name name,
     BuildContext context,
     Alignment alignment,
     EdgeInsets padding,
   ) {
+    if (name.name.isEmpty) return const SizedBox.shrink();
     return Align(
       alignment: alignment,
       child: Padding(
@@ -395,12 +402,13 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
     );
   }
 
-  Align NameBubble2(
+  Widget NameBubble2(
     Name name,
     BuildContext context,
     Alignment alignment,
     EdgeInsets padding,
   ) {
+    if (name.name.isEmpty) return const SizedBox.shrink();
     return Align(
       alignment: alignment,
       child: Padding(
@@ -528,16 +536,21 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
               ),
             ),
             const SizedBox(width: 30),
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Text(
-                '${teamCount.value}조',
-                style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                      color: const Color(0xFFFFDE00),
-                      fontSize: 60,
-                      shadows: shadows(),
-                    ),
-              ),
+            ValueListenableBuilder(
+              valueListenable: teamCount,
+              builder: (context, count , _) {
+                return Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Text(
+                    '$count조',
+                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                          color: const Color(0xFFFFDE00),
+                          fontSize: 60,
+                          shadows: shadows(),
+                        ),
+                  ),
+                );
+              },
             ),
           ],
         ),
