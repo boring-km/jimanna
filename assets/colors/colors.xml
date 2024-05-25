@@ -3,4 +3,7 @@
     <color name="cyan">#6BCDFF</color>
     <color name="blue_dark">#185ABD</color>
     <color name="blue_light">#3173D6</color>
+
+    <color name="yellow">#FFDE00</color>
+    <color name="green">#27E04E</color>
 </resources>

@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/gen/assets.gen.dart';
 import 'package:jimanna/gen/colors.gen.dart';
 import 'package:jimanna/models/admin_option.dart';
+import 'package:jimanna/models/name.dart';
 import 'package:jimanna/models/team.dart';
 import 'package:jimanna/providers/admin_draw_provider.dart';
 import 'package:jimanna/providers/current_name.dart';
@@ -79,13 +81,13 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
   }
 
   final teamCount = ValueNotifier(1);
-  final firstName = ValueNotifier('');
-  final secondName = ValueNotifier('');
-  final thirdName = ValueNotifier('');
-  final fourthName = ValueNotifier('');
-  final fifthName = ValueNotifier('');
-  final sixthName = ValueNotifier('');
-  final seventhName = ValueNotifier('');
+  final firstName = ValueNotifier(Name('테스트', type: 'abad'));
+  final secondName = ValueNotifier(Name('테스트', type: 'paqad'));
+  final thirdName = ValueNotifier(Name('테스트', type: 'paqad'));
+  final fourthName = ValueNotifier(Name('테스트', type: 'paqad'));
+  final fifthName = ValueNotifier(Name('테스트', type: 'abad'));
+  final sixthName = ValueNotifier(Name('테스트', type: 'abad'));
+  final seventhName = ValueNotifier(Name('진강민', type: 'abad'));
 
   final myNameTeamNumber = ValueNotifier(0);
 
@@ -121,38 +123,38 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
   Future<void> showNames(Team team) async {
     for (var i = 0; i < team.names.length; i++) {
       if (i == 0) {
-        firstName.value = team.names[i].name;
+        firstName.value = team.names[i];
         await Future.delayed(const Duration(milliseconds: 300));
       } else if (i == 1) {
-        secondName.value = team.names[i].name;
+        secondName.value = team.names[i];
         await Future.delayed(const Duration(milliseconds: 300));
       } else if (i == 2) {
-        thirdName.value = team.names[i].name;
+        thirdName.value = team.names[i];
         await Future.delayed(const Duration(milliseconds: 300));
       } else if (i == 3) {
-        fourthName.value = team.names[i].name;
+        fourthName.value = team.names[i];
         await Future.delayed(const Duration(milliseconds: 300));
       } else if (i == 4) {
-        fifthName.value = team.names[i].name;
+        fifthName.value = team.names[i];
         await Future.delayed(const Duration(milliseconds: 300));
       } else if (i == 5) {
-        sixthName.value = team.names[i].name;
+        sixthName.value = team.names[i];
         await Future.delayed(const Duration(milliseconds: 300));
       } else if (i == 6) {
-        seventhName.value = team.names[i].name;
+        seventhName.value = team.names[i];
         await Future.delayed(const Duration(milliseconds: 300));
       }
     }
   }
 
   void clearNames() {
-    firstName.value = '';
-    secondName.value = '';
-    thirdName.value = '';
-    fourthName.value = '';
-    fifthName.value = '';
-    sixthName.value = '';
-    seventhName.value = '';
+    firstName.value = Name('');
+    secondName.value = Name('');
+    thirdName.value = Name('');
+    fourthName.value = Name('');
+    fifthName.value = Name('');
+    sixthName.value = Name('');
+    seventhName.value = Name('');
   }
 
   late VideoPlayerController _controller;
@@ -268,20 +270,163 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
     );
   }
 
+  TextStyle textStyleBy(String type) {
+    Color color;
+    if (type == 'abad') {
+      color = ColorName.yellow;
+    } else {
+      color = ColorName.green;
+    }
+    return Theme.of(context).textTheme.displayMedium!.copyWith(color: color);
+  }
+
   Stack Bubbles() {
     return Stack(
       children: [
-        Align(
-          alignment: Alignment.bottomLeft,
-          child: Padding(
-            padding: EdgeInsets.only(left: 30 * wr, bottom: 892 * hr),
-            child: Assets.images.chatBubble1.image(
-              width: 300 * wr,
-              fit: BoxFit.fitWidth,
-            ),
-          ),
+        ValueListenableBuilder(
+          valueListenable: firstName,
+          builder: (context, name, _) {
+            return NameBubble1(
+              name,
+              context,
+              Alignment.bottomLeft,
+              EdgeInsets.only(left: 30 * wr, bottom: 892 * hr),
+            );
+          },
+        ),
+        ValueListenableBuilder(
+          valueListenable: secondName,
+          builder: (context, name, _) {
+            return NameBubble1(
+              name,
+              context,
+              Alignment.topLeft,
+              EdgeInsets.only(left: 451 * wr, top: 405 * hr),
+            );
+          },
+        ),
+        ValueListenableBuilder(
+          valueListenable: thirdName,
+          builder: (context, name, _) {
+            return NameBubble1(
+              name,
+              context,
+              Alignment.topLeft,
+              EdgeInsets.only(left: 996 * wr, top: 485 * hr),
+            );
+          },
+        ),
+        ValueListenableBuilder(
+          valueListenable: fourthName,
+          builder: (context, name, _) {
+            return NameBubble1(
+              name,
+              context,
+              Alignment.topRight,
+              EdgeInsets.only(right: 1506 * wr, top: 416 * hr),
+            );
+          },
+        ),
+        ValueListenableBuilder(
+          valueListenable: fifthName,
+          builder: (context, name, _) {
+            return NameBubble2(name, context, Alignment.topRight,
+                EdgeInsets.only(right: 817 * wr, top: 397 * hr));
+          },
+        ),
+        ValueListenableBuilder(
+          valueListenable: sixthName,
+          builder: (context, name, _) {
+            return NameBubble2(
+              name,
+              context,
+              Alignment.topRight,
+              EdgeInsets.only(right: 184 * wr, top: 510 * hr),
+            );
+          },
+        ),
+        ValueListenableBuilder(
+          valueListenable: seventhName,
+          builder: (context, name, _) {
+            return NameBubble1(
+              name,
+              context,
+              Alignment.bottomRight,
+              EdgeInsets.only(right: 48 * wr, bottom: 846 * hr),
+            );
+          },
         ),
       ],
+    );
+  }
+
+  Align NameBubble1(
+    Name name,
+    BuildContext context,
+    Alignment alignment,
+    EdgeInsets padding,
+  ) {
+    return Align(
+      alignment: alignment,
+      child: Padding(
+        padding: padding,
+        child: SizedBox(
+          width: 468 * wr,
+          height: 269 * hr,
+          child: Stack(
+            children: [
+              Assets.images.chatBubble1.image(
+                width: 468 * wr,
+                fit: BoxFit.fitWidth,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 36),
+                child: Center(
+                  child: Text(
+                    name.name,
+                    style: textStyleBy(name.type!),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Align NameBubble2(
+    Name name,
+    BuildContext context,
+    Alignment alignment,
+    EdgeInsets padding,
+  ) {
+    return Align(
+      alignment: alignment,
+      child: Padding(
+        padding: padding,
+        child: SizedBox(
+          width: 486 * wr,
+          height: 280 * hr,
+          child: Stack(
+            children: [
+              Assets.images.chatBubble2.image(
+                width: 486 * wr,
+                fit: BoxFit.fitWidth,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 36),
+                child: Center(
+                  child: Text(
+                    name.name,
+                    style: textStyleBy(name.type!),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

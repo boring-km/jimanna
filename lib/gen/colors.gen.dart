@@ -21,4 +21,10 @@ class ColorName {
 
   /// Color: #6BCDFF
   static const Color cyan = Color(0xFF6BCDFF);
+
+  /// Color: #27E04E
+  static const Color green = Color(0xFF27E04E);
+
+  /// Color: #FFDE00
+  static const Color yellow = Color(0xFFFFDE00);
 }
