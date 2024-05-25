@@ -75,6 +75,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
         timer.cancel();
         _controller.pause();
         showResult.value = true;
+        _controller.pause();
         showNamesWithTimer();
       }
     });
@@ -199,7 +200,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
       body: Stack(
         children: [
           Center(
-            child: Assets.images.drawBackground.image(
+            child: Assets.images.drawResultBackground.image(
               width: width,
               height: height,
               fit: BoxFit.fitHeight,
@@ -212,13 +213,13 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
             child: Center(
               child: _controller.value.isInitialized
                   ? SizedBox(
-                width: nintendoHeight * (16 / 9),
-                height: nintendoHeight,
-                child: AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
-                  child: VideoPlayer(_controller),
-                ),
-              )
+                      width: nintendoHeight * (16 / 9),
+                      height: nintendoHeight,
+                      child: AspectRatio(
+                        aspectRatio: _controller.value.aspectRatio,
+                        child: VideoPlayer(_controller),
+                      ),
+                    )
                   : Container(),
             ),
           ),
@@ -301,7 +302,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
           },
         ),
         ValueListenableBuilder(
-          valueListenable: seventhName,
+          valueListenable: thirdName,
           builder: (context, name, _) {
             return NameBubble1(
               name,
@@ -312,7 +313,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
           },
         ),
         ValueListenableBuilder(
-          valueListenable: thirdName,
+          valueListenable: firstName,
           builder: (context, name, _) {
             return NameBubble1(
               name,
@@ -323,7 +324,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
           },
         ),
         ValueListenableBuilder(
-          valueListenable: fourthName,
+          valueListenable: secondName,
           builder: (context, name, _) {
             return NameBubble1(
               name,
@@ -334,14 +335,18 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
           },
         ),
         ValueListenableBuilder(
-          valueListenable: fifthName,
+          valueListenable: fourthName,
           builder: (context, name, _) {
-            return NameBubble2(name, context, Alignment.topRight,
-                EdgeInsets.only(right: 817 * wr, top: 397 * hr));
+            return NameBubble2(
+              name,
+              context,
+              Alignment.topRight,
+              EdgeInsets.only(right: 817 * wr, top: 397 * hr),
+            );
           },
         ),
         ValueListenableBuilder(
-          valueListenable: firstName,
+          valueListenable: seventhName,
           builder: (context, name, _) {
             return NameBubble2(
               name,
@@ -352,7 +357,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
           },
         ),
         ValueListenableBuilder(
-          valueListenable: secondName,
+          valueListenable: fifthName,
           builder: (context, name, _) {
             return NameBubble1(
               name,
@@ -538,7 +543,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
             const SizedBox(width: 30),
             ValueListenableBuilder(
               valueListenable: teamCount,
-              builder: (context, count , _) {
+              builder: (context, count, _) {
                 return Padding(
                   padding: const EdgeInsets.all(8),
                   child: Text(
@@ -596,8 +601,10 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('내가 뽑힌 조는?',
-                  style: TextStyle(fontSize: 30, color: Colors.white)),
+              const Text(
+                '내가 뽑힌 조는?',
+                style: TextStyle(fontSize: 30, color: Colors.white),
+              ),
               const SizedBox(height: 20),
               ValueListenableBuilder(
                 valueListenable: myNameTeamNumber,
@@ -623,7 +630,9 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
                               child: Text(
                                 teamDraw.teams[value - 1].names[index].name,
                                 style: const TextStyle(
-                                    fontSize: 20, color: Colors.white),
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
                                 textAlign: TextAlign.center,
                               ),
                             );

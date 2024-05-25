@@ -12,7 +12,6 @@ import 'package:jimanna/providers/is_start_draw_provider.dart';
 import 'package:jimanna/ui/ongmezim_text.dart';
 import 'package:jimanna/ui/themes.dart';
 import 'package:jimanna/utils/background_audio_player.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class HomeDesktopView extends ConsumerStatefulWidget {
@@ -59,7 +58,7 @@ class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
             scrollDirection: Axis.horizontal,
             itemCount: 2,
             itemBuilder: (context, index) {
-              return Assets.images.drawResultBackground.image(
+              return Assets.images.homeDesktopBackground.image(
                 height: height,
                 fit: BoxFit.fitHeight,
               );

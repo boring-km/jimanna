@@ -21,7 +21,7 @@ class _FeedbackButtonView extends StatelessWidget {
               .displaySmall
               ?.copyWith(
             color: Colors.white,
-            fontSize: width / 45,
+            fontSize: width / 30,
           ),
         ),
       ),
