@@ -76,19 +76,22 @@ class _Scaffold extends ConsumerWidget {
   }
 
   void processNameRegister(
-    BuildContext context,
-    WidgetRef ref,
-  ) {
+      BuildContext context,
+      WidgetRef ref,
+      ) {
     ref
-      .listen(nameRegisterProvider, (previous, result) {
-        result.whenOrNull(
-          error: (e) {
-            ref.read(registerStateProvider.notifier).setError(e);
-          },
-          success: (page) {
-            Navigator.pushNamed(context, page);
-          },
-        );
-      });
+        .listen(nameRegisterProvider, (previous, result) {
+      result.whenOrNull(
+        error: (e) {
+          ref.read(registerStateProvider.notifier).setError(e);
+        },
+        success: (page) {
+          if (page == Routes.admin) {
+            ref.read(nameRegisterProvider.notifier).initialize();
+          }
+          Navigator.pushNamed(context, page);
+        },
+      );
+    });
   }
 }
