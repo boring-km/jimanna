@@ -12,10 +12,23 @@ class AdminNameListPage extends ConsumerStatefulWidget {
 
 class _AdminNameListPageState extends ConsumerState<AdminNameListPage> {
   final _nameController = TextEditingController();
+  List<String> filteredNameList = <String>[];
 
   @override
   Widget build(BuildContext context) {
     final nameList = ref.watch(adminNameListProvider);
+
+    _nameController.addListener(() {
+      setState(() {
+        if (_nameController.text.isNotEmpty) {
+          filteredNameList = nameList
+              .where((name) => name.contains(_nameController.text))
+              .toList();
+        } else {
+          filteredNameList = nameList;
+        }
+      });
+    });
 
     return Scaffold(
       body: Center(
@@ -49,15 +62,15 @@ class _AdminNameListPageState extends ConsumerState<AdminNameListPage> {
             const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
-                itemCount: nameList.length,
+                itemCount: filteredNameList.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(nameList[index]),
+                    title: Text(filteredNameList[index]),
                     trailing: IconButton(
                       onPressed: () {
                         ref
                             .read(adminNameListProvider.notifier)
-                            .remove(nameList[index]);
+                            .remove(filteredNameList[index]);
                       },
                       icon: const Icon(Icons.delete),
                     ),

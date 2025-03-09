@@ -17,8 +17,7 @@ class _HeaderMiddle extends StatelessWidget {
                 fontSize: width / 12,
               ),
         ),
-        Image.asset(
-          'assets/images/heart.gif',
+        Assets.images.heart.image(
           width: width / 8,
         ),
         Text(

@@ -29,8 +29,7 @@ class _CharacterImageView extends StatelessWidget {
               alignment: Alignment.topLeft,
               child: Padding(
                 padding: EdgeInsets.only(top: height / 70, left: width / 24),
-                child: Image.asset(
-                  'assets/images/emoji.gif',
+                child: Assets.images.emoji.image(
                   width: width / 24,
                 ),
               ),
@@ -45,8 +44,7 @@ class _CharacterImageView extends StatelessWidget {
               alignment: Alignment.topRight,
               child: Padding(
                 padding: EdgeInsets.only(top: height / 70, right: width / 24),
-                child: Image.asset(
-                  'assets/images/health.gif',
+                child: Assets.images.health.image(
                   width: width / 8,
                 ),
               ),

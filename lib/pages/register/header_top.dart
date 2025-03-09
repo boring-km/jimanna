@@ -20,8 +20,7 @@ class _HeaderTop extends StatelessWidget {
               ),
         ),
         const SizedBox(width: 10),
-        Image.asset(
-          'assets/images/star.gif',
+        Assets.images.star.image(
           width: width / 10,
         ),
       ],
