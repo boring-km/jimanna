@@ -24,6 +24,7 @@ class Routes {
   static const String adminCurrentParticipants =
       '/qlalftmfjdnsghkaus/currentParticipants';
   static const String homeAdmin = '/homeAdmin';
+  static const String homeAdmin2 = '/homeAdmin2';
 
   static const String drawResult = '/drawResult';
 
@@ -46,6 +47,8 @@ class Pages {
         return router.create(child: const HomePage());
       case Routes.homeAdmin:
         return router.create(child: const HomePage(isAdmin: true));
+      case Routes.homeAdmin2:
+        return router.create(child: const HomePage(isAdmin: true, desktop: true));
       case Routes.drawResult:
         return router.create(child: const DrawResultPage(isMobile: false));
       case Routes.drawMobileResult:

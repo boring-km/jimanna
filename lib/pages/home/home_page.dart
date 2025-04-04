@@ -6,9 +6,10 @@ import 'package:jimanna/providers/firebase/firebase_factory.dart';
 import 'package:jimanna/routes.dart';
 
 class HomePage extends ConsumerStatefulWidget {
-  const HomePage({super.key, this.isAdmin = false});
+  const HomePage({super.key, this.isAdmin = false, this.desktop = false});
 
   final bool isAdmin;
+  final bool desktop;
 
   @override
   ConsumerState<HomePage> createState() => _HomePageState();
@@ -46,8 +47,13 @@ class _HomePageState extends ConsumerState<HomePage> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
-    final isMobile = width < 787 || height < 787;
-    isMobileState.value = isMobile;
+    var isMobile = width < 787 || height < 787;
+    if (widget.desktop) {
+      isMobileState.value = false;
+      isMobile = false;
+    } else {
+      isMobileState.value = isMobile;
+    }
 
     return Scaffold(
       body: isMobile

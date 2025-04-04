@@ -28,12 +28,13 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
   }
 
   final screenOnly = '관리자';
+  final screenOnly2 = '관리자2';
   var _adminPassword = 'adminPassword';
 
   Future<void> addNameIfNotAdmin(String name) async {
     // get password from adminOptionRef
 
-    if (name != _adminPassword && name != screenOnly && name.isNotEmpty) {
+    if (name != _adminPassword && name != screenOnly && name != screenOnly2 && name.isNotEmpty) {
       // nameListRef 에 모든 doc 중에 name이 있을 때만 추가
       final nameListDocs = await nameListRef.get();
       if (nameListDocs.docs.any((element) => element.data().name == name)) {
@@ -63,6 +64,8 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
       state = const Result.success(Routes.admin);
     } else if (name == screenOnly) {
       state = const Result.success(Routes.homeAdmin);
+    } else if (name == screenOnly2) {
+      state = const Result.success(Routes.homeAdmin2);
     }
   }
 
@@ -71,6 +74,10 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
       state = const Result.success(Routes.admin);
     } else if (name == screenOnly) {
       state = const Result.success(Routes.homeAdmin);
+    } else if (name == screenOnly2) {
+      state = const Result.success(Routes.homeAdmin2);
+    } else {
+      state = const Result.error('등록되지 않은 이름입니다.');
     }
   }
 
