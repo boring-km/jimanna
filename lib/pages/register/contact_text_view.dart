@@ -7,14 +7,15 @@ class _ContactTextView extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = getDefaultWidth(context);
     return Text(
-      '문의사항은 임원들에게 문의바랍니다.',
+      '혹시 등록이 오류가 난다면\n옆에 사람한테 대신 등록해달라고 해보세요',
       style: Theme.of(context)
           .textTheme
           .displaySmall
           ?.copyWith(
         color: Colors.white,
-        fontSize: width / 30,
+        fontSize: width / 40,
       ),
+      textAlign: TextAlign.center,
     );
   }
 }

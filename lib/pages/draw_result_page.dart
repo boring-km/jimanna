@@ -96,7 +96,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
     final teamDraw = ref.read(adminDrawProvider);
     for (var j = 0; j < teamDraw.teams.length; j++) {
       for (var i = 0; i < teamDraw.teams[j].names.length; i++) {
-        if (teamDraw.teams[j].names[i] == CurrentName.value) {
+        if (teamDraw.teams[j].names[i].name == CurrentName.value) {
           return j + 1;
         }
       }

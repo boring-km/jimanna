@@ -52,6 +52,10 @@ class $AssetsImagesGen {
   AssetGenImage get chatBubble2 =>
       const AssetGenImage('assets/images/chat_bubble2.png');
 
+  /// File path: assets/images/chat_bubble3.png
+  AssetGenImage get chatBubble3 =>
+      const AssetGenImage('assets/images/chat_bubble3.png');
+
   /// File path: assets/images/confirm_button.png
   AssetGenImage get confirmButton =>
       const AssetGenImage('assets/images/confirm_button.png');
@@ -100,6 +104,9 @@ class $AssetsImagesGen {
   AssetGenImage get homeImage =>
       const AssetGenImage('assets/images/home_image.png');
 
+  /// File path: assets/images/kangmin.png
+  AssetGenImage get kangmin => const AssetGenImage('assets/images/kangmin.png');
+
   /// File path: assets/images/name_background1.png
   AssetGenImage get nameBackground1 =>
       const AssetGenImage('assets/images/name_background1.png');
@@ -137,6 +144,7 @@ class $AssetsImagesGen {
         characterImage,
         chatBubble1,
         chatBubble2,
+        chatBubble3,
         confirmButton,
         drawBackground,
         drawResultBackground,
@@ -150,6 +158,7 @@ class $AssetsImagesGen {
         homeDesktopBottomButton,
         homeDesktopTop,
         homeImage,
+        kangmin,
         nameBackground1,
         nameBackground2,
         nintendo,

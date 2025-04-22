@@ -80,6 +80,6 @@ class _AdminBlackListPageState extends ConsumerState<AdminBlackListPage> {
   }
 
   String encodeBase64(String str) {
-    return base64.encode(utf8.encode(str));
+    return base64.encode(utf8.encode(str)).substring(0, 6);
   }
 }

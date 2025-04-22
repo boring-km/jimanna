@@ -16,8 +16,6 @@ class DrawTotalResultPage extends ConsumerWidget {
     final teamDraw = ref.watch(adminDrawProvider);
     final teams = teamDraw.teams;
 
-    final nintendoHeight = ((width * 0.4) / 2330) * 973;
-
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
@@ -66,6 +64,30 @@ class DrawTotalResultPage extends ConsumerWidget {
             },
           ),
           BottomText(context, width, height),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Assets.images.kangmin.image(width: 100, height: 100),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 80, bottom: 50),
+              child: Assets.images.chatBubble3.image(width: 160),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 95, bottom: 78),
+              child: Text(
+                '이번엔 문제가 없었겠지..?',
+                style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                  color: Colors.white,
+                  fontSize: 10,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

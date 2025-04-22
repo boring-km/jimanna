@@ -11,7 +11,6 @@ import 'package:jimanna/providers/current_registered_names_provider.dart';
 import 'package:jimanna/providers/is_start_draw_provider.dart';
 import 'package:jimanna/ui/ongmezim_text.dart';
 import 'package:jimanna/ui/themes.dart';
-import 'package:jimanna/utils/background_audio_player.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class HomeDesktopView extends ConsumerStatefulWidget {
@@ -24,24 +23,6 @@ class HomeDesktopView extends ConsumerStatefulWidget {
 }
 
 class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
-  @override
-  void initState() {
-    setAudioPlayer();
-    super.initState();
-  }
-
-  void setAudioPlayer() {
-    audioPlayer
-        .setAsset(
-          'assets/music/background_music.mp3',
-          initialPosition: const Duration(seconds: 15),
-        )
-        .then(
-          (value) =>
-              Future.delayed(const Duration(seconds: 1), audioPlayer.play),
-        );
-  }
-
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -65,10 +46,24 @@ class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
             },
           ),
         ),
-        Center(
-          child: Assets.images.bigLogo.image(
-            width: width / 3,
-            fit: BoxFit.fitWidth,
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 100),
+            child: Assets.images.bigLogo.image(
+              width: width / 4,
+              fit: BoxFit.fitWidth,
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 100),
+            child: Assets.images.bigLogo.image(
+              width: width / 4,
+              fit: BoxFit.fitWidth,
+            ),
           ),
         ),
         Align(
@@ -90,8 +85,7 @@ class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
                   crossAxisCellCount: 10,
                   mainAxisCellCount: 1.8,
                   child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 10,
                       childAspectRatio: 441 / 248,
                       mainAxisSpacing: 10,
@@ -107,8 +101,7 @@ class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
                   crossAxisCellCount: 4,
                   mainAxisCellCount: 1.7,
                   child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 4,
                       childAspectRatio: 441 / 248,
                       mainAxisSpacing: 10,
@@ -144,8 +137,7 @@ class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
                   crossAxisCellCount: 4,
                   mainAxisCellCount: 1.7,
                   child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 4,
                       childAspectRatio: 441 / 248,
                       mainAxisSpacing: 10,
@@ -166,8 +158,7 @@ class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
                   crossAxisCellCount: 10,
                   mainAxisCellCount: 2,
                   child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 10,
                       childAspectRatio: 441 / 248,
                       mainAxisSpacing: 10,
@@ -185,6 +176,30 @@ class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
                   ),
                 ),
               ],
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: Assets.images.kangmin.image(width: 100, height: 100),
+        ),
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 80, bottom: 50),
+            child: Assets.images.chatBubble3.image(width: 160),
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 95, bottom: 78),
+            child: Text(
+              '이번엔 에러가 없어야 해...',
+              style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                    color: Colors.white,
+                    fontSize: 10,
+                  ),
             ),
           ),
         ),
