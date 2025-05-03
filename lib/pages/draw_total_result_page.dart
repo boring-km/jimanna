@@ -27,41 +27,56 @@ class DrawTotalResultPage extends ConsumerWidget {
               fit: BoxFit.fitHeight,
             ),
           ),
-          ListView.builder(
-            itemCount: teams.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: EdgeInsets.only(bottom: 60),
-                child: Column(
-                  children: [
-                    Text(
-                      '${index + 1}조',
-                      style: Theme.of(context)
-                          .textTheme
-                          .displayMedium!
-                          .copyWith(color: Colors.white, fontSize: 60),
-                    ),
-                    SizedBox(height: 30),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        for (final name in teams[index].names)
-                          Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Text(
-                              name.name,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .displayMedium!
-                                  .copyWith(color: Colors.white, fontSize: 40),
-                            ),
+          Container(
+            width: width,
+            height: height,
+            decoration: BoxDecoration(
+              color: const Color(0x11FFFFFF),
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+          Center(
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color(0x66000000),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              padding: const EdgeInsets.all(40),
+              child: SingleChildScrollView(
+                  child: Column(
+                children: List.generate(
+                  teams.length,
+                  (index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 60),
+                      child: Column(
+                        children: [
+                          Text(
+                            '${index + 1}조',
+                            style: Theme.of(context).textTheme.displayMedium!.copyWith(color: Colors.white, fontSize: 60),
                           ),
-                      ],
-                    ),
-                  ],
+                          const SizedBox(height: 30, width: 0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              for (final name in teams[index].names)
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Text(
+                                    name.name,
+                                    style: Theme.of(context).textTheme.displayMedium!.copyWith(color: Colors.white, fontSize: 40),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
+              )),
+            ),
           ),
           BottomText(context, width, height),
           Align(
@@ -82,8 +97,9 @@ class DrawTotalResultPage extends ConsumerWidget {
               child: Text(
                 '이번엔 문제가 없었겠지..?',
                 style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontSize: 10,
+                  shadows: [],
                 ),
               ),
             ),

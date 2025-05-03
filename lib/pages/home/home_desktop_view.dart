@@ -10,6 +10,7 @@ import 'package:jimanna/providers/admin_draw_provider.dart';
 import 'package:jimanna/providers/current_registered_names_provider.dart';
 import 'package:jimanna/providers/is_start_draw_provider.dart';
 import 'package:jimanna/ui/ongmezim_text.dart';
+import 'package:jimanna/ui/single_rotating_image.dart';
 import 'package:jimanna/ui/themes.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -197,12 +198,14 @@ class _HomeDesktopViewState extends ConsumerState<HomeDesktopView> {
             child: Text(
               '이번엔 에러가 없어야 해...',
               style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontSize: 10,
+                shadows: [],
                   ),
             ),
           ),
         ),
+        BottomAdminButton(context, ref, height),
       ],
     );
   }

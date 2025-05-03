@@ -14,8 +14,10 @@ import 'package:jimanna/providers/firebase/firebase_factory.dart';
 import 'package:jimanna/routes.dart';
 import 'package:jimanna/ui/background_painter.dart';
 import 'package:jimanna/ui/ongmezim_text.dart';
+import 'package:jimanna/ui/single_rotating_image.dart';
 import 'package:jimanna/ui/themes.dart';
 import 'package:jimanna/utils/background_audio_player.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:video_player/video_player.dart';
 
@@ -65,7 +67,15 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
   }
 
   void setAudioPlayer() {
-    audioPlayer.seek(const Duration(seconds: 15));
+    audioPlayer.setLoopMode(LoopMode.all);
+    audioPlayer
+        .setAsset(
+          'assets/music/background_music.mp3',
+          initialPosition: const Duration(seconds: 15),
+        )
+        .then(
+          (value) => Future.delayed(const Duration(seconds: 1), audioPlayer.play),
+        );
   }
 
   void startResultTimer() {
@@ -174,9 +184,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
 
     final nintendoHeight = getNintendoHeight();
 
-    return isMobile
-        ? MobileView(width)
-        : DesktopView(width, height, nintendoHeight);
+    return isMobile ? MobileView(width) : DesktopView(width, height, nintendoHeight);
   }
 
   void moveIfDrawEnd(BuildContext context) {
@@ -205,6 +213,12 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
               height: height,
               fit: BoxFit.fitHeight,
             ),
+          ),
+          NameBubbleCustom(
+            '이번엔 성공할꺼야..!',
+            context,
+            Alignment.topLeft,
+            EdgeInsets.only(left: 100 * wr, top: 805 * hr),
           ),
           BottomText(context, width * (3 / 4), height),
           ReadyVideoView(width, nintendoHeight),
@@ -271,6 +285,11 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
             TopTextView(height, context),
             Characters(),
             Bubbles(),
+            const Positioned(
+              bottom: 50,
+              left: 50,
+              child: SingleRotatingImage(),
+            ),
           ],
         );
       },
@@ -346,7 +365,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
           },
         ),
         ValueListenableBuilder(
-          valueListenable: seventhName,
+          valueListenable: fifthName,
           builder: (context, name, _) {
             return NameBubble2(
               name,
@@ -357,7 +376,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
           },
         ),
         ValueListenableBuilder(
-          valueListenable: fifthName,
+          valueListenable: seventhName,
           builder: (context, name, _) {
             return NameBubble1(
               name,
@@ -397,6 +416,45 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
                   child: Text(
                     name.name,
                     style: textStyleBy(name.type!),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget NameBubbleCustom(
+    String text,
+    BuildContext context,
+    Alignment alignment,
+    EdgeInsets padding,
+  ) {
+    return Align(
+      alignment: alignment,
+      child: Padding(
+        padding: padding,
+        child: SizedBox(
+          width: 468 * wr,
+          height: 269 * hr,
+          child: Stack(
+            children: [
+              Assets.images.chatBubble1.image(
+                width: 468 * wr,
+                fit: BoxFit.fitWidth,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 36),
+                child: Center(
+                  child: Text(
+                    text,
+                    style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      shadows: [],
+                    ),
                   ),
                 ),
               ),
@@ -584,8 +642,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
   }
 
   double getNintendoHeight() {
-    final nintendoRenderBox =
-        nintendoKey.currentContext?.findRenderObject() as RenderBox?;
+    final nintendoRenderBox = nintendoKey.currentContext?.findRenderObject() as RenderBox?;
     final nintendoHeight = nintendoRenderBox?.size.height ?? 0;
     return nintendoHeight;
   }
@@ -616,8 +673,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
                     children: [
                       Text(
                         value != 0 ? '$value조' : '',
-                        style:
-                            const TextStyle(fontSize: 60, color: Colors.white),
+                        style: const TextStyle(fontSize: 60, color: Colors.white),
                       ),
                       const SizedBox(height: 20),
                       SizedBox(
@@ -674,8 +730,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
     Timer.periodic(const Duration(seconds: 1), (timer) {
       final myTeamNumber = findMyNameTeamNumber();
       FireStoreFactory.adminOptionRef().snapshots().listen((event) {
-        if (event.docs.first.data().current_showed_team_number ==
-            myTeamNumber) {
+        if (event.docs.first.data().current_showed_team_number == myTeamNumber) {
           timer.cancel();
           myNameTeamNumber.value = myTeamNumber;
         }
