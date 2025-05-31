@@ -4,10 +4,10 @@ part 'name.g.dart';
 
 @JsonSerializable()
 class Name {
-  final String name;
-
   Name(this.name);
 
   factory Name.fromJson(Map<String, dynamic> json) => _$NameFromJson(json);
+  final String name;
+
   Map<String, dynamic> toJson() => _$NameToJson(this);
 }

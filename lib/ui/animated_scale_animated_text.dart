@@ -5,6 +5,24 @@ import 'package:simple_gradient_text/src/constants.dart';
 
 /// A gradient text.
 class AnimatedGradientText extends StatelessWidget {
+  const AnimatedGradientText(
+    this.text, {
+    required this.colors,
+    this.gradientDirection = GradientDirection.ltr,
+    this.gradientType = GradientType.linear,
+    super.key,
+    this.overflow,
+    this.radius = 1.0,
+    this.style,
+    this.textAlign,
+    this.stops,
+    this.textScaleFactor,
+    this.maxLines,
+  }) : assert(
+          colors.length >= 2,
+          'Colors list must have at least two colors',
+        );
+
   /// Colors used to show the gradient.
   final List<Color> colors;
 
@@ -39,31 +57,13 @@ class AnimatedGradientText extends StatelessWidget {
   /// Gradient stops
   final List<double>? stops;
 
-  const AnimatedGradientText(
-      this.text, {
-        required this.colors,
-        this.gradientDirection = GradientDirection.ltr,
-        this.gradientType = GradientType.linear,
-        super.key,
-        this.overflow,
-        this.radius = 1.0,
-        this.style,
-        this.textAlign,
-        this.stops,
-        this.textScaleFactor,
-        this.maxLines,
-      }) : assert(
-  colors.length >= 2,
-  'Colors list must have at least two colors',
-  );
-
   @override
   Widget build(BuildContext context) {
     return ShaderMask(
       shaderCallback: (Rect bounds) {
         switch (gradientType) {
           case GradientType.linear:
-            final Map<String, Alignment> map = {};
+            final map = <String, Alignment>{};
             switch (gradientDirection) {
               case GradientDirection.rtl:
                 map['begin'] = Alignment.centerRight;
@@ -74,9 +74,11 @@ class AnimatedGradientText extends StatelessWidget {
               case GradientDirection.btt:
                 map['begin'] = Alignment.bottomCenter;
                 map['end'] = Alignment.topCenter;
-              default:
+              case GradientDirection.ltr:
                 map['begin'] = Alignment.centerLeft;
                 map['end'] = Alignment.centerRight;
+              case null:
+                throw UnimplementedError();
             }
             return LinearGradient(
               begin: map['begin']!,

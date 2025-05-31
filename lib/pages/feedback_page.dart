@@ -101,6 +101,7 @@ class _FeedbackPageState extends ConsumerState<FeedbackPage> {
         .add(TextFeedback(_feedbackController.text, currentTimeText))
         .then(
       (value) {
+        if (!context.mounted) return;
         Navigator.pop(context, true);
       },
     );

@@ -39,15 +39,14 @@ class ErrorPage extends StatelessWidget {
                       padding: const EdgeInsets.all(12),
                       child: Text(
                         '처음으로',
-                        style:
-                            Theme.of(context).textTheme.displayMedium?.copyWith(
-                                  color: Colors.white,
-                                  fontSize: 30,
-                                ),
+                        style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                              color: Colors.white,
+                              fontSize: 30,
+                            ),
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

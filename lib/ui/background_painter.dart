@@ -40,4 +40,3 @@ class BackgroundPainter extends CustomPainter {
   @override
   bool shouldRepaint(BackgroundPainter oldDelegate) => false;
 }
-

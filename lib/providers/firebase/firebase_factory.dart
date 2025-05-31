@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:jimanna/models/admin_option.dart';
 import 'package:jimanna/models/black_twin.dart';
-import 'package:jimanna/models/text_feedback.dart';
 import 'package:jimanna/models/name.dart';
 import 'package:jimanna/models/team.dart';
+import 'package:jimanna/models/text_feedback.dart';
 import 'package:jimanna/utils/date_utils.dart';
 
 class FireStoreFactory {
@@ -27,9 +27,7 @@ class FireStoreFactory {
 
   static CollectionReference<Name> namesByCurrentYearMonthRef() =>
       FirebaseFirestore.instance
-          // TODO 최종은 여기로
           .collection(getCurrentYearMonthOnly())
-          // .collection('names')
           .withConverter(
             fromFirestore: (sn, _) => Name.fromJson(sn.data()!),
             toFirestore: (name, _) => name.toJson(),

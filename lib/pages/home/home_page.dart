@@ -24,6 +24,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     FireStoreFactory.adminOptionRef().snapshots().listen((event) {
       if (event.docs.first.data().is_start_draw) {
+        if (!mounted) return;
         final isDrawEnd = event.docs.first.data().is_draw_end;
         if (isMobileState.value) {
           Navigator.popAndPushNamed(

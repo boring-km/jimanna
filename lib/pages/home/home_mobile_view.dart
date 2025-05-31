@@ -23,8 +23,7 @@ class HomeMobileView extends ConsumerWidget {
       painter: BackgroundPainter(),
       child: Center(
         child: Padding(
-          padding:
-              const EdgeInsets.only(top: 20, left: 5, right: 5, bottom: 20),
+          padding: const EdgeInsets.only(top: 20, left: 5, right: 5, bottom: 20),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -71,8 +70,7 @@ class HomeMobileView extends ConsumerWidget {
                             itemBuilder: (context, index) {
                               return NameCard(names[index], context);
                             },
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
                               childAspectRatio: 2,
                             ),
@@ -108,7 +106,8 @@ class HomeMobileView extends ConsumerWidget {
                 ? const TextStyle(
                     color: Colors.black,
                     fontSize: 20,
-                    fontWeight: FontWeight.bold)
+                    fontWeight: FontWeight.bold,
+                  )
                 : Theme.of(context).textTheme.displaySmall?.copyWith(
                       color: Colors.white,
                     ),

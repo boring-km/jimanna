@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/models/team.dart';
 import 'package:jimanna/providers/firebase/firebase_factory.dart';

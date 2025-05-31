@@ -1,8 +1,8 @@
-import 'package:jimanna/models/black_twin.dart';
+import 'package:flutter/cupertino.dart';
 
 void main() {
   // 여기에 50명의 이름을 추가하세요.
-  List<String> names = [
+  final names = <String>[
     'A',
     'B',
     'C',
@@ -57,16 +57,12 @@ void main() {
     // 'ZZ',
   ];
 
-  final blackList = [
-    BlackTwin(name_first: 'YY', name_second: 'ZZ'),
-    BlackTwin(name_first: 'A', name_second: 'B'),
-  ];
 
   final teams = organizeGroupsOfFourOrThree(names);
 
   // 조 출력
   for (var i = 0; i < teams.length; i++) {
-    print('조 ${i + 1}: ${teams[i]}');
+    debugPrint('조 ${i + 1}: ${teams[i]}');
   }
 }
 

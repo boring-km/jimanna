@@ -66,7 +66,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       feedbackButtonView: _FeedbackButtonView(
         onPressFeedbackButton: () {
           Navigator.pushNamed(context, Routes.feedback).then((value) {
-            if (value == true) {
+            if (value == true && context.mounted) {
               const snackBar = SnackBar(
                 content: Text('피드백이 전송되었습니다!'),
               );

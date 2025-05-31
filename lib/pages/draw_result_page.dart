@@ -69,8 +69,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
           initialPosition: const Duration(seconds: 15),
         )
         .then(
-          (value) =>
-              Future.delayed(const Duration(seconds: 1), audioPlayer.play),
+          (value) => Future.delayed(const Duration(seconds: 1), audioPlayer.play),
         );
   }
 
@@ -137,6 +136,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
       rightBottomName.value = '';
     }
     ref.read(adminOptionsProvider.notifier).endDraw();
+    if (!mounted) return;
     unawaited(Navigator.popAndPushNamed(context, Routes.drawTotalResultPage));
   }
 
@@ -156,9 +156,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
 
     final nintendoHeight = getNintendoHeight();
 
-    return isMobile
-        ? MobileView(width)
-        : DesktopView(width, height, nintendoHeight);
+    return isMobile ? MobileView(width) : DesktopView(width, height, nintendoHeight);
   }
 
   void moveIfDrawEnd(BuildContext context) {
@@ -188,7 +186,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
               fit: BoxFit.fitHeight,
             ),
           ),
-          BottomText(context, width * (3/4), height),
+          BottomText(context, width * (3 / 4), height),
           Padding(
             padding: const EdgeInsets.only(bottom: 40),
             child: Center(
@@ -273,8 +271,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
   }
 
   double getNintendoHeight() {
-    final nintendoRenderBox =
-        nintendoKey.currentContext?.findRenderObject() as RenderBox?;
+    final nintendoRenderBox = nintendoKey.currentContext?.findRenderObject() as RenderBox?;
     final nintendoHeight = nintendoRenderBox?.size.height ?? 0;
     return nintendoHeight;
   }
@@ -370,8 +367,10 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('내가 뽑힌 조는?',
-                  style: TextStyle(fontSize: 30, color: Colors.white)),
+              const Text(
+                '내가 뽑힌 조는?',
+                style: TextStyle(fontSize: 30, color: Colors.white),
+              ),
               const SizedBox(height: 20),
               ValueListenableBuilder(
                 valueListenable: myNameTeamNumber,
@@ -383,8 +382,7 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
                     children: [
                       Text(
                         value != 0 ? '$value조' : '',
-                        style:
-                            const TextStyle(fontSize: 60, color: Colors.white),
+                        style: const TextStyle(fontSize: 60, color: Colors.white),
                       ),
                       const SizedBox(height: 20),
                       SizedBox(
@@ -397,7 +395,9 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
                               child: Text(
                                 teamDraw.teams[value - 1].names[index],
                                 style: const TextStyle(
-                                    fontSize: 20, color: Colors.white),
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
                                 textAlign: TextAlign.center,
                               ),
                             );
