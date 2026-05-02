@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/gen/assets.gen.dart';
 import 'package:jimanna/gen/colors.gen.dart';
+import 'package:jimanna/models/result.dart';
 import 'package:jimanna/pages/register/register_state.dart';
 import 'package:jimanna/providers/name_register_provider.dart';
 import 'package:jimanna/providers/register_state_provider.dart';

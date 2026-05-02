@@ -3,19 +3,16 @@ import 'package:jimanna/pages/register/register_state.dart';
 import 'package:jimanna/providers/firebase/firebase_factory.dart';
 
 final registerStateProvider =
-    StateNotifierProvider<RegisterStateProvider, RegisterState>((ref) {
-  return RegisterStateProvider();
-});
+    NotifierProvider<RegisterStateProvider, RegisterState>(
+  RegisterStateProvider.new,
+);
 
-class RegisterStateProvider extends StateNotifier<RegisterState> {
-  RegisterStateProvider() : super(EmptyRegisterState()) {
-    loadOnRealTime();
-  }
+class RegisterStateProvider extends Notifier<RegisterState> {
+  late final adminOptionRef = FireStoreFactory.adminOptionRef();
 
-  final adminOptionRef = FireStoreFactory.adminOptionRef();
-
-  void loadOnRealTime() {
-    adminOptionRef.snapshots().listen((event) {
+  @override
+  RegisterState build() {
+    final sub = adminOptionRef.snapshots().listen((event) {
       if (event.docs.isNotEmpty) {
         if (event.docs.first.data().can_register) {
           state = CanRegisterState();
@@ -26,6 +23,8 @@ class RegisterStateProvider extends StateNotifier<RegisterState> {
         state = ErrorRegisterState('시스템 오류');
       }
     });
+    ref.onDispose(sub.cancel);
+    return EmptyRegisterState();
   }
 
   void switchEvent() {

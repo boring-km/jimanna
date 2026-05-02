@@ -6,53 +6,50 @@ import 'package:jimanna/providers/firebase/firebase_factory.dart';
 import 'package:jimanna/routes.dart';
 
 final nameRegisterProvider =
-    StateNotifierProvider<NameRegisterNotifier, Result<String>>((ref) {
-  return NameRegisterNotifier();
-});
+    NotifierProvider<NameRegisterNotifier, Result<String>>(
+  NameRegisterNotifier.new,
+);
 
-class NameRegisterNotifier extends StateNotifier<Result<String>> {
-  NameRegisterNotifier() : super(const Result.empty()) {
+class NameRegisterNotifier extends Notifier<Result<String>> {
+  static const _screenOnly = '관리자';
+  String _adminPassword = 'adminPassword';
+
+  late final currentParticipantRef =
+      FireStoreFactory.namesByCurrentYearMonthRef();
+  late final adminOptionRef = FireStoreFactory.adminOptionRef();
+  late final nameListRef = FireStoreFactory.abadNamesRef();
+  late final secondNameListRef = FireStoreFactory.secondNamesRef();
+
+  @override
+  Result<String> build() {
     getAdminPassword().then((value) => _adminPassword = value);
+    return const Result<String>.empty();
   }
-
-  final currentParticipantRef = FireStoreFactory.namesByCurrentYearMonthRef();
-  final adminOptionRef = FireStoreFactory.adminOptionRef();
-
-  final nameListRef = FireStoreFactory.abadNamesRef();
-  final secondNameListRef = FireStoreFactory.secondNamesRef();
 
   void registerNameToFirestore(String name) {
     alwaysTrueIfAdmin(name);
     addNameIfNotAdmin(name);
     Future.delayed(
       const Duration(milliseconds: 1000),
-      () => state = const Result.empty(),
+      () => state = const Result<String>.empty(),
     );
   }
 
-  final screenOnly = '관리자';
-  var _adminPassword = 'adminPassword';
-
   Future<void> addNameIfNotAdmin(String name) async {
-    // get password from adminOptionRef
-
-    if (name != _adminPassword && name != screenOnly && name.isNotEmpty) {
-      // nameListRef 에 모든 doc 중에 name이 있을 때만 추가
+    if (name != _adminPassword && name != _screenOnly && name.isNotEmpty) {
       final abadNameList = await nameListRef.get();
       final secondNameList = await secondNameListRef.get();
 
       final isAbad = abadNameList.docs.any((e) => e.data().name == name);
       final isPaqad = secondNameList.docs.any((e) => e.data().name == name);
       if (isAbad) {
-        print('abad');
         await addParticipant(Name(name, type: 'abad'));
-        state = const Result.success(Routes.home);
+        state = const Result<String>.success(Routes.home);
       } else if (isPaqad) {
-        print('paqad');
         await addParticipant(Name(name, type: 'paqad'));
-        state = const Result.success(Routes.home);
+        state = const Result<String>.success(Routes.home);
       } else {
-        state = const Result.error('등록되지 않은 이름입니다.');
+        state = const Result<String>.error('등록되지 않은 이름입니다.');
       }
     }
   }
@@ -64,11 +61,14 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
     }
   }
 
-  bool hasNamesInPaqad(QuerySnapshot<Name> secondNameList, String name) => secondNameList.docs.any((e) => e.data().name == name);
+  bool hasNamesInPaqad(QuerySnapshot<Name> secondNameList, String name) =>
+      secondNameList.docs.any((e) => e.data().name == name);
 
-  bool hasNamesInAbad(QuerySnapshot<Name> abadNameList, String name) => abadNameList.docs.any((element) => element.data().name == name);
+  bool hasNamesInAbad(QuerySnapshot<Name> abadNameList, String name) =>
+      abadNameList.docs.any((element) => element.data().name == name);
 
-  bool hasNamesInParticipantList(QuerySnapshot<Name> nameDocs, Name name) => nameDocs.docs.any((element) => element.data().name == name.name);
+  bool hasNamesInParticipantList(QuerySnapshot<Name> nameDocs, Name name) =>
+      nameDocs.docs.any((element) => element.data().name == name.name);
 
   Future<String> getAdminPassword() async {
     final adminOptionDocs = await adminOptionRef.get();
@@ -79,21 +79,21 @@ class NameRegisterNotifier extends StateNotifier<Result<String>> {
 
   void alwaysTrueIfAdmin(String name) {
     if (name == _adminPassword) {
-      state = const Result.success(Routes.admin);
-    } else if (name == screenOnly) {
-      state = const Result.success(Routes.homeAdmin);
+      state = const Result<String>.success(Routes.admin);
+    } else if (name == _screenOnly) {
+      state = const Result<String>.success(Routes.homeAdmin);
     }
   }
 
   void checkAdmin(String name) {
     if (name == _adminPassword) {
-      state = const Result.success(Routes.admin);
-    } else if (name == screenOnly) {
-      state = const Result.success(Routes.homeAdmin);
+      state = const Result<String>.success(Routes.admin);
+    } else if (name == _screenOnly) {
+      state = const Result<String>.success(Routes.homeAdmin);
     }
   }
 
   void initialize() {
-    state = const Result.empty();
+    state = const Result<String>.empty();
   }
 }

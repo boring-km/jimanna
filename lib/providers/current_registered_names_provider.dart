@@ -3,21 +3,20 @@ import 'package:jimanna/models/name.dart';
 import 'package:jimanna/providers/firebase/firebase_factory.dart';
 
 final currentRegisteredNamesProvider =
-    StateNotifierProvider<CurrentRegisteredNamesNotifier, List<Name>>((ref) {
-  return CurrentRegisteredNamesNotifier();
-});
+    NotifierProvider<CurrentRegisteredNamesNotifier, List<Name>>(
+  CurrentRegisteredNamesNotifier.new,
+);
 
-class CurrentRegisteredNamesNotifier extends StateNotifier<List<Name>> {
-  CurrentRegisteredNamesNotifier() : super([]) {
-    loadOnRealTime();
-  }
+class CurrentRegisteredNamesNotifier extends Notifier<List<Name>> {
+  late final nameRef = FireStoreFactory.namesByCurrentYearMonthRef();
 
-  final nameRef = FireStoreFactory.namesByCurrentYearMonthRef();
-
-  void loadOnRealTime() {
-    nameRef.snapshots().listen((event) {
+  @override
+  List<Name> build() {
+    final sub = nameRef.snapshots().listen((event) {
       state = event.docs.map((e) => e.data()).toList().reversed.toList();
     });
+    ref.onDispose(sub.cancel);
+    return [];
   }
 
   void removeAll() {
@@ -36,8 +35,9 @@ class CurrentRegisteredNamesNotifier extends StateNotifier<List<Name>> {
   }
 
   String countText() {
-    final abadCount = state.where((element) => element.type == 'abad').length;
-    final secondCount = state.where((element) => element.type == 'paqad').length;
+    final abadCount = state.where((Name element) => element.type == 'abad').length;
+    final secondCount =
+        state.where((Name element) => element.type == 'paqad').length;
     return 'abad: $abadCount, paqad: $secondCount';
   }
 }

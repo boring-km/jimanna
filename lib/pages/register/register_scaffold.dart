@@ -79,19 +79,19 @@ class _Scaffold extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) {
-    ref
-      .listen(nameRegisterProvider, (previous, result) {
-        result.whenOrNull(
-          error: (e) {
-            ref.read(registerStateProvider.notifier).setError(e);
-          },
-          success: (page) {
-            if (page == Routes.admin) {
-              ref.read(nameRegisterProvider.notifier).initialize();
-            }
-            Navigator.pushNamed(context, page);
-          },
-        );
-      });
+    ref.listen(nameRegisterProvider, (previous, result) {
+      switch (result) {
+        case Error(:final message):
+          ref.read(registerStateProvider.notifier).setError(message);
+        case Success(:final data):
+          if (data == Routes.admin) {
+            ref.read(nameRegisterProvider.notifier).initialize();
+          }
+          Navigator.pushNamed(context, data);
+        case Loading():
+        case Empty():
+          break;
+      }
+    });
   }
 }

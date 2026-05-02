@@ -2,25 +2,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/models/name.dart';
 import 'package:jimanna/providers/firebase/firebase_factory.dart';
 
-final adminLeaderProvider = StateNotifierProvider<AdminLeaderProvider, List<Name>>((ref) {
-  return AdminLeaderProvider();
-});
+final adminLeaderProvider =
+    NotifierProvider<AdminLeaderProvider, List<Name>>(
+  AdminLeaderProvider.new,
+);
 
-class AdminLeaderProvider extends StateNotifier<List<Name>> {
-  AdminLeaderProvider() : super([]) {
-    loadOnRealTime();
-  }
+class AdminLeaderProvider extends Notifier<List<Name>> {
+  late final nameRef = FireStoreFactory.leadersRef();
 
-  final nameRef = FireStoreFactory.leadersRef();
-
-  void loadOnRealTime() {
-    nameRef.snapshots().listen((event) {
+  @override
+  List<Name> build() {
+    final sub = nameRef.snapshots().listen((event) {
       final list = event.docs.map((e) => e.data()).toList();
-      for (final element in list) {
-        print('${element.name} ${element.type}');
-      }
       state = list;
     });
+    ref.onDispose(sub.cancel);
+    return [];
   }
 
   void remove(String name) {

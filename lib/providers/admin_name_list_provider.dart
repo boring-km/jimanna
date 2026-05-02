@@ -3,22 +3,21 @@ import 'package:jimanna/models/name.dart';
 import 'package:jimanna/providers/firebase/firebase_factory.dart';
 
 final abadNameListProvider =
-    StateNotifierProvider<FirstNameListNotifier, List<String>>((ref) {
-  return FirstNameListNotifier();
-});
+    NotifierProvider<FirstNameListNotifier, List<String>>(
+  FirstNameListNotifier.new,
+);
 
-class FirstNameListNotifier extends StateNotifier<List<String>> {
-  FirstNameListNotifier() : super([]) {
-    loadOnRealTime();
-  }
+class FirstNameListNotifier extends Notifier<List<String>> {
+  late final nameRef = FireStoreFactory.abadNamesRef();
 
-  final nameRef = FireStoreFactory.abadNamesRef();
-
-  void loadOnRealTime() {
-    nameRef.snapshots().listen((event) {
+  @override
+  List<String> build() {
+    final sub = nameRef.snapshots().listen((event) {
       final list = event.docs.map((e) => e.data().name).toList()..sort();
       state = list;
     });
+    ref.onDispose(sub.cancel);
+    return [];
   }
 
   void remove(String name) {
@@ -38,22 +37,22 @@ class FirstNameListNotifier extends StateNotifier<List<String>> {
   }
 }
 
-final secondNameListProvider = StateNotifierProvider<SecondNameListNotifier, List<String>>((ref) {
-  return SecondNameListNotifier();
-});
+final secondNameListProvider =
+    NotifierProvider<SecondNameListNotifier, List<String>>(
+  SecondNameListNotifier.new,
+);
 
-class SecondNameListNotifier extends StateNotifier<List<String>> {
-  SecondNameListNotifier() : super([]) {
-    loadOnRealTime();
-  }
+class SecondNameListNotifier extends Notifier<List<String>> {
+  late final nameRef = FireStoreFactory.secondNamesRef();
 
-  final nameRef = FireStoreFactory.secondNamesRef();
-
-  void loadOnRealTime() {
-    nameRef.snapshots().listen((event) {
+  @override
+  List<String> build() {
+    final sub = nameRef.snapshots().listen((event) {
       final list = event.docs.map((e) => e.data().name).toList()..sort();
       state = list;
     });
+    ref.onDispose(sub.cancel);
+    return [];
   }
 
   void remove(String name) {

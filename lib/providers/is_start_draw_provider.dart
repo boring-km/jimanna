@@ -1,21 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jimanna/providers/firebase/firebase_factory.dart';
 
-final isStartDrawProvider = StateNotifierProvider<IsStartDrawNotifier, bool?>(
-  (ref) => IsStartDrawNotifier(),
+final isStartDrawProvider = NotifierProvider<IsStartDrawNotifier, bool?>(
+  IsStartDrawNotifier.new,
 );
 
-class IsStartDrawNotifier extends StateNotifier<bool?> {
-  IsStartDrawNotifier() : super(null) {
-    loadOnRealTime();
-  }
+class IsStartDrawNotifier extends Notifier<bool?> {
+  late final adminOptionRef = FireStoreFactory.adminOptionRef();
 
-  final adminOptionRef = FireStoreFactory.adminOptionRef();
-
-  void loadOnRealTime() {
-    adminOptionRef.snapshots().listen((event) {
+  @override
+  bool? build() {
+    final sub = adminOptionRef.snapshots().listen((event) {
       state = event.docs.first.data().is_start_draw;
     });
+    ref.onDispose(sub.cancel);
+    return null;
   }
 
   void startDraw() {
