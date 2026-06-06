@@ -10,6 +10,7 @@ import 'package:jimanna/providers/current_name.dart';
 import 'package:jimanna/providers/firebase/firebase_factory.dart';
 import 'package:jimanna/routes.dart';
 import 'package:jimanna/ui/background_painter.dart';
+import 'package:jimanna/ui/music_volume_control.dart';
 import 'package:jimanna/ui/ongmezim_text.dart';
 import 'package:jimanna/utils/background_audio_player.dart';
 import 'package:just_audio/just_audio.dart';
@@ -244,6 +245,13 @@ class _DrawResultPageState extends ConsumerState<DrawResultPage> {
               }
               return const SizedBox.shrink();
             },
+          ),
+          const Align(
+            alignment: Alignment.bottomLeft,
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: MusicVolumeControl(),
+            ),
           ),
         ],
       ),
